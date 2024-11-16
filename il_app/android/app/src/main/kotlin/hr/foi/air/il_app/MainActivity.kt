@@ -1,4 +1,4 @@
-package hr.foi.air.ilapp.indoorlocalization_mobile_app
+package hr.foi.air.il_app
 
 import io.flutter.embedding.android.FlutterActivity
 
