@@ -1,25 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:il_basic_auth/il_basic_auth.dart';
-import 'package:il_core/il_core.dart';
+import 'package:il_app/logic/login_view_model.dart';
+import 'package:il_app/ui/widgets/message_card.dart';
+import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final tcUsername = TextEditingController();
-  final tcPassword = TextEditingController();
-
-  final loginHandler = BasicLoginHandler();
-  bool showPassword = false;
-
-  void togglePasswordVisibility() {
-    setState(() => showPassword = !showPassword);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,67 +15,57 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(40),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: tcUsername,
-              decoration: const InputDecoration(
-                label: Text('Username'),
-                border: OutlineInputBorder(),
-              ),
-              autocorrect: false,
-              enableSuggestions: false,
-              textInputAction: TextInputAction.next,
-            ),
-            const SizedBox(height: 40),
-            TextField(
-              controller: tcPassword,
-              decoration: InputDecoration(
-                label: const Text('Password'),
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  onPressed: () => togglePasswordVisibility(),
-                  icon: showPassword ? const FaIcon(FontAwesomeIcons.solidEye) : const FaIcon(FontAwesomeIcons.solidEyeSlash),
-                ),
-              ),
-              obscureText: !showPassword,
-              autocorrect: false,
-              enableSuggestions: false,
-              textInputAction: TextInputAction.done,
-            ),
-            const SizedBox(height: 40),
-            FilledButton(
-              onPressed: () {
-                var username = tcUsername.text;
-                var password = tcPassword.text;
-
-                var token = BasicLoginToken(username, password);
-
-                loginHandler.handleLogin(
-                  baseToken: token,
-                  loginListener: LoginOutcomeListener(
-                    onSuccessfulLogin: (user) {
-                      debugPrint('Success login ${user.username}');
-                    },
-                    onFailedLogin: (reason) {
-                      debugPrint('Failed login $reason');
-                    },
+        child: ChangeNotifierProvider(
+          create: (context) => LoginViewModel(),
+          child: Consumer<LoginViewModel>(
+            builder: (context, model, child) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextField(
+                    controller: model.tcUsername,
+                    decoration: const InputDecoration(
+                      label: Text('Username'),
+                      isDense: true,
+                      border: OutlineInputBorder(),
+                    ),
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    textInputAction: TextInputAction.next,
                   ),
-                );
-              },
-              child: const Text('Log in'),
-            ),
-          ],
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: model.tcPassword,
+                    decoration: InputDecoration(
+                      label: const Text('Password'),
+                      isDense: true,
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        onPressed: () => model.togglePasswordVisibility(),
+                        icon: !model.showPassword ? const FaIcon(FontAwesomeIcons.solidEye) : const FaIcon(FontAwesomeIcons.solidEyeSlash),
+                      ),
+                    ),
+                    obscureText: !model.showPassword,
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    textInputAction: TextInputAction.done,
+                  ),
+                  if (model.message != null)
+                    MessageCard(
+                      message: model.message!,
+                      onClose: () => model.clearMessage(),
+                    ),
+                  const SizedBox(height: 40),
+                  FilledButton(
+                    onPressed: () => model.login(),
+                    child: const Text('Log in'),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    tcUsername.dispose();
-    tcPassword.dispose();
-    super.dispose();
   }
 }
