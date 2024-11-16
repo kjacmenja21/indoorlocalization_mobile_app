@@ -13,8 +13,20 @@ class LoginViewModel extends ChangeNotifier {
   Message? message;
 
   void login() {
-    var username = tcUsername.text;
-    var password = tcPassword.text;
+    var username = tcUsername.text.trim();
+    var password = tcPassword.text.trim();
+
+    if (username.isEmpty) {
+      message = Message.error('Please enter your username.');
+      notifyListeners();
+      return;
+    }
+
+    if (password.isEmpty) {
+      message = Message.error('Please enter your password.');
+      notifyListeners();
+      return;
+    }
 
     var token = BasicLoginToken(username, password);
 
