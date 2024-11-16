@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
 
@@ -14,6 +15,11 @@ class _LoginPageState extends State<LoginPage> {
   final tcPassword = TextEditingController();
 
   final loginHandler = BasicLoginHandler();
+  bool showPassword = false;
+
+  void togglePasswordVisibility() {
+    setState(() => showPassword = !showPassword);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +45,15 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 40),
             TextField(
               controller: tcPassword,
-              decoration: const InputDecoration(
-                label: Text('Password'),
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                label: const Text('Password'),
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  onPressed: () => togglePasswordVisibility(),
+                  icon: showPassword ? const FaIcon(FontAwesomeIcons.solidEye) : const FaIcon(FontAwesomeIcons.solidEyeSlash),
+                ),
               ),
-              obscureText: true,
+              obscureText: !showPassword,
               autocorrect: false,
               enableSuggestions: false,
               textInputAction: TextInputAction.done,
