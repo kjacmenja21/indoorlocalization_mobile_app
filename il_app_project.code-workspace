@@ -16,5 +16,7 @@
 		"path": "il_ws"
 	}
 ],
-  "settings": {}
+  "settings": {
+    "git.openRepositoryInParentFolders": "always"
+  }
 }
