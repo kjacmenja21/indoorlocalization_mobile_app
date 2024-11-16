@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "hr.foi.air.ilapp" "\0"
-            VALUE "FileDescription", "indoorlocalization_mobile_app" "\0"
+            VALUE "CompanyName", "hr.foi.air" "\0"
+            VALUE "FileDescription", "il_app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "indoorlocalization_mobile_app" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 hr.foi.air.ilapp. All rights reserved." "\0"
-            VALUE "OriginalFilename", "indoorlocalization_mobile_app.exe" "\0"
-            VALUE "ProductName", "indoorlocalization_mobile_app" "\0"
+            VALUE "InternalName", "il_app" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 hr.foi.air. All rights reserved." "\0"
+            VALUE "OriginalFilename", "il_app.exe" "\0"
+            VALUE "ProductName", "il_app" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
