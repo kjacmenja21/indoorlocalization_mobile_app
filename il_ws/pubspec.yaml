@@ -11,6 +11,9 @@ environment:
 dependencies:
   # path: ^1.8.0
 
+  http: ^1.2.2
+  multicast_dns: ^0.3.2+7
+
   il_core:
     path: ../il_core
 
