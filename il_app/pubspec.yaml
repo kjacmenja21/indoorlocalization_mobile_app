@@ -10,7 +10,21 @@ dependencies:
   flutter:
     sdk: flutter
 
+  provider: ^6.1.2
   go_router: ^14.6.0
+  font_awesome_flutter: ^10.8.0
+
+  il_core:
+    path: ../il_core
+
+  il_basic_auth:
+    path: ../il_basic_auth
+
+  il_entities:
+    path: ../il_entities
+
+  il_ws:
+    path: ../il_ws
 
 dev_dependencies:
   flutter_test:
