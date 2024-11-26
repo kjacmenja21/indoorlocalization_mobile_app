@@ -12,7 +12,11 @@ dependencies:
   # path: ^1.8.0
 
   http: ^1.2.2
-  multicast_dns: ^0.3.2+7
+
+  #multicast_dns: ^0.3.2+7
+  multicast_dns:
+    git:
+      url: https://github.com/jmojzes21/multicast_dns.git
 
   il_core:
     path: ../il_core

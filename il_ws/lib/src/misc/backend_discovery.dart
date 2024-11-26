@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:il_core/il_core.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 
 class BackendDiscovery {
@@ -30,6 +31,10 @@ class BackendDiscovery {
           }
         }
       }
+    }
+
+    if (completer.isCompleted == false) {
+      completer.completeError(AppException('Backend is not working!'));
     }
 
     client.stop();
