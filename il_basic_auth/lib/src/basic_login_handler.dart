@@ -16,9 +16,9 @@ class BasicLoginHandler extends LoginHandler {
 
     try {
       var authService = AuthenticationService();
-      var user = await authService.login(token.username, token.password);
+      var registeredUser = await authService.login(token.username, token.password);
 
-      loginListener.onSuccessfulLogin(user);
+      loginListener.onSuccessfulLogin(registeredUser);
     } on AppException catch (e) {
       loginListener.onFailedLogin(e.message);
     }

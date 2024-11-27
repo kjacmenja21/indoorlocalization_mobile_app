@@ -33,8 +33,8 @@ class LoginViewModel extends ChangeNotifier {
     loginHandler.handleLogin(
       baseToken: token,
       loginListener: LoginOutcomeListener(
-        onSuccessfulLogin: (user) {
-          message = Message.success('Success login ${user.username}');
+        onSuccessfulLogin: (registeredUser) {
+          message = Message.success('Success login ${registeredUser.user.username}');
           notifyListeners();
         },
         onFailedLogin: (reason) {
