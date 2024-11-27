@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:il_app/models/message.dart';
 import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
+import 'package:il_ws/il_ws.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final tcUsername = TextEditingController();
   final tcPassword = TextEditingController();
 
-  final loginHandler = BasicLoginHandler();
+  final loginHandler = BasicLoginHandler(FakeAuthenticationService());
 
   bool showPassword = false;
   Message? message;

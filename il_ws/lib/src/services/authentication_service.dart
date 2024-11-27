@@ -1,7 +1,20 @@
 import 'package:il_core/il_core.dart';
 import 'package:il_entities/il_entities.dart';
+import 'package:il_ws/src/services/web_service.dart';
 
-class AuthenticationService {
+abstract class IAuthenticationService {
+  Future<RegisteredUser> login(String username, String password);
+}
+
+class AuthenticationService extends WebService implements IAuthenticationService {
+  @override
+  Future<RegisteredUser> login(String username, String password) async {
+    throw UnimplementedError();
+  }
+}
+
+class FakeAuthenticationService implements IAuthenticationService {
+  @override
   Future<RegisteredUser> login(String username, String password) async {
     if (username == "admin" && password == "admin") {
       return Future.value(
