@@ -9,7 +9,18 @@ abstract class IAuthenticationService {
 class AuthenticationService extends WebService implements IAuthenticationService {
   @override
   Future<RegisteredUser> login(String username, String password) async {
-    throw UnimplementedError();
+    var response = await httpPost(path: '/api/login', body: {
+      'username': username,
+      'password': password,
+    });
+
+    var user = User.fromJson(response);
+    var jwtToken = response['token'];
+
+    return RegisteredUser(
+      user: user,
+      jwtToken: jwtToken,
+    );
   }
 }
 
