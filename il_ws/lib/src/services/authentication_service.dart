@@ -27,23 +27,23 @@ class AuthenticationService extends WebService implements IAuthenticationService
 class FakeAuthenticationService implements IAuthenticationService {
   @override
   Future<RegisteredUser> login(String username, String password) async {
-    if (username == "admin" && password == "admin") {
+    if (username == "bruno" && password == "bruno") {
       return Future.value(
         RegisteredUser(
           user: User(
             id: 0,
-            username: 'admin',
-            firstName: '',
-            lastName: '',
+            username: 'bruno',
+            firstName: 'Bruno',
+            lastName: 'Brunić',
             email: '',
             contact: '',
             role: UserRole(id: 0, name: ''),
           ),
-          jwtToken: '',
+          jwtToken: 'bruno-jwt-token',
         ),
       );
     }
 
-    throw AppException("Invalid username or password.");
+    throw WebServiceException("Invalid username or password.");
   }
 }

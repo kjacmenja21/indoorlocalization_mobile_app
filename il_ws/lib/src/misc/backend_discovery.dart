@@ -5,16 +5,13 @@ import 'package:il_core/il_core.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 
 class BackendDiscovery {
-  Future<String> discoverBackendAddress() async {
+  Future<String> discoverBackendAddress(String serviceName, String targetName) async {
     var completer = Completer<String>();
-    _backendAddressDiscovery(completer);
+    _backendAddressDiscovery(completer, serviceName, targetName);
     return completer.future;
   }
 
-  void _backendAddressDiscovery(Completer<String> completer) async {
-    const String serviceName = '_http._tcp.local';
-    const String targetName = 'foi-air-adaptiq-il._http._tcp.local';
-
+  void _backendAddressDiscovery(Completer<String> completer, String serviceName, String targetName) async {
     var client = MDnsClient();
 
     log('Start MDNS discovery');
