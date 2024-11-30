@@ -6,3 +6,7 @@ class AppException implements Exception {
   @override
   String toString() => message;
 }
+
+class WebServiceException extends AppException {
+  WebServiceException(super.message);
+}

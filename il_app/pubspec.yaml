@@ -13,6 +13,7 @@ dependencies:
   provider: ^6.1.2
   go_router: ^14.6.0
   font_awesome_flutter: ^10.8.0
+  shared_preferences: ^2.3.3
 
   il_core:
     path: ../il_core

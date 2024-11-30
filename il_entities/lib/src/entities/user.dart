@@ -21,4 +21,16 @@ class User {
     required this.contact,
     required this.role,
   });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      username: json['username'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      email: json['email'],
+      contact: json['contact'],
+      role: UserRole.fromJson(json['role']),
+    );
+  }
 }

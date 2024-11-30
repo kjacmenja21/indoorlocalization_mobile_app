@@ -1,8 +1,18 @@
-import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_ws/il_ws.dart';
 
+class BasicLoginToken implements LoginToken {
+  final String username;
+  final String password;
+
+  BasicLoginToken(this.username, this.password);
+}
+
 class BasicLoginHandler extends LoginHandler {
+  IAuthenticationService authService;
+
+  BasicLoginHandler(this.authService);
+
   @override
   void handleLogin({
     required LoginToken baseToken,
@@ -15,10 +25,9 @@ class BasicLoginHandler extends LoginHandler {
     BasicLoginToken token = baseToken as BasicLoginToken;
 
     try {
-      var authService = AuthenticationService();
-      var user = await authService.login(token.username, token.password);
+      var registeredUser = await authService.login(token.username, token.password);
 
-      loginListener.onSuccessfulLogin(user);
+      loginListener.onSuccessfulLogin(registeredUser);
     } on AppException catch (e) {
       loginListener.onFailedLogin(e.message);
     }

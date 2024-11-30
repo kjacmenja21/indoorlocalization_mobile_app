@@ -3,7 +3,7 @@ import 'package:il_entities/il_entities.dart';
 abstract class LoginToken {}
 
 class LoginOutcomeListener {
-  final void Function(User user) onSuccessfulLogin;
+  final void Function(RegisteredUser registeredUser) onSuccessfulLogin;
   final void Function(String reason) onFailedLogin;
 
   LoginOutcomeListener({
