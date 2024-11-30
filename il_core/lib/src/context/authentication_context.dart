@@ -1,4 +1,4 @@
-import 'package:il_entities/il_entities.dart';
+import 'package:il_core/il_entities.dart';
 
 class AuthenticationContext {
   static RegisteredUser? currentUser;

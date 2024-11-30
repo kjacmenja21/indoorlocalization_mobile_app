@@ -1,4 +1,4 @@
-import 'package:il_entities/src/entities/user_role.dart';
+import 'package:il_core/il_entities.dart';
 
 class User {
   final int id;

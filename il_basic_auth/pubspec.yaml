@@ -14,9 +14,6 @@ dependencies:
   il_core:
     path: ../il_core
   
-  il_entities:
-    path: ../il_entities
-
   il_ws:
     path: ../il_ws
 

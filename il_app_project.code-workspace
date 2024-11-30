@@ -1,21 +1,18 @@
 {
   "folders": [
-	{
-		"path": "il_app"
-	},
-	{
-		"path": "il_basic_auth"
-	},
-	{
-		"path": "il_core"
-	},
-	{
-		"path": "il_entities"
-	},
-	{
-		"path": "il_ws"
-	}
-],
+    {
+      "path": "il_app"
+    },
+    {
+      "path": "il_basic_auth"
+    },
+    {
+      "path": "il_core"
+    },
+    {
+      "path": "il_ws"
+    }
+  ],
   "settings": {
     "git.openRepositoryInParentFolders": "always"
   }

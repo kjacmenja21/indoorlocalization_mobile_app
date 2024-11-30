@@ -134,13 +134,6 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
-  il_entities:
-    dependency: "direct main"
-    description:
-      path: "../il_entities"
-      relative: true
-    source: path
-    version: "1.0.0"
   il_ws:
     dependency: "direct main"
     description:
