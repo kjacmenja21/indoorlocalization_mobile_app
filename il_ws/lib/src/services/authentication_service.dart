@@ -1,5 +1,5 @@
-import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_exceptions.dart';
 import 'package:il_ws/src/services/web_service.dart';
 
 abstract class IAuthenticationService {

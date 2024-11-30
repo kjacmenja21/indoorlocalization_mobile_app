@@ -1,4 +1,5 @@
 import 'package:il_core/il_core.dart';
+import 'package:il_core/il_exceptions.dart';
 import 'package:il_ws/il_ws.dart';
 
 class BasicLoginToken implements LoginToken {

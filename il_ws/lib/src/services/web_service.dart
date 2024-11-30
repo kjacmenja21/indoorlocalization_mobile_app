@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:il_core/il_core.dart';
+import 'package:il_core/il_exceptions.dart';
 
 typedef JsonObject = Map<String, dynamic>;
 

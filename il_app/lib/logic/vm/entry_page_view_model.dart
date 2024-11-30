@@ -3,6 +3,7 @@ import 'package:il_app/logic/services/session_service.dart';
 import 'package:il_app/models/message.dart';
 import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
+import 'package:il_core/il_exceptions.dart';
 import 'package:il_ws/il_ws.dart';
 
 class EntryPageViewModel extends ChangeNotifier {

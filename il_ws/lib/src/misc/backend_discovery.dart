@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:il_core/il_core.dart';
+import 'package:il_core/il_exceptions.dart';
 import 'package:multicast_dns/multicast_dns.dart';
 
 class BackendDiscovery {
