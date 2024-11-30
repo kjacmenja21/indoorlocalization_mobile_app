@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:il_app/logic/services/session_service.dart';
 import 'package:il_app/models/message.dart';
 import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_ws/il_ws.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EntryPageViewModel extends ChangeNotifier {
   static const String serviceName = '_http._tcp.local';
@@ -39,9 +39,8 @@ class EntryPageViewModel extends ChangeNotifier {
   }
 
   void _loadSession() async {
-    var prefs = await SharedPreferences.getInstance();
-
-    String? jwtToken = prefs.getString('userJwtToken');
+    var sessionService = SessionService();
+    String? jwtToken = await sessionService.loadSession();
 
     if (jwtToken == null) {
       navigateToLoginPage();
@@ -56,6 +55,10 @@ class EntryPageViewModel extends ChangeNotifier {
       loginListener: LoginOutcomeListener(
         onSuccessfulLogin: (registeredUser) {
           AuthenticationContext.currentUser = registeredUser;
+
+          var sessionService = SessionService();
+          sessionService.saveSession(registeredUser);
+
           navigateToHomePage();
         },
         onFailedLogin: (reason) {
