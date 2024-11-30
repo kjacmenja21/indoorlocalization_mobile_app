@@ -1,6 +1,12 @@
-import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_ws/il_ws.dart';
+
+class BasicLoginToken implements LoginToken {
+  final String username;
+  final String password;
+
+  BasicLoginToken(this.username, this.password);
+}
 
 class BasicLoginHandler extends LoginHandler {
   IAuthenticationService authService;
