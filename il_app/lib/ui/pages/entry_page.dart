@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/entry_page_view_model.dart';
 import 'package:il_app/ui/widgets/message_card.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,10 @@ class EntryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ChangeNotifierProvider(
-        create: (context) => EntryPageViewModel(),
+        create: (context) => EntryPageViewModel(
+          navigateToLoginPage: () => context.pushReplacement('/login'),
+          navigateToHomePage: () => context.pushReplacement('/home'),
+        ),
         child: Consumer<EntryPageViewModel>(
           builder: (context, model, child) {
             if (model.message != null) {

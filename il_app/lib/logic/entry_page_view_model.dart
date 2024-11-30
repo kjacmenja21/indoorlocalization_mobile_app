@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:il_app/models/message.dart';
+import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_ws/il_ws.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EntryPageViewModel extends ChangeNotifier {
   static const String serviceName = '_http._tcp.local';
@@ -9,7 +11,13 @@ class EntryPageViewModel extends ChangeNotifier {
 
   Message? message;
 
-  EntryPageViewModel() {
+  final VoidCallback navigateToLoginPage;
+  final VoidCallback navigateToHomePage;
+
+  EntryPageViewModel({
+    required this.navigateToLoginPage,
+    required this.navigateToHomePage,
+  }) {
     runTasks();
   }
 
@@ -20,12 +28,41 @@ class EntryPageViewModel extends ChangeNotifier {
     }
 
     try {
-      await _discoverLocalBackend();
+      //await _discoverLocalBackend();
     } on AppException catch (e) {
       message = Message.error(e.message);
       notifyListeners();
       return;
     }
+
+    _loadSession();
+  }
+
+  void _loadSession() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    String? jwtToken = prefs.getString('userJwtToken');
+
+    if (jwtToken == null) {
+      navigateToLoginPage();
+      return;
+    }
+
+    var autoLoginHandler = AutoLoginHandler(FakeAuthenticationService());
+    var token = AutoLoginToken(jwtToken);
+
+    autoLoginHandler.handleLogin(
+      baseToken: token,
+      loginListener: LoginOutcomeListener(
+        onSuccessfulLogin: (registeredUser) {
+          AuthenticationContext.currentUser = registeredUser;
+          navigateToHomePage();
+        },
+        onFailedLogin: (reason) {
+          navigateToLoginPage();
+        },
+      ),
+    );
   }
 
   Future<void> _discoverLocalBackend() async {
