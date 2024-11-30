@@ -5,7 +5,7 @@ import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_ws/il_ws.dart';
 
-class LoginViewModel extends ChangeNotifier {
+class LoginPageViewModel extends ChangeNotifier {
   final tcUsername = TextEditingController();
   final tcPassword = TextEditingController();
 
@@ -16,7 +16,7 @@ class LoginViewModel extends ChangeNotifier {
 
   final VoidCallback navigateToHomePage;
 
-  LoginViewModel({required this.navigateToHomePage});
+  LoginPageViewModel({required this.navigateToHomePage});
 
   void login() {
     var username = tcUsername.text.trim();

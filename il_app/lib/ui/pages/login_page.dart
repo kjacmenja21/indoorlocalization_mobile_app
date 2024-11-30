@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:il_app/logic/login_view_model.dart';
+import 'package:il_app/logic/vm/login_page_view_model.dart';
 import 'package:il_app/ui/widgets/message_card.dart';
 import 'package:provider/provider.dart';
 
@@ -17,10 +17,10 @@ class LoginPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(40),
         child: ChangeNotifierProvider(
-          create: (context) => LoginViewModel(
+          create: (context) => LoginPageViewModel(
             navigateToHomePage: () => context.pushReplacement('/home'),
           ),
-          child: Consumer<LoginViewModel>(
+          child: Consumer<LoginPageViewModel>(
             builder: (context, model, child) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
