@@ -1,0 +1,62 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:il_core/il_core.dart';
+
+class AppNavigationDrawer extends StatelessWidget {
+  const AppNavigationDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var user = AuthenticationContext.currentUser!.user;
+
+    return Drawer(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            listTileTheme: ListTileThemeData(
+              textColor: Colors.blue.shade900,
+              iconColor: Colors.blue.shade900,
+            ),
+          ),
+          child: Column(
+            children: [
+              ListTile(
+                title: const Text('Home'),
+                leading: const FaIcon(FontAwesomeIcons.house),
+                onTap: () => context.pushReplacement('/home'),
+              ),
+              ListTile(
+                title: const Text('Dashboard'),
+                leading: const FaIcon(FontAwesomeIcons.solidMap),
+                onTap: () => context.pushReplacement('/home'),
+              ),
+              ListTile(
+                title: const Text('Assets'),
+                leading: const FaIcon(FontAwesomeIcons.box),
+                onTap: () => context.pushReplacement('/home'),
+              ),
+              ListTile(
+                title: const Text('Heatmap report'),
+                leading: const FaIcon(FontAwesomeIcons.solidChartBar),
+                onTap: () => context.pushReplacement('/home'),
+              ),
+              ListTile(
+                title: const Text('Zone retention report'),
+                leading: const FaIcon(FontAwesomeIcons.solidChartBar),
+                onTap: () => context.pushReplacement('/home'),
+              ),
+              const Spacer(),
+              ListTile(
+                title: Text(user.fullName),
+                leading: const FaIcon(FontAwesomeIcons.solidUser),
+                onTap: () => context.pushReplacement('/home'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
