@@ -22,6 +22,8 @@ class User {
     required this.role,
   });
 
+  String get fullName => '$firstName $lastName';
+
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
