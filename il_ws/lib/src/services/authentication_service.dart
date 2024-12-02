@@ -47,13 +47,13 @@ class FakeAuthenticationService implements IAuthenticationService {
       return Future.value(
         RegisteredUser(
           user: User(
-            id: 0,
+            id: 1,
             username: 'bruno',
             firstName: 'Bruno',
             lastName: 'Brunić',
-            email: '',
-            contact: '',
-            role: UserRole(id: 0, name: ''),
+            email: 'bbrunic@gmail.com',
+            contact: '99 100 2000',
+            role: UserRole(id: 1, name: 'Admin'),
           ),
           jwtToken: 'bruno-jwt-token',
         ),
