@@ -51,7 +51,7 @@ class AppNavigationDrawer extends StatelessWidget {
               ListTile(
                 title: Text(user.fullName),
                 leading: const FaIcon(FontAwesomeIcons.solidUser),
-                onTap: () => context.pushReplacement('/home'),
+                onTap: () => context.pushReplacement('/user'),
               ),
             ],
           ),

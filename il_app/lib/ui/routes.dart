@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:il_app/ui/pages/entry_page.dart';
 import 'package:il_app/ui/pages/home_page.dart';
 import 'package:il_app/ui/pages/login_page.dart';
+import 'package:il_app/ui/pages/user_page.dart';
 
 final goRouter = GoRouter(
   initialLocation: '/entry',
@@ -17,6 +18,10 @@ final goRouter = GoRouter(
     GoRoute(
       path: '/home',
       builder: (context, state) => const HomePage(),
+    ),
+    GoRoute(
+      path: '/user',
+      builder: (context, state) => const UserPage(),
     ),
   ],
 );
