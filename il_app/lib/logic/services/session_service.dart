@@ -15,4 +15,9 @@ class SessionService {
     var prefs = await SharedPreferences.getInstance();
     await prefs.setString(_userTokenKey, registeredUser.jwtToken);
   }
+
+  Future<void> deleteSession() async {
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_userTokenKey);
+  }
 }
