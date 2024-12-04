@@ -14,9 +14,13 @@ class LoginPageViewModel extends ChangeNotifier {
   bool showPassword = false;
   Message? message;
 
+  final ISessionService sessionService;
   final VoidCallback navigateToHomePage;
 
-  LoginPageViewModel({required this.navigateToHomePage});
+  LoginPageViewModel({
+    required this.sessionService,
+    required this.navigateToHomePage,
+  });
 
   void login() {
     var username = tcUsername.text.trim();
@@ -42,7 +46,6 @@ class LoginPageViewModel extends ChangeNotifier {
         onSuccessfulLogin: (registeredUser) {
           AuthenticationContext.currentUser = registeredUser;
 
-          var sessionService = SessionService();
           sessionService.saveSession(registeredUser);
 
           navigateToHomePage();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:il_app/logic/services/session_service.dart';
 import 'package:il_app/logic/vm/user_page_view_model.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class UserPage extends StatelessWidget {
         padding: const EdgeInsets.all(40),
         child: ChangeNotifierProvider(
           create: (context) => UserPageViewModel(
+            sessionService: SessionService(),
             navigateToLoginPage: () => context.pushReplacement('/login'),
           ),
           child: Consumer<UserPageViewModel>(

@@ -12,10 +12,13 @@ class EntryPageViewModel extends ChangeNotifier {
 
   Message? message;
 
+  final ISessionService sessionService;
+
   final VoidCallback navigateToLoginPage;
   final VoidCallback navigateToHomePage;
 
   EntryPageViewModel({
+    required this.sessionService,
     required this.navigateToLoginPage,
     required this.navigateToHomePage,
   }) {
@@ -40,7 +43,6 @@ class EntryPageViewModel extends ChangeNotifier {
   }
 
   void _loadSession() async {
-    var sessionService = SessionService();
     String? jwtToken = await sessionService.loadSession();
 
     if (jwtToken == null) {
@@ -57,7 +59,6 @@ class EntryPageViewModel extends ChangeNotifier {
         onSuccessfulLogin: (registeredUser) {
           AuthenticationContext.currentUser = registeredUser;
 
-          var sessionService = SessionService();
           sessionService.saveSession(registeredUser);
 
           navigateToHomePage();

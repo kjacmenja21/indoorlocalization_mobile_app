@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:il_app/logic/services/session_service.dart';
 import 'package:il_app/logic/vm/entry_page_view_model.dart';
 import 'package:il_app/ui/widgets/message_card.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ class EntryPage extends StatelessWidget {
     return Scaffold(
       body: ChangeNotifierProvider(
         create: (context) => EntryPageViewModel(
+          sessionService: SessionService(),
           navigateToLoginPage: () => context.pushReplacement('/login'),
           navigateToHomePage: () => context.pushReplacement('/home'),
         ),
