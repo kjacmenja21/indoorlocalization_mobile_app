@@ -2,20 +2,20 @@ import 'package:il_core/il_core.dart';
 import 'package:il_core/il_exceptions.dart';
 import 'package:il_ws/il_ws.dart';
 
-class AutoLoginToken implements LoginToken {
+class AutoLoginToken implements ILoginToken {
   final String jwtToken;
 
   AutoLoginToken(this.jwtToken);
 }
 
-class AutoLoginHandler extends LoginHandler {
+class AutoLoginHandler extends ILoginHandler {
   IAuthenticationService authService;
 
   AutoLoginHandler(this.authService);
 
   @override
   void handleLogin({
-    required LoginToken baseToken,
+    required ILoginToken baseToken,
     required LoginOutcomeListener loginListener,
   }) async {
     if (baseToken is AutoLoginToken == false) {

@@ -1,6 +1,6 @@
 import 'package:il_core/il_entities.dart';
 
-abstract class LoginToken {}
+abstract class ILoginToken {}
 
 class LoginOutcomeListener {
   final void Function(RegisteredUser registeredUser) onSuccessfulLogin;
@@ -12,9 +12,9 @@ class LoginOutcomeListener {
   });
 }
 
-abstract class LoginHandler {
+abstract class ILoginHandler {
   void handleLogin({
-    required LoginToken baseToken,
+    required ILoginToken baseToken,
     required LoginOutcomeListener loginListener,
   });
 }

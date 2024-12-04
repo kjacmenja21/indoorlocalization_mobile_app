@@ -2,21 +2,21 @@ import 'package:il_core/il_core.dart';
 import 'package:il_core/il_exceptions.dart';
 import 'package:il_ws/il_ws.dart';
 
-class BasicLoginToken implements LoginToken {
+class BasicLoginToken implements ILoginToken {
   final String username;
   final String password;
 
   BasicLoginToken(this.username, this.password);
 }
 
-class BasicLoginHandler extends LoginHandler {
+class BasicLoginHandler extends ILoginHandler {
   IAuthenticationService authService;
 
   BasicLoginHandler(this.authService);
 
   @override
   void handleLogin({
-    required LoginToken baseToken,
+    required ILoginToken baseToken,
     required LoginOutcomeListener loginListener,
   }) async {
     if (baseToken is BasicLoginToken == false) {
