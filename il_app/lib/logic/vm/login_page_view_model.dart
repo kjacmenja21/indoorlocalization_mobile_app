@@ -3,22 +3,21 @@ import 'package:il_app/logic/services/session_service.dart';
 import 'package:il_app/models/message.dart';
 import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
-import 'package:il_ws/il_ws.dart';
 
 class LoginPageViewModel extends ChangeNotifier {
   final tcUsername = TextEditingController();
   final tcPassword = TextEditingController();
 
-  final loginHandler = BasicLoginHandler(FakeAuthenticationService());
-
   bool showPassword = false;
   Message? message;
 
   final ISessionService sessionService;
+  final ILoginHandler loginHandler;
   final VoidCallback navigateToHomePage;
 
   LoginPageViewModel({
     required this.sessionService,
+    required this.loginHandler,
     required this.navigateToHomePage,
   });
 

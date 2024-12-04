@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/services/session_service.dart';
 import 'package:il_app/logic/vm/login_page_view_model.dart';
 import 'package:il_app/ui/widgets/message_card.dart';
+import 'package:il_basic_auth/il_basic_auth.dart';
+import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
@@ -18,6 +20,7 @@ class LoginPage extends StatelessWidget {
       body: ChangeNotifierProvider(
         create: (context) => LoginPageViewModel(
           sessionService: SessionService(),
+          loginHandler: BasicLoginHandler(FakeAuthenticationService()),
           navigateToHomePage: () => context.pushReplacement('/home'),
         ),
         child: buildBody(),

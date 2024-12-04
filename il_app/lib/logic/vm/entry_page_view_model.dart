@@ -13,12 +13,13 @@ class EntryPageViewModel extends ChangeNotifier {
   Message? message;
 
   final ISessionService sessionService;
-
+  final ILoginHandler autoLoginHandler;
   final VoidCallback navigateToLoginPage;
   final VoidCallback navigateToHomePage;
 
   EntryPageViewModel({
     required this.sessionService,
+    required this.autoLoginHandler,
     required this.navigateToLoginPage,
     required this.navigateToHomePage,
   }) {
@@ -50,7 +51,6 @@ class EntryPageViewModel extends ChangeNotifier {
       return;
     }
 
-    var autoLoginHandler = AutoLoginHandler(FakeAuthenticationService());
     var token = AutoLoginToken(jwtToken);
 
     autoLoginHandler.handleLogin(
