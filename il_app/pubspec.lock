@@ -134,6 +134,20 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  il_display_assets_map:
+    dependency: "direct main"
+    description:
+      path: "../features/il_display_assets_map"
+      relative: true
+    source: path
+    version: "0.0.1"
+  il_display_assets_table:
+    dependency: "direct main"
+    description:
+      path: "../features/il_display_assets_table"
+      relative: true
+    source: path
+    version: "0.0.1"
   il_ws:
     dependency: "direct main"
     description:

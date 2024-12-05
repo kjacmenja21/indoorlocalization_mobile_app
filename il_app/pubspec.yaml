@@ -18,11 +18,17 @@ dependencies:
   il_core:
     path: ../il_core
 
+  il_ws:
+    path: ../il_ws
+
   il_basic_auth:
     path: ../il_basic_auth
 
-  il_ws:
-    path: ../il_ws
+  il_display_assets_map:
+    path: ../features/il_display_assets_map
+  
+  il_display_assets_table:
+    path: ../features/il_display_assets_table 
 
 dev_dependencies:
   flutter_test:
