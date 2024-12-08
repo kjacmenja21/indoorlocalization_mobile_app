@@ -8,10 +8,10 @@ class AssetDashboardPageViewModel extends ChangeNotifier {
   late final IAssetService _assetService;
   late final IFloorMapService _floorMapService;
 
+  late IAssetDisplayHandler _currentDisplayHandler;
+
   List<FloorMap> _floorMaps = [];
   FloorMap? _currentFloorMap;
-
-  late IAssetDisplayHandler _currentDisplayHandler;
 
   List<Asset> _assets = [];
 
@@ -29,12 +29,22 @@ class AssetDashboardPageViewModel extends ChangeNotifier {
   }
 
   void showAssets() {
-    _currentDisplayHandler.showAssets(_assets);
+    if (_currentFloorMap == null) {
+      return;
+    }
+
+    _currentDisplayHandler.showAssets(floorMap: _currentFloorMap!, assets: _assets);
   }
 
   Future<void> changeFloorMap(FloorMap floorMap) async {
+    if (floorMap.zones == null) {
+      var zones = await _floorMapService.getFloorMapZones(floorMap.id);
+      floorMap.zones = zones;
+    }
+
     _currentFloorMap = floorMap;
     _assets = await _assetService.getAssetsByFloorMap(floorMap.id);
+
     notifyListeners();
     showAssets();
   }
