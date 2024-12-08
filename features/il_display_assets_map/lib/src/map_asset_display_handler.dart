@@ -35,8 +35,8 @@ class MapAssetDisplayHandler implements IAssetDisplayHandler {
   }
 
   @override
-  void showAssets(List<Asset> assets) {
-    changeNotifier.show(assets);
+  void showAssets({required FloorMap floorMap, required List<Asset> assets}) {
+    changeNotifier.show(floorMap: floorMap, assets: assets);
   }
 
   @override
