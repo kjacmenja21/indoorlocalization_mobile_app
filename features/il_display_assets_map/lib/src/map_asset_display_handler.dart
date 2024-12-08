@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_display_assets_map/src/widgets/assets_widget.dart';
 
 class MapAssetDisplayHandler implements IAssetDisplayHandler {
   @override
@@ -20,14 +21,19 @@ class MapAssetDisplayHandler implements IAssetDisplayHandler {
     return ListenableBuilder(
       listenable: changeNotifier,
       builder: (context, child) {
+        if (changeNotifier.floorMap == null) {
+          return Container();
+        }
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Map'),
-            const SizedBox(height: 10),
-            ...changeNotifier.assets.map((e) {
-              return Text(e.name);
-            }),
+            Expanded(
+              child: AssetsWidget(
+                floorMap: changeNotifier.floorMap!,
+                assets: changeNotifier.assets,
+              ),
+            ),
           ],
         );
       },
