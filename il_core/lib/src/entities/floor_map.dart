@@ -7,6 +7,8 @@ class FloorMap {
   String name;
 
   Rect trackingArea;
+  Size size;
+
   String svgImage;
 
   List<FloorMapZone>? zones;
@@ -15,6 +17,7 @@ class FloorMap {
     required this.id,
     required this.name,
     required this.trackingArea,
+    required this.size,
     required this.svgImage,
     this.zones,
   });
@@ -24,8 +27,12 @@ class FloorMap {
       id: json['id'],
       name: json['name'],
       trackingArea: Rect.fromLTWH(
-        json['offsetX'],
-        json['offsetY'],
+        json['tx'],
+        json['ty'],
+        json['tw'],
+        json['th'],
+      ),
+      size: Size(
         json['width'],
         json['height'],
       ),
