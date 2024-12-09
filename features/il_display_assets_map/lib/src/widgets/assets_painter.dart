@@ -31,9 +31,14 @@ class AssetsPainter extends CustomPainter {
     double scale = transform.getMaxScaleOnAxis();
     Vector3 translation = transform.getTranslation();
 
-    double ax = asset.x * scale + translation.x;
-    double ay = asset.y * scale + translation.y;
-    Offset assetPosition = Offset(ax, ay);
+    Rect trackingArea = floorMap.trackingArea;
+
+    double ax = asset.x + trackingArea.left;
+    double ay = asset.y + trackingArea.top;
+
+    double tx = ax * scale + translation.x;
+    double ty = ay * scale + translation.y;
+    Offset assetPosition = Offset(tx, ty);
 
     // draw position circle
 
