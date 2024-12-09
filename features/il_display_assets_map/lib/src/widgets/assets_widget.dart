@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_theme.dart';
 import 'package:il_display_assets_map/src/widgets/assets_painter.dart';
+import 'package:il_display_assets_map/src/widgets/floor_map_painter.dart';
 
 class AssetsWidget extends StatefulWidget {
   final FloorMap floorMap;
@@ -18,29 +20,26 @@ class AssetsWidget extends StatefulWidget {
 }
 
 class _AssetsWidgetState extends State<AssetsWidget> {
+  var transformationController = TransformationController();
+
   late FloorMap floorMap;
   late List<Asset> assets;
 
-  PictureInfo? svg;
+  PictureInfo? floorMapSvg;
 
   @override
   void initState() {
     super.initState();
     floorMap = widget.floorMap;
     assets = widget.assets;
-    _loadSvg(floorMap.svgImage);
-  }
-
-  @override
-  void didUpdateWidget(AssetsWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    floorMap = widget.floorMap;
-    assets = widget.assets;
+    loadSvg(floorMap.svgImage);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (svg == null) return Container();
+    if (floorMapSvg == null) {
+      return Container();
+    }
 
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
@@ -48,29 +47,71 @@ class _AssetsWidgetState extends State<AssetsWidget> {
         height: constraints.maxHeight,
         decoration: BoxDecoration(
           border: Border.all(
-            color: Colors.black,
+            color: AppColors.primaryBlueColor,
+            width: 2,
           ),
         ),
-        child: InteractiveViewer(
-          constrained: false,
-          minScale: 0.1,
-          maxScale: 100,
-          child: CustomPaint(
-            willChange: true,
-            size: svg!.size,
-            painter: AssetsPainter(
-              floorMap: floorMap,
-              assets: assets,
-              svg: svg!,
+        child: Stack(
+          children: [
+            InteractiveViewer(
+              transformationController: transformationController,
+              constrained: false,
+              minScale: 0.001,
+              maxScale: 20,
+              boundaryMargin: const EdgeInsets.all(500),
+              child: buildFloorMapPaint(),
             ),
-          ),
+            IgnorePointer(
+              child: ListenableBuilder(
+                listenable: transformationController,
+                builder: (context, child) {
+                  return buildAssetsPaint(
+                    constraints.biggest,
+                    transformationController.value,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       );
     });
   }
 
-  Future<void> _loadSvg(String svgText) async {
+  Widget buildFloorMapPaint() {
+    return CustomPaint(
+      willChange: false,
+      isComplex: true,
+      size: floorMap.size,
+      painter: FloorMapPainter(
+        floorMap: floorMap,
+        svg: floorMapSvg!,
+      ),
+    );
+  }
+
+  Widget buildAssetsPaint(Size size, Matrix4 transform) {
+    return ClipRect(
+      child: CustomPaint(
+        willChange: true,
+        size: size,
+        painter: AssetsPainter(
+          transform: transform,
+          floorMap: floorMap,
+          assets: assets,
+        ),
+      ),
+    );
+  }
+
+  Future<void> loadSvg(String svgText) async {
     var svg = await vg.loadPicture(SvgStringLoader(svgText), null);
-    setState(() => this.svg = svg);
+    setState(() => floorMapSvg = svg);
+  }
+
+  @override
+  void dispose() {
+    transformationController.dispose();
+    super.dispose();
   }
 }
