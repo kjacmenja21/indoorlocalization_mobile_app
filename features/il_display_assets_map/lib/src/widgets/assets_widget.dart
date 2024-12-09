@@ -36,9 +36,16 @@ class _AssetsWidgetState extends State<AssetsWidget> {
   }
 
   @override
+  void didUpdateWidget(AssetsWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (floorMapSvg == null) {
-      return Container();
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     }
 
     return LayoutBuilder(builder: (context, constraints) {
@@ -56,8 +63,8 @@ class _AssetsWidgetState extends State<AssetsWidget> {
             InteractiveViewer(
               transformationController: transformationController,
               constrained: false,
-              minScale: 0.001,
-              maxScale: 20,
+              minScale: 0.01,
+              maxScale: 2,
               boundaryMargin: const EdgeInsets.all(500),
               child: buildFloorMapPaint(),
             ),

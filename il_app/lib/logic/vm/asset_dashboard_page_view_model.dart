@@ -15,6 +15,8 @@ class AssetDashboardPageViewModel extends ChangeNotifier {
 
   List<Asset> _assets = [];
 
+  bool _isLoading = true;
+
   AssetDashboardPageViewModel({
     required List<IAssetDisplayHandler> displayHandlers,
     required IAssetService assetService,
@@ -37,14 +39,18 @@ class AssetDashboardPageViewModel extends ChangeNotifier {
   }
 
   Future<void> changeFloorMap(FloorMap floorMap) async {
+    _isLoading = true;
+    _currentFloorMap = floorMap;
+    notifyListeners();
+
     if (floorMap.zones == null) {
       var zones = await _floorMapService.getFloorMapZones(floorMap.id);
       floorMap.zones = zones;
     }
 
-    _currentFloorMap = floorMap;
     _assets = await _assetService.getAssetsByFloorMap(floorMap.id);
 
+    _isLoading = false;
     notifyListeners();
     showAssets();
   }
@@ -61,8 +67,11 @@ class AssetDashboardPageViewModel extends ChangeNotifier {
   List<FloorMap> get floorMaps => _floorMaps;
   FloorMap? get currentFloorMap => _currentFloorMap;
 
+  bool get isLoading => _isLoading;
+
   Future<void> _loadFloorMaps() async {
     _floorMaps = await _floorMapService.getAllFloorMaps();
+    _isLoading = false;
     notifyListeners();
   }
 

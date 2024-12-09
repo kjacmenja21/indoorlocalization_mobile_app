@@ -25,16 +25,9 @@ class MapAssetDisplayHandler implements IAssetDisplayHandler {
           return Container();
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: AssetsWidget(
-                floorMap: changeNotifier.floorMap!,
-                assets: changeNotifier.assets,
-              ),
-            ),
-          ],
+        return AssetsWidget(
+          floorMap: changeNotifier.floorMap!,
+          assets: changeNotifier.assets,
         );
       },
     );

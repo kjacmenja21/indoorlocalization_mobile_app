@@ -52,11 +52,18 @@ class AssetDashboardPage extends StatelessWidget {
   Widget buildBody() {
     return Consumer<AssetDashboardPageViewModel>(
       builder: (context, model, child) {
+        if (model.floorMaps.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DropdownMenu<FloorMap>(
               label: const Text('Facility'),
+              enabled: !model.isLoading,
               width: 200,
               enableSearch: false,
               requestFocusOnTap: false,
@@ -74,10 +81,24 @@ class AssetDashboardPage extends StatelessWidget {
                 );
               }).toList(),
             ),
-            const SizedBox(height: 20),
-            if (model.currentFloorMap != null)
+            if (model.currentFloorMap == null)
               Expanded(
-                child: model.currentDisplayHandler.buildWidget(context),
+                child: Center(
+                  child: Text('Select a facility', style: Theme.of(context).textTheme.titleLarge),
+                ),
+              ),
+            if (model.isLoading)
+              const Expanded(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            if (!model.isLoading && model.currentFloorMap != null)
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: model.currentDisplayHandler.buildWidget(context),
+                ),
               ),
           ],
         );
