@@ -20,6 +20,7 @@ class AssetDashboardPage extends StatelessWidget {
           TableAssetDisplayHandler(),
         ],
         assetService: FakeAssetService(),
+        assetLocationTracker: FakeAssetLocationTracker(),
         floorMapService: FakeFloorMapService(),
       ),
       child: Builder(builder: (context) {

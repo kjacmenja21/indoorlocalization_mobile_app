@@ -6,6 +6,7 @@ import 'package:il_ws/il_ws.dart';
 class AssetDashboardPageViewModel extends ChangeNotifier {
   late final List<IAssetDisplayHandler> _displayHandlers;
   late final IAssetService _assetService;
+  late final IAssetLocationTracker _assetLocationTracker;
   late final IFloorMapService _floorMapService;
 
   late IAssetDisplayHandler _currentDisplayHandler;
@@ -20,10 +21,12 @@ class AssetDashboardPageViewModel extends ChangeNotifier {
   AssetDashboardPageViewModel({
     required List<IAssetDisplayHandler> displayHandlers,
     required IAssetService assetService,
+    required IAssetLocationTracker assetLocationTracker,
     required IFloorMapService floorMapService,
   }) {
     _displayHandlers = displayHandlers;
     _assetService = assetService;
+    _assetLocationTracker = assetLocationTracker;
     _floorMapService = floorMapService;
 
     _currentDisplayHandler = displayHandlers.first;
@@ -41,6 +44,7 @@ class AssetDashboardPageViewModel extends ChangeNotifier {
   Future<void> changeFloorMap(FloorMap floorMap) async {
     _isLoading = true;
     _currentFloorMap = floorMap;
+    await _assetLocationTracker.close();
     notifyListeners();
 
     if (floorMap.zones == null) {
@@ -49,6 +53,14 @@ class AssetDashboardPageViewModel extends ChangeNotifier {
     }
 
     _assets = await _assetService.getAssetsByFloorMap(floorMap.id);
+    await _assetLocationTracker.connect();
+
+    _assetLocationTracker.addListener((location) {
+      var asset = _assets.firstWhere((e) => e.id == location.id);
+      asset.x = location.x;
+      asset.y = location.y;
+      showAssets();
+    });
 
     _isLoading = false;
     notifyListeners();
