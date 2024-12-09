@@ -1,51 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_theme.dart';
+import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 class AssetsPainter extends CustomPainter {
+  final Matrix4 transform;
   final FloorMap floorMap;
   final List<Asset> assets;
-  final PictureInfo svg;
 
-  AssetsPainter({required this.floorMap, required this.assets, required this.svg});
+  AssetsPainter({
+    required this.transform,
+    required this.floorMap,
+    required this.assets,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    var offset = Offset(50, 50);
-    var img = svg.picture.toImageSync((size.width - 2 * offset.dx).toInt(), (size.height - 2 * offset.dy).toInt());
-
-    canvas.drawImage(img, offset, Paint());
-    img.dispose();
-
     for (var asset in assets) {
-      drawAsset(offset, asset, canvas);
+      drawAsset(asset, canvas);
     }
   }
 
-  void drawAsset(Offset offset, Asset asset, Canvas canvas) {
-    Paint p = Paint();
-    p.color = AppColors.primaryBlueColor;
-    p.style = PaintingStyle.fill;
+  void drawAsset(Asset asset, Canvas canvas) {
+    const double assetCircleRadius = 4.0;
+    const double labelBottomMargin = 10;
+    const double labelFontSize = 16;
+
+    // transform asset position
+
+    double scale = transform.getMaxScaleOnAxis();
+    Vector3 translation = transform.getTranslation();
+
+    double ax = asset.x * scale + translation.x;
+    double ay = asset.y * scale + translation.y;
+    Offset assetPosition = Offset(ax, ay);
+
+    // draw position circle
+
+    Paint paint = Paint();
+    paint.color = AppColors.primaryBlueColor;
+    paint.style = PaintingStyle.fill;
+
+    canvas.drawCircle(assetPosition, assetCircleRadius, paint);
+
+    // draw asset name
 
     var textPainter = TextPainter(
       textDirection: TextDirection.ltr,
       text: TextSpan(
         text: asset.name,
-        style: TextStyle(color: Colors.white, fontSize: 16),
+        style: const TextStyle(color: Colors.white, fontSize: labelFontSize),
       ),
     );
 
     textPainter.layout();
 
-    var assetPosition = offset + Offset(asset.x, asset.y);
-    canvas.drawCircle(assetPosition, 3, p);
+    var labelPosition = assetPosition - Offset(textPainter.width / 2, textPainter.height + labelBottomMargin);
+    var labelRectPosition = labelPosition - const Offset(12, 2);
+    var labelRectSize = Offset(textPainter.width + 24, textPainter.height + 4);
 
-    var labelPosition = assetPosition - Offset(textPainter.width / 2, textPainter.height + 8);
-    var labelRectPosition = labelPosition - Offset(8, 0);
-    var labelRectSize = Offset(textPainter.width + 16, textPainter.height);
-
-    _drawRRect(labelRectPosition, labelRectSize, labelRectSize.dy / 2, canvas, p);
+    _drawRRect(labelRectPosition, labelRectSize, labelRectSize.dy / 2, canvas, paint);
     textPainter.paint(canvas, labelPosition);
   }
 
@@ -54,5 +68,5 @@ class AssetsPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
