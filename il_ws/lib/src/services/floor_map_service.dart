@@ -25,12 +25,14 @@ class FakeFloorMapService implements IFloorMapService {
           id: 1,
           name: 'Floor map 1',
           trackingArea: Rect.fromLTWH(0, 0, 3000, 2000),
+          size: Size(3000, 2000),
           svgImage: _testSvg,
         ),
         FloorMap(
           id: 2,
           name: 'Floor map 2',
           trackingArea: Rect.fromLTWH(0, 0, 3000, 2000),
+          size: Size(3000, 2000),
           svgImage: _testSvg,
         ),
       ];
@@ -39,8 +41,26 @@ class FakeFloorMapService implements IFloorMapService {
 
   @override
   Future<List<FloorMapZone>> getFloorMapZones(int floorMapId) async {
+    double x = 1300;
+    double y = 180;
+    double w = 1500;
+    double h = 1200;
+
     return Future.delayed(Duration(milliseconds: 500), () {
-      return [];
+      return [
+        FloorMapZone(
+          id: 1,
+          name: 'Zone 1',
+          color: Color.fromARGB(255, 255, 167, 38),
+          points: [
+            Offset(x, y),
+            Offset(x + w, y),
+            Offset(x + w, y + h),
+            Offset(x, y + h),
+          ],
+          floorMapId: floorMapId,
+        ),
+      ];
     });
   }
 }
