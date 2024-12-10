@@ -22,17 +22,47 @@ class _AssetsTableWidgetState extends State<AssetsTableWidget> {
   @override
   void initState() {
     super.initState();
-    prepareData();
+    getAssetInfo();
   }
 
   @override
   void didUpdateWidget(AssetsTableWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    prepareData();
+
+    if (widget.assets != oldWidget.assets) {
+      getAssetInfo();
+      return;
+    }
+
+    updateAssetInfo();
   }
 
-  void prepareData() {
+  void getAssetInfo() {
     assets = widget.assets.map((e) => AssetInfo.fromAsset(e, widget.floorMap)).toList();
+  }
+
+  void updateAssetInfo() {
+    if (assets.length != widget.assets.length) {
+      getAssetInfo();
+      return;
+    }
+
+    for (int i = 0; i < assets.length; i++) {
+      AssetInfo info = assets[i];
+      Asset asset = widget.assets[i];
+
+      if (info.id != asset.id) {
+        getAssetInfo();
+        return;
+      }
+
+      if (asset.x != info.x || asset.y != info.y) {
+        // asset position is changed
+        // zone must be updated
+        info = AssetInfo.fromAsset(asset, widget.floorMap);
+        assets[i] = info;
+      }
+    }
   }
 
   @override

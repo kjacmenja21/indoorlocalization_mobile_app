@@ -16,12 +16,14 @@ class AssetInfo {
   });
 
   factory AssetInfo.fromAsset(Asset asset, FloorMap floorMap) {
+    FloorMapZone? zone = asset.getCurrentZone(floorMap);
+
     return AssetInfo(
       id: asset.id,
       name: asset.name,
       x: asset.x,
       y: asset.y,
-      zone: '',
+      zone: zone?.name ?? '',
     );
   }
 }
