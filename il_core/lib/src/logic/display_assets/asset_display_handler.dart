@@ -16,7 +16,7 @@ abstract class IAssetDisplayHandler {
   @protected
   late AssetDisplayChangeNotifier changeNotifier;
 
-  String getDisplayName();
+  Widget buildDisplayWidget({required VoidCallback onTap});
 
   Widget buildWidget(BuildContext context);
 

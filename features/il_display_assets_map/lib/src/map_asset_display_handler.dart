@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_display_assets_map/src/widgets/assets_widget.dart';
@@ -12,8 +13,12 @@ class MapAssetDisplayHandler implements IAssetDisplayHandler {
   }
 
   @override
-  String getDisplayName() {
-    return 'Map';
+  Widget buildDisplayWidget({required VoidCallback onTap}) {
+    return ListTile(
+      title: const Text('Map'),
+      leading: const FaIcon(FontAwesomeIcons.solidMap),
+      onTap: onTap,
+    );
   }
 
   @override

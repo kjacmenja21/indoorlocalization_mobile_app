@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_display_assets_table/src/widgets/assets_table_widget.dart';
@@ -12,8 +13,12 @@ class TableAssetDisplayHandler implements IAssetDisplayHandler {
   }
 
   @override
-  String getDisplayName() {
-    return 'Table';
+  Widget buildDisplayWidget({required VoidCallback onTap}) {
+    return ListTile(
+      title: const Text('Table'),
+      leading: const FaIcon(FontAwesomeIcons.table),
+      onTap: onTap,
+    );
   }
 
   @override
