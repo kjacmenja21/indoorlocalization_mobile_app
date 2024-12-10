@@ -6,6 +6,7 @@ import 'package:il_core/il_entities.dart';
 import 'package:il_display_assets_map/il_display_assets_map.dart';
 import 'package:il_display_assets_table/il_display_assets_table.dart';
 import 'package:il_ws/il_ws.dart';
+import 'package:il_ws/il_fake_services.dart';
 import 'package:provider/provider.dart';
 
 class AssetDashboardPage extends StatelessWidget {
