@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  font_awesome_flutter: ^10.8.0
+
   il_core:
     path: ../../il_core
 
