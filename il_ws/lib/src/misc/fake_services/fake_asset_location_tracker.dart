@@ -6,14 +6,14 @@ import 'package:il_ws/il_ws.dart';
 
 class FakeAssetLocationTracker implements IAssetLocationTracker {
   Timer? _timer;
+  final List<AssetLocationCallback> _listeners = [];
 
   @override
   Future<void> connect() async {
-    return Future.delayed(Duration(milliseconds: 500));
-  }
+    if (_timer != null) {
+      await close();
+    }
 
-  @override
-  void addListener(AssetLocationCallback onData) {
     _timer = Timer.periodic(
       Duration(milliseconds: 1000),
       (timer) {
@@ -25,13 +25,24 @@ class FakeAssetLocationTracker implements IAssetLocationTracker {
 
         var location = AssetLocation(id: id, x: x, y: y);
 
-        onData(location);
+        for (var listener in _listeners) {
+          listener.call(location);
+        }
       },
     );
+
+    return Future.delayed(Duration(milliseconds: 500));
+  }
+
+  @override
+  void addListener(AssetLocationCallback onData) {
+    _listeners.add(onData);
   }
 
   @override
   Future<void> close() async {
+    _listeners.clear();
     _timer?.cancel();
+    _timer = null;
   }
 }
