@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_display_assets_table/src/widgets/assets_table_widget.dart';
 
 class TableAssetDisplayHandler implements IAssetDisplayHandler {
   @override
@@ -20,16 +21,7 @@ class TableAssetDisplayHandler implements IAssetDisplayHandler {
     return ListenableBuilder(
       listenable: changeNotifier,
       builder: (context, child) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Table'),
-            const SizedBox(height: 10),
-            ...changeNotifier.assets.map((e) {
-              return Text(e.name);
-            }),
-          ],
-        );
+        return AssetsTableWidget(assets: changeNotifier.assets);
       },
     );
   }
