@@ -21,7 +21,14 @@ class TableAssetDisplayHandler implements IAssetDisplayHandler {
     return ListenableBuilder(
       listenable: changeNotifier,
       builder: (context, child) {
-        return AssetsTableWidget(assets: changeNotifier.assets);
+        if (changeNotifier.floorMap == null) {
+          return Container();
+        }
+
+        return AssetsTableWidget(
+          floorMap: changeNotifier.floorMap!,
+          assets: changeNotifier.assets,
+        );
       },
     );
   }

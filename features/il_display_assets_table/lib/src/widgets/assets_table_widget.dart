@@ -1,30 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_display_assets_table/src/models/asset_info.dart';
 
-class AssetsTableWidget extends StatelessWidget {
+class AssetsTableWidget extends StatefulWidget {
+  final FloorMap floorMap;
   final List<Asset> assets;
 
   const AssetsTableWidget({
     super.key,
+    required this.floorMap,
     required this.assets,
   });
 
   @override
+  State<AssetsTableWidget> createState() => _AssetsTableWidgetState();
+}
+
+class _AssetsTableWidgetState extends State<AssetsTableWidget> {
+  List<AssetInfo> assets = [];
+
+  @override
+  void initState() {
+    super.initState();
+    prepareData();
+  }
+
+  @override
+  void didUpdateWidget(AssetsTableWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    prepareData();
+  }
+
+  void prepareData() {
+    assets = widget.assets.map((e) => AssetInfo.fromAsset(e, widget.floorMap)).toList();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var children = <Widget>[];
-
-    for (var asset in assets) {
-      children.add(Row(
-        children: [
-          Expanded(child: Text(asset.name)),
-          Expanded(child: Text('${asset.x.round()}')),
-          Expanded(child: Text('${asset.y.round()}')),
-          Expanded(child: Text('Zone')),
-        ],
-      ));
-      children.add(const Divider());
-    }
-
     var dataTable = DataTable(
         horizontalMargin: 0,
         columnSpacing: 20,
@@ -42,7 +54,7 @@ class AssetsTableWidget extends StatelessWidget {
             DataCell(Text(e.name)),
             DataCell(Text('${e.x.round()}')),
             DataCell(Text('${e.y.round()}')),
-            DataCell(Text('Zone 1')),
+            DataCell(Text(e.zone)),
           ]);
         }).toList());
 
