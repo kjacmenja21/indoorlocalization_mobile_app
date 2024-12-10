@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/vm/asset_dashboard_page_view_model.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
+import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_display_assets_map/il_display_assets_map.dart';
 import 'package:il_display_assets_table/il_display_assets_table.dart';
@@ -10,6 +12,20 @@ import 'package:provider/provider.dart';
 
 class AssetDashboardPage extends StatelessWidget {
   const AssetDashboardPage({super.key});
+
+  Future<void> openDisplayModeDialog(BuildContext context) async {
+    var assetDashboardViewModel = context.read<AssetDashboardPageViewModel>();
+    var displayHandlers = assetDashboardViewModel.displayHandlers;
+
+    IAssetDisplayHandler? result = await showDialog<IAssetDisplayHandler>(
+      context: context,
+      builder: (context) => _AssetDisplayModeDialog(displayHandlers: displayHandlers),
+    );
+
+    if (result != null) {
+      assetDashboardViewModel.changeDisplayHandler(result);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +50,7 @@ class AssetDashboardPage extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               IconButton(
-                onPressed: () {},
+                onPressed: () => openDisplayModeDialog(context),
                 icon: const FaIcon(FontAwesomeIcons.display),
               ),
               const SizedBox(width: 10),
@@ -104,6 +120,32 @@ class AssetDashboardPage extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _AssetDisplayModeDialog extends StatelessWidget {
+  final List<IAssetDisplayHandler> displayHandlers;
+
+  const _AssetDisplayModeDialog({required this.displayHandlers});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Asset display mode'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: displayHandlers.map((e) => getDisplayWidget(e, context)).toList(),
+      ),
+    );
+  }
+
+  Widget getDisplayWidget(IAssetDisplayHandler displayHandler, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: displayHandler.buildDisplayWidget(onTap: () {
+        context.pop(displayHandler);
+      }),
     );
   }
 }
