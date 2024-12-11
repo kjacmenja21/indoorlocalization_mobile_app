@@ -5,10 +5,25 @@ class AssetDisplayChangeNotifier extends ChangeNotifier {
   FloorMap? floorMap;
   List<Asset> assets = [];
 
+  bool _disposed = false;
+
   void show({required FloorMap floorMap, required List<Asset> assets}) {
     this.floorMap = floorMap;
     this.assets = assets;
+
     notifyListeners();
+  }
+
+  @override
+  void notifyListeners() {
+    if (_disposed) return;
+    super.notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
   }
 }
 
