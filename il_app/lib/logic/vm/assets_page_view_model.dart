@@ -6,51 +6,87 @@ class AssetsPageViewModel extends ChangeNotifier {
   final tcSearch = TextEditingController();
 
   late final IAssetService _assetService;
+  late final IFloorMapService _floorMapService;
 
   List<Asset> _allAssets = [];
   List<Asset> _currentAssets = [];
+
+  List<FloorMap> _floorMaps = [];
+  FloorMap? _floorMapFilter;
+
   bool _isLoading = true;
 
-  AssetsPageViewModel({required IAssetService assetService}) {
+  AssetsPageViewModel({
+    required IAssetService assetService,
+    required IFloorMapService floorMapService,
+  }) {
     _assetService = assetService;
+    _floorMapService = floorMapService;
 
     tcSearch.addListener(() {
-      _onSearchTextChanged(tcSearch.value.text);
+      _filterAssets();
     });
 
-    _loadAllAssets();
+    _loadData();
+  }
+
+  void setFloorMapFilter(FloorMap? floorMap) {
+    _floorMapFilter = floorMap;
+    _filterAssets();
   }
 
   List<Asset> get assets => _currentAssets;
+  List<FloorMap> get floorMaps => _floorMaps;
   bool get isLoading => _isLoading;
 
-  void _onSearchTextChanged(String text) {
-    text = text.trim().toLowerCase();
+  void _filterAssets() {
+    List<Asset> assets = _allAssets;
 
-    if (text.isEmpty) {
-      _currentAssets = _allAssets;
-      notifyListeners();
-      return;
+    if (_floorMapFilter != null) {
+      var floorMapId = _floorMapFilter!.id;
+      assets = assets.where((e) => e.floorMapId == floorMapId).toList();
     }
 
-    _currentAssets = _allAssets.where((asset) {
+    var search = tcSearch.text.trim().toLowerCase();
+    assets = _getSearchResult(search, assets);
+
+    _currentAssets = assets;
+    notifyListeners();
+  }
+
+  List<Asset> _getSearchResult(String search, List<Asset> assets) {
+    if (search.isEmpty) {
+      return assets;
+    }
+
+    return assets.where((asset) {
       String name = asset.name.toLowerCase();
 
-      if (name.contains(text)) {
+      if (name.contains(search)) {
         return true;
       }
 
       return false;
     }).toList();
+  }
+
+  Future<void> _loadData() async {
+    await Future.wait([
+      _loadAllAssets(),
+      _loadFloorMaps(),
+    ]);
+
+    _isLoading = false;
     notifyListeners();
   }
 
   Future<void> _loadAllAssets() async {
     _allAssets = await _assetService.getAllAssets();
     _currentAssets = _allAssets;
-    _isLoading = false;
+  }
 
-    notifyListeners();
+  Future<void> _loadFloorMaps() async {
+    _floorMaps = await _floorMapService.getAllFloorMaps();
   }
 
   @override

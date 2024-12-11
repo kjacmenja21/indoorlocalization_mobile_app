@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_app/logic/vm/assets_page_view_model.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
+import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_widgets.dart';
 import 'package:il_ws/il_fake_services.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ class AssetsPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => AssetsPageViewModel(
         assetService: FakeAssetService(),
+        floorMapService: FakeFloorMapService(),
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -46,6 +48,8 @@ class AssetsPage extends StatelessWidget {
               controller: model.tcSearch,
             ),
             const SizedBox(height: 20),
+            createFacilityMenu(model),
+            const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
                 itemCount: assets.length,
@@ -63,6 +67,34 @@ class AssetsPage extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget createFacilityMenu(AssetsPageViewModel model) {
+    return DropdownMenu<FloorMap?>(
+      label: const Text('Facility'),
+      enabled: !model.isLoading,
+      width: 200,
+      enableSearch: false,
+      requestFocusOnTap: false,
+      enableFilter: false,
+      onSelected: (value) {
+        model.setFloorMapFilter(value);
+      },
+      dropdownMenuEntries: [
+        const DropdownMenuEntry(
+          value: null,
+          label: 'All facilities',
+          leadingIcon: FaIcon(FontAwesomeIcons.building),
+        ),
+        ...model.floorMaps.map((e) {
+          return DropdownMenuEntry(
+            value: e,
+            label: e.name,
+            leadingIcon: const FaIcon(FontAwesomeIcons.building),
+          );
+        }),
+      ],
     );
   }
 }
