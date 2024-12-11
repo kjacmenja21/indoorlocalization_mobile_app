@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_app/logic/vm/assets_page_view_model.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
+import 'package:il_core/il_widgets.dart';
 import 'package:il_ws/il_fake_services.dart';
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,10 @@ class AssetsPage extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            CustomSearchBar(
+              controller: model.tcSearch,
+            ),
+            const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
                 itemCount: assets.length,

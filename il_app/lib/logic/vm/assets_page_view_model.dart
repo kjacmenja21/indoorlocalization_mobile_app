@@ -3,6 +3,8 @@ import 'package:il_core/il_entities.dart';
 import 'package:il_ws/il_ws.dart';
 
 class AssetsPageViewModel extends ChangeNotifier {
+  final tcSearch = TextEditingController();
+
   late final IAssetService _assetService;
 
   List<Asset> _assets = [];
@@ -19,6 +21,13 @@ class AssetsPageViewModel extends ChangeNotifier {
   Future<void> _loadAssets() async {
     _assets = await _assetService.getAllAssets();
     _isLoading = false;
+
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    tcSearch.dispose();
+    super.dispose();
   }
 }
