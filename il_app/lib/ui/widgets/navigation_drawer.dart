@@ -36,7 +36,7 @@ class AppNavigationDrawer extends StatelessWidget {
               ListTile(
                 title: const Text('Assets'),
                 leading: const FaIcon(FontAwesomeIcons.box),
-                onTap: () => context.pushReplacement('/home'),
+                onTap: () => context.pushReplacement('/assets'),
               ),
               ListTile(
                 title: const Text('Heatmap report'),
