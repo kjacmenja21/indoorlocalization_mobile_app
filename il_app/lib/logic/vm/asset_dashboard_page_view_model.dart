@@ -68,6 +68,10 @@ class AssetDashboardPageViewModel extends ChangeNotifier {
   }
 
   void changeDisplayHandler(IAssetDisplayHandler handler) {
+    if (handler == _currentDisplayHandler) {
+      return;
+    }
+
     _currentDisplayHandler = handler;
     notifyListeners();
     showAssets();
@@ -89,6 +93,8 @@ class AssetDashboardPageViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
+    _assetLocationTracker.close();
+
     for (var e in _displayHandlers) {
       e.dispose();
     }
