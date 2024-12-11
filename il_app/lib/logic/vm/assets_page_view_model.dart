@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:il_app/logic/vm/view_model.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_ws/il_ws.dart';
 
-class AssetsPageViewModel extends ChangeNotifier {
+class AssetsPageViewModel extends ViewModel {
   final tcSearch = TextEditingController();
 
   late final IAssetService _assetService;

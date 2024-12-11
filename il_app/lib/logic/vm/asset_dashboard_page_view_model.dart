@@ -1,9 +1,9 @@
-import 'package:flutter/foundation.dart';
+import 'package:il_app/logic/vm/view_model.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_ws/il_ws.dart';
 
-class AssetDashboardPageViewModel extends ChangeNotifier {
+class AssetDashboardPageViewModel extends ViewModel {
   late final List<IAssetDisplayHandler> _displayHandlers;
   late final IAssetService _assetService;
   late final IAssetLocationTracker _assetLocationTracker;

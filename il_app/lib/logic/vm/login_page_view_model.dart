@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:il_app/logic/services/session_service.dart';
+import 'package:il_app/logic/vm/view_model.dart';
 import 'package:il_app/models/message.dart';
 import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
 
-class LoginPageViewModel extends ChangeNotifier {
+class LoginPageViewModel extends ViewModel {
   final tcUsername = TextEditingController();
   final tcPassword = TextEditingController();
 
