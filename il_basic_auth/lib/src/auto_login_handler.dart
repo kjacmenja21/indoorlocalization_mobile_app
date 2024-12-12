@@ -29,7 +29,8 @@ class AutoLoginHandler extends ILoginHandler {
       var registeredUser = await authService.renewSession(token.refreshToken);
 
       loginListener.onSuccessfulLogin(registeredUser);
-    } on AppException catch (e) {
+    } catch (a) {
+      var e = AppException.from(a);
       loginListener.onFailedLogin(e.message);
     }
   }

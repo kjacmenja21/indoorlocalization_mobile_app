@@ -29,7 +29,7 @@ class WebService {
     var data = response.json;
 
     if (response.statusCode != successfulStatusCode) {
-      String msg = data['msg'] ?? 'Unknown error!';
+      String msg = data['detail'] ?? 'Unknown error!';
       throw WebServiceException(msg);
     }
 
@@ -69,7 +69,7 @@ class WebService {
     var data = response.json;
 
     if (response.statusCode != successfulStatusCode) {
-      String msg = data['msg'] ?? 'Unknown error!';
+      String msg = data['detail'] ?? 'Unknown error!';
       throw WebServiceException(msg);
     }
 
