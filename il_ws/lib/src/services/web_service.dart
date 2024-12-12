@@ -14,13 +14,13 @@ class WebService {
     int successfulStatusCode = 200,
   }) async {
     String base = BackendContext.httpServerAddress;
-    Uri uri = Uri.http(base, path, queryParameters);
+    Uri uri = Uri.https(base, path, queryParameters);
 
     var currentUser = AuthenticationContext.currentUser;
 
     var headers = <String, String>{};
     if (currentUser != null) {
-      headers['Authorization'] = 'Bearer ${currentUser.jwtToken}';
+      headers['Authorization'] = 'Bearer ${currentUser.accessToken.value}';
     }
 
     var response = await http.get(uri, headers: headers);
@@ -36,26 +36,31 @@ class WebService {
 
   Future<JsonObject> httpPost({
     required String path,
-    required JsonObject body,
-    int successfulStatusCode = 201,
+    required Object body,
+    int successfulStatusCode = 200,
+    String contentType = 'application/json',
   }) async {
     String base = BackendContext.httpServerAddress;
-    Uri uri = Uri.http(base, path);
+    Uri uri = Uri.https(base, path);
 
     var currentUser = AuthenticationContext.currentUser;
 
     var headers = <String, String>{
-      'Content-Type': 'application/json',
+      'Content-Type': contentType,
     };
 
     if (currentUser != null) {
-      headers['Authorization'] = 'Bearer ${currentUser.jwtToken}';
+      headers['Authorization'] = 'Bearer ${currentUser.accessToken.value}';
+    }
+
+    if (contentType == 'application/json') {
+      body = jsonEncode(body);
     }
 
     var response = await http.post(
       uri,
       headers: headers,
-      body: jsonEncode(body),
+      body: body,
       encoding: utf8,
     );
 
