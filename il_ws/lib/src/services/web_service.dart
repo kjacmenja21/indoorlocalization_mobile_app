@@ -12,13 +12,15 @@ class WebService {
     required String path,
     Map<String, dynamic>? queryParameters,
     int successfulStatusCode = 200,
+    Map<String, String>? headers,
   }) async {
     String base = BackendContext.httpServerAddress;
     Uri uri = Uri.https(base, path, queryParameters);
 
     var currentUser = AuthenticationContext.currentUser;
 
-    var headers = <String, String>{};
+    headers ??= {};
+
     if (currentUser != null) {
       headers['Authorization'] = 'Bearer ${currentUser.accessToken.value}';
     }
@@ -36,18 +38,18 @@ class WebService {
 
   Future<JsonObject> httpPost({
     required String path,
-    required Object body,
+    Object? body,
     int successfulStatusCode = 200,
     String contentType = 'application/json',
+    Map<String, String>? headers,
   }) async {
     String base = BackendContext.httpServerAddress;
     Uri uri = Uri.https(base, path);
 
     var currentUser = AuthenticationContext.currentUser;
 
-    var headers = <String, String>{
-      'Content-Type': contentType,
-    };
+    headers ??= {};
+    headers['Content-Type'] = contentType;
 
     if (currentUser != null) {
       headers['Authorization'] = 'Bearer ${currentUser.accessToken.value}';
