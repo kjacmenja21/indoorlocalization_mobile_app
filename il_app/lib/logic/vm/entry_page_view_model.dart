@@ -4,13 +4,9 @@ import 'package:il_app/logic/vm/view_model.dart';
 import 'package:il_app/models/message.dart';
 import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
-import 'package:il_core/il_exceptions.dart';
-import 'package:il_ws/il_ws.dart';
+import 'package:il_core/il_entities.dart';
 
 class EntryPageViewModel extends ViewModel {
-  static const String serviceName = '_http._tcp.local';
-  static const String targetName = 'foi-air-adaptiq-il._http._tcp.local';
-
   Message? message;
 
   final ISessionService sessionService;
@@ -33,26 +29,18 @@ class EntryPageViewModel extends ViewModel {
       notifyListeners();
     }
 
-    try {
-      //await _discoverLocalBackend();
-    } on AppException catch (e) {
-      message = Message.error(e.message);
-      notifyListeners();
-      return;
-    }
-
     _loadSession();
   }
 
   void _loadSession() async {
-    String? jwtToken = await sessionService.loadSession();
+    JwtToken? refreshToken = await sessionService.loadSession();
 
-    if (jwtToken == null) {
+    if (refreshToken == null) {
       navigateToLoginPage();
       return;
     }
 
-    var token = AutoLoginToken(jwtToken);
+    var token = AutoLoginToken(refreshToken);
 
     autoLoginHandler.handleLogin(
       baseToken: token,
@@ -69,12 +57,5 @@ class EntryPageViewModel extends ViewModel {
         },
       ),
     );
-  }
-
-  Future<void> _discoverLocalBackend() async {
-    var backendDiscovery = BackendDiscovery();
-    var address = await backendDiscovery.discoverBackendAddress(serviceName, targetName);
-
-    BackendContext.httpServerAddress = '$address:80';
   }
 }
