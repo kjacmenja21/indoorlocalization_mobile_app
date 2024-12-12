@@ -70,10 +70,12 @@ class LoginPage extends StatelessWidget {
                 onClose: () => model.clearMessage(),
               ),
             const SizedBox(height: 40),
-            FilledButton(
-              onPressed: () => model.login(),
-              child: const Text('Log in'),
-            ),
+            if (model.isLoading) const CircularProgressIndicator(),
+            if (!model.isLoading)
+              FilledButton(
+                onPressed: () => model.login(),
+                child: const Text('Log in'),
+              ),
           ],
         );
 
