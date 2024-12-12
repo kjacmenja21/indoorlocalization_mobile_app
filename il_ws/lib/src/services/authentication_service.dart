@@ -18,7 +18,7 @@ class AuthenticationService extends WebService implements IAuthenticationService
       contentType: 'application/x-www-form-urlencoded',
     );
 
-    var user = User.fromJson(response['user']);
+    var user = User.fromJson(response['data']);
     var accessToken = JwtToken.decode(response['access_token']);
     var refreshToken = JwtToken.decode(response['refresh_token']);
 
