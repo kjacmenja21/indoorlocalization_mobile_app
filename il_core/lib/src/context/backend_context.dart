@@ -1,3 +1,3 @@
 class BackendContext {
-  static String httpServerAddress = '';
+  static const String httpServerAddress = 'adaptiq.up.railway.app';
 }
