@@ -1,11 +1,12 @@
 import 'package:il_core/il_core.dart';
+import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_exceptions.dart';
 import 'package:il_ws/il_ws.dart';
 
 class AutoLoginToken implements ILoginToken {
-  final String jwtToken;
+  final JwtToken refreshToken;
 
-  AutoLoginToken(this.jwtToken);
+  AutoLoginToken(this.refreshToken);
 }
 
 class AutoLoginHandler extends ILoginHandler {
@@ -25,7 +26,7 @@ class AutoLoginHandler extends ILoginHandler {
     AutoLoginToken token = baseToken as AutoLoginToken;
 
     try {
-      var registeredUser = await authService.renewSession(token.jwtToken);
+      var registeredUser = await authService.renewSession(token.refreshToken);
 
       loginListener.onSuccessfulLogin(registeredUser);
     } on AppException catch (e) {
