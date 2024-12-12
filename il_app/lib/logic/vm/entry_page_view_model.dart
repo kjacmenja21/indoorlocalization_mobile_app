@@ -53,6 +53,7 @@ class EntryPageViewModel extends ViewModel {
           navigateToHomePage();
         },
         onFailedLogin: (reason) {
+          sessionService.deleteSession();
           navigateToLoginPage();
         },
       ),
