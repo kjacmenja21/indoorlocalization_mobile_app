@@ -23,7 +23,16 @@ final goRouter = GoRouter(
     ),
     GoRoute(
       path: '/asset_dashboard',
-      builder: (context, state) => const AssetDashboardPage(),
+      builder: (context, state) {
+        Object? extra = state.extra;
+        int? initFloorMapId;
+
+        if (extra is Map) {
+          initFloorMapId = extra['floorMapId'];
+        }
+
+        return AssetDashboardPage(initFloorMapId: initFloorMapId);
+      },
     ),
     GoRoute(
       path: '/assets',

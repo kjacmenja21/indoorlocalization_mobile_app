@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/services/session_service.dart';
 import 'package:il_app/logic/vm/login_page_view_model.dart';
+import 'package:il_app/ui/widgets/app_logo.dart';
 import 'package:il_app/ui/widgets/message_card.dart';
 import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_ws/il_ws.dart';
@@ -34,7 +35,7 @@ class LoginPage extends StatelessWidget {
         var body = Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const _AppLogoWidget(),
+            const AppLogoWidget(),
             const SizedBox(height: 80),
             TextField(
               controller: model.tcUsername,
@@ -88,26 +89,6 @@ class LoginPage extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class _AppLogoWidget extends StatelessWidget {
-  const _AppLogoWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Image.asset('assets/images/sick-mobilisis-logo.png'),
-        ),
-        const SizedBox(height: 10),
-        Text('Indoor Localization', style: Theme.of(context).textTheme.headlineLarge),
-      ],
     );
   }
 }

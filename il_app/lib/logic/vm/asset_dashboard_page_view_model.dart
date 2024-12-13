@@ -23,6 +23,7 @@ class AssetDashboardPageViewModel extends ViewModel {
     required IAssetService assetService,
     required IAssetLocationTracker assetLocationTracker,
     required IFloorMapService floorMapService,
+    int? initFloorMapId,
   }) {
     _displayHandlers = displayHandlers;
     _assetService = assetService;
@@ -30,7 +31,7 @@ class AssetDashboardPageViewModel extends ViewModel {
     _floorMapService = floorMapService;
 
     _currentDisplayHandler = displayHandlers.first;
-    _loadFloorMaps();
+    _init(initFloorMapId);
   }
 
   void showAssets() {
@@ -94,6 +95,18 @@ class AssetDashboardPageViewModel extends ViewModel {
   FloorMap? get currentFloorMap => _currentFloorMap;
 
   bool get isLoading => _isLoading;
+
+  Future<void> _init(int? initFloorMapId) async {
+    await _loadFloorMaps();
+
+    if (initFloorMapId != null) {
+      var i = _floorMaps.indexWhere((e) => e.id == initFloorMapId);
+
+      if (i != -1) {
+        changeFloorMap(_floorMaps[i]);
+      }
+    }
+  }
 
   Future<void> _loadFloorMaps() async {
     _floorMaps = await _floorMapService.getAllFloorMaps();
