@@ -12,6 +12,8 @@ class LoginPageViewModel extends ViewModel {
   bool showPassword = false;
   Message? message;
 
+  bool isLoading = false;
+
   final ISessionService sessionService;
   final ILoginHandler loginHandler;
   final VoidCallback navigateToHomePage;
@@ -40,6 +42,9 @@ class LoginPageViewModel extends ViewModel {
 
     var token = BasicLoginToken(username, password);
 
+    isLoading = true;
+    notifyListeners();
+
     loginHandler.handleLogin(
       baseToken: token,
       loginListener: LoginOutcomeListener(
@@ -52,6 +57,7 @@ class LoginPageViewModel extends ViewModel {
         },
         onFailedLogin: (reason) {
           message = Message.error(reason);
+          isLoading = false;
           notifyListeners();
         },
       ),

@@ -23,7 +23,7 @@ class FakeAssetLocationTracker implements IAssetLocationTracker {
         double x = random.nextInt(3000).toDouble();
         double y = random.nextInt(2000).toDouble();
 
-        var location = AssetLocation(id: id, x: x, y: y);
+        var location = AssetLocation(id: id, x: x, y: y, floorMapId: 0);
 
         for (var listener in _listeners) {
           listener.call(location);

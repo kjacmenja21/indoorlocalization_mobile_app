@@ -54,9 +54,9 @@ class Asset {
       name: json['name'],
       x: json['x'],
       y: json['y'],
-      lastSync: DateTime.parse(json['lastSync']),
+      lastSync: DateTime.parse(json['last_sync']),
       active: json['active'],
-      floorMapId: json['floorMapId'],
+      floorMapId: json['floormap_id'],
     );
   }
 }
