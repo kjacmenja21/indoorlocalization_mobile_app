@@ -28,8 +28,8 @@ class User {
     return User(
       id: json['id'],
       username: json['username'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
+      firstName: json['first_name'],
+      lastName: json['last_name'],
       email: json['email'],
       contact: json['contact'],
       role: UserRole.fromJson(json['role']),

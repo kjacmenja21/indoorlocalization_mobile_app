@@ -17,7 +17,8 @@ class FakeAuthenticationService implements IAuthenticationService {
             contact: '99 100 2000',
             role: UserRole(id: 1, name: 'Admin'),
           ),
-          jwtToken: 'bruno-jwt-token',
+          accessToken: JwtToken(value: 'access-token-bruno'),
+          refreshToken: JwtToken(value: 'refresh-token-bruno'),
         ),
       );
     }
@@ -26,8 +27,8 @@ class FakeAuthenticationService implements IAuthenticationService {
   }
 
   @override
-  Future<RegisteredUser> renewSession(String token) {
-    if (token == 'bruno-jwt-token') {
+  Future<RegisteredUser> renewSession(JwtToken refreshToken) {
+    if (refreshToken.value == 'refresh-token-bruno') {
       return login('bruno', 'bruno');
     }
     throw WebServiceException("Error");

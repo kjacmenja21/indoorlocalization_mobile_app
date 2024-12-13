@@ -6,7 +6,7 @@ import 'package:il_app/logic/vm/login_page_view_model.dart';
 import 'package:il_app/ui/widgets/app_logo.dart';
 import 'package:il_app/ui/widgets/message_card.dart';
 import 'package:il_basic_auth/il_basic_auth.dart';
-import 'package:il_ws/il_fake_services.dart';
+import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
       body: ChangeNotifierProvider(
         create: (context) => LoginPageViewModel(
           sessionService: SessionService(),
-          loginHandler: BasicLoginHandler(FakeAuthenticationService()),
+          loginHandler: BasicLoginHandler(AuthenticationService()),
           navigateToHomePage: () => context.pushReplacement('/home'),
         ),
         child: buildBody(),
@@ -71,10 +71,12 @@ class LoginPage extends StatelessWidget {
                 onClose: () => model.clearMessage(),
               ),
             const SizedBox(height: 40),
-            FilledButton(
-              onPressed: () => model.login(),
-              child: const Text('Log in'),
-            ),
+            if (model.isLoading) const CircularProgressIndicator(),
+            if (!model.isLoading)
+              FilledButton(
+                onPressed: () => model.login(),
+                child: const Text('Log in'),
+              ),
           ],
         );
 

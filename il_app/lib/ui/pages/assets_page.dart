@@ -4,7 +4,7 @@ import 'package:il_app/logic/vm/assets_page_view_model.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_widgets.dart';
-import 'package:il_ws/il_fake_services.dart';
+import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
 class AssetsPage extends StatelessWidget {
@@ -14,8 +14,8 @@ class AssetsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => AssetsPageViewModel(
-        assetService: FakeAssetService(),
-        floorMapService: FakeFloorMapService(),
+        assetService: AssetService(),
+        floorMapService: FloorMapService(),
       ),
       child: Scaffold(
         appBar: AppBar(

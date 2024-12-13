@@ -29,7 +29,8 @@ class BasicLoginHandler extends ILoginHandler {
       var registeredUser = await authService.login(token.username, token.password);
 
       loginListener.onSuccessfulLogin(registeredUser);
-    } on AppException catch (e) {
+    } catch (a) {
+      var e = AppException.from(a);
       loginListener.onFailedLogin(e.message);
     }
   }
