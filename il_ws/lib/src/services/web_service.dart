@@ -29,7 +29,7 @@ class WebService {
     var data = response.json;
 
     if (response.statusCode != successfulStatusCode) {
-      String msg = data['detail'] ?? 'Unknown error!';
+      String msg = _getMessage(data);
       throw WebServiceException(msg);
     }
 
@@ -44,6 +44,7 @@ class WebService {
     Map<String, String>? headers,
   }) async {
     String base = BackendContext.httpServerAddress;
+
     Uri uri = Uri.https(base, path);
 
     var currentUser = AuthenticationContext.currentUser;
@@ -69,11 +70,21 @@ class WebService {
     var data = response.json;
 
     if (response.statusCode != successfulStatusCode) {
-      String msg = data['detail'] ?? 'Unknown error!';
+      String msg = _getMessage(data);
       throw WebServiceException(msg);
     }
 
     return data;
+  }
+
+  String _getMessage(JsonObject data) {
+    var detail = data['detail'];
+
+    if (detail is String) {
+      return detail;
+    }
+
+    return 'Unknown error!';
   }
 }
 
