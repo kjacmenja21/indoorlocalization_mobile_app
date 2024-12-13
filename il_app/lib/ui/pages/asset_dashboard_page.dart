@@ -11,7 +11,8 @@ import 'package:il_ws/il_fake_services.dart';
 import 'package:provider/provider.dart';
 
 class AssetDashboardPage extends StatelessWidget {
-  const AssetDashboardPage({super.key});
+  final int? initFloorMapId;
+  const AssetDashboardPage({super.key, this.initFloorMapId});
 
   Future<void> openDisplayModeDialog(BuildContext context) async {
     var assetDashboardViewModel = context.read<AssetDashboardPageViewModel>();
@@ -38,6 +39,7 @@ class AssetDashboardPage extends StatelessWidget {
         assetService: FakeAssetService(),
         assetLocationTracker: FakeAssetLocationTracker(),
         floorMapService: FakeFloorMapService(),
+        initFloorMapId: initFloorMapId,
       ),
       child: Builder(builder: (context) {
         return Scaffold(
@@ -79,6 +81,7 @@ class AssetDashboardPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DropdownMenu<FloorMap>(
+              initialSelection: model.currentFloorMap,
               label: const Text('Facility'),
               enabled: !model.isLoading,
               width: 200,
