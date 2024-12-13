@@ -56,7 +56,17 @@ class AssetDashboardPageViewModel extends ViewModel {
     await _assetLocationTracker.connect();
 
     _assetLocationTracker.addListener((location) {
-      var asset = _assets.firstWhere((e) => e.id == location.id);
+      if (location.floorMapId != _currentFloorMap?.id) {
+        return;
+      }
+
+      int i = _assets.indexWhere((e) => e.id == location.id);
+      if (i == -1) {
+        return;
+      }
+
+      var asset = _assets[i];
+
       asset.x = location.x;
       asset.y = location.y;
       showAssets();
