@@ -1,0 +1,27 @@
+name: il_ws
+description: A starting point for Dart libraries or applications.
+publish_to: 'none'
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ^3.5.4
+
+# Add regular dependencies here.
+dependencies:
+  # path: ^1.8.0
+
+  http: ^1.2.2
+  mqtt_client: ^10.5.0
+
+  #multicast_dns: ^0.3.2+7
+  multicast_dns:
+    git:
+      url: https://github.com/jmojzes21/multicast_dns.git
+
+  il_core:
+    path: ../il_core
+
+dev_dependencies:
+  lints: ^4.0.0
+  test: ^1.24.0

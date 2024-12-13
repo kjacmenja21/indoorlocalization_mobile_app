@@ -1,0 +1,31 @@
+{
+  "folders": [
+    {
+      "name": "il_app",
+      "path": "il_app"
+    },
+    {
+      "name": "il_core",
+      "path": "il_core"
+    },
+    {
+      "name": "il_ws",
+      "path": "il_ws"
+    },
+    {
+      "name": "il_basic_auth",
+      "path": "il_basic_auth"
+    },
+    {
+      "name": "il_display_assets_map",
+      "path": "features/il_display_assets_map"
+    },
+    {
+      "name": "il_display_assets_table",
+      "path": "features/il_display_assets_table"
+    }
+  ],
+  "settings": {
+    "git.openRepositoryInParentFolders": "always"
+  }
+}
