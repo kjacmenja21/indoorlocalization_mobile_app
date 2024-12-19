@@ -16,6 +16,8 @@ class FloorMapZone {
     required this.floorMapId,
   });
 
+  Offset get labelPoint => points.first;
+
   factory FloorMapZone.fromJson(Map<String, dynamic> json) {
     var pointsJson = json['points'] as List<dynamic>;
     var points = pointsJson.map((e) => Offset(e['x'], e['y'])).toList();
