@@ -13,6 +13,12 @@ class FloorMapPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    var paint = Paint();
+    paint.style = PaintingStyle.fill;
+    paint.color = Colors.white;
+
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
+
     canvas.drawPicture(svg.picture);
 
     for (var zone in floorMap.zones!) {
