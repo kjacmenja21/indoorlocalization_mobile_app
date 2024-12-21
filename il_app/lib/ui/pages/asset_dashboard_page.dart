@@ -33,15 +33,15 @@ class AssetDashboardPage extends StatelessWidget {
   Future<void> openAssetFilterDialog(BuildContext context) async {
     var model = context.read<AssetDashboardPageViewModel>();
 
-    bool? result = await showDialog(
+    List<bool>? result = await showDialog(
       context: context,
       builder: (context) => AssetFilterDialog(
         assets: model.assets,
       ),
     );
 
-    if (result == true) {
-      model.showAssets();
+    if (result != null) {
+      model.updateAssetVisibility(result);
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_widgets.dart';
 
 class AssetFilterDialog extends StatefulWidget {
   final List<Asset> assets;
@@ -15,31 +16,41 @@ class AssetFilterDialog extends StatefulWidget {
 }
 
 class _AssetFilterDialogState extends State<AssetFilterDialog> {
+  final tcSearch = TextEditingController();
+
   late List<Asset> assets;
-  late List<bool> visibility;
 
   @override
   void initState() {
     super.initState();
-    assets = widget.assets;
-    visibility = assets.map((e) => e.visible).toList();
+    assets = widget.assets.map((e) => e.copy()).toList();
   }
 
-  void changeVisibility(int index) {
+  void changeVisibility(Asset asset) {
     setState(() {
-      visibility[index] = !visibility[index];
+      asset.visible = !asset.visible;
+    });
+  }
+
+  void onHideAll() {
+    setState(() {
+      for (var e in assets) {
+        e.visible = false;
+      }
+    });
+  }
+
+  void onShowAll() {
+    setState(() {
+      for (var e in assets) {
+        e.visible = true;
+      }
     });
   }
 
   void onApply() {
-    for (var i = 0; i < assets.length; i++) {
-      var asset = assets[i];
-      var visible = visibility[i];
-
-      asset.visible = visible;
-    }
-
-    Navigator.of(context).pop(true);
+    List<bool> visibility = assets.map((e) => e.visible).toList();
+    Navigator.of(context).pop(visibility);
   }
 
   void onCancel() {
@@ -51,9 +62,43 @@ class _AssetFilterDialogState extends State<AssetFilterDialog> {
     return AlertDialog(
       title: const Text('Filter assets'),
       content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          ...buildAssetWidgets(assets),
+          CustomSearchBar(controller: tcSearch),
+          const SizedBox(height: 20),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: assets.map((asset) {
+                  return ListTile(
+                    title: Text(asset.name),
+                    leading: const FaIcon(FontAwesomeIcons.box),
+                    trailing: IconButton(
+                      onPressed: () => changeVisibility(asset),
+                      icon: getVisibilityIcon(asset.visible),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () => onHideAll(),
+                child: const Text('Hide all'),
+              ),
+              const SizedBox(width: 10),
+              TextButton(
+                onPressed: () => onShowAll(),
+                child: const Text('Show all'),
+              ),
+            ],
+          ),
         ],
       ),
       actions: [
@@ -61,32 +106,12 @@ class _AssetFilterDialogState extends State<AssetFilterDialog> {
           onPressed: () => onCancel(),
           child: const Text('Cancel'),
         ),
-        TextButton(
+        FilledButton(
           onPressed: () => onApply(),
           child: const Text('Ok'),
         ),
       ],
     );
-  }
-
-  List<Widget> buildAssetWidgets(List<Asset> assets) {
-    var children = <Widget>[];
-
-    for (var i = 0; i < assets.length; i++) {
-      var asset = assets[i];
-      var visible = visibility[i];
-
-      children.add(ListTile(
-        title: Text(asset.name),
-        leading: const FaIcon(FontAwesomeIcons.box),
-        trailing: IconButton(
-          onPressed: () => changeVisibility(i),
-          icon: getVisibilityIcon(visible),
-        ),
-      ));
-    }
-
-    return children;
   }
 
   Widget getVisibilityIcon(bool visible) {
@@ -95,5 +120,11 @@ class _AssetFilterDialogState extends State<AssetFilterDialog> {
     } else {
       return const FaIcon(FontAwesomeIcons.eyeSlash);
     }
+  }
+
+  @override
+  void dispose() {
+    tcSearch.dispose();
+    super.dispose();
   }
 }

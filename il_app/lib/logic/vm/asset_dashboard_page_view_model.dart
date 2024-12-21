@@ -91,6 +91,19 @@ class AssetDashboardPageViewModel extends ViewModel {
     showAssets();
   }
 
+  void updateAssetVisibility(List<bool> visibility) {
+    if (_assets.length != visibility.length) {
+      throw ArgumentError('Visibility list length must be same as assets list length.');
+    }
+
+    for (var i = 0; i < _assets.length; i++) {
+      _assets[i].visible = visibility[i];
+    }
+
+    notifyListeners();
+    showAssets();
+  }
+
   List<IAssetDisplayHandler> get displayHandlers => _displayHandlers;
   IAssetDisplayHandler get currentDisplayHandler => _currentDisplayHandler;
 
