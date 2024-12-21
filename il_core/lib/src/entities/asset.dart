@@ -16,6 +16,8 @@ class Asset {
   int floorMapId;
   FloorMap? floorMap;
 
+  bool visible;
+
   Asset({
     required this.id,
     required this.name,
@@ -25,6 +27,7 @@ class Asset {
     required this.active,
     required this.floorMapId,
     this.floorMap,
+    this.visible = true,
   });
 
   /// Returns the zone in which the asset is currently located.
