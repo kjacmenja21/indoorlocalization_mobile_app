@@ -51,6 +51,20 @@ class Asset {
     return null;
   }
 
+  Asset copy() {
+    return Asset(
+      id: id,
+      name: name,
+      x: x,
+      y: y,
+      lastSync: lastSync,
+      active: active,
+      floorMapId: floorMapId,
+      floorMap: floorMap,
+      visible: visible,
+    );
+  }
+
   factory Asset.fromJson(Map<String, dynamic> json) {
     return Asset(
       id: json['id'],
