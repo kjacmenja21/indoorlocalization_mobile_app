@@ -38,6 +38,7 @@ class _AssetsWidgetState extends State<AssetsWidget> {
   @override
   void didUpdateWidget(AssetsWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
+    assets = widget.assets;
   }
 
   @override
