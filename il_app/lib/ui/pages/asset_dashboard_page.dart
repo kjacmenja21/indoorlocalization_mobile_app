@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/vm/asset_dashboard_page_view_model.dart';
+import 'package:il_app/ui/widgets/asset_filter_dialog.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_display_assets_map/il_display_assets_map.dart';
 import 'package:il_display_assets_table/il_display_assets_table.dart';
+import 'package:il_ws/il_fake_services.dart';
 import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
@@ -15,8 +17,8 @@ class AssetDashboardPage extends StatelessWidget {
   const AssetDashboardPage({super.key, this.initFloorMapId});
 
   Future<void> openDisplayModeDialog(BuildContext context) async {
-    var assetDashboardViewModel = context.read<AssetDashboardPageViewModel>();
-    var displayHandlers = assetDashboardViewModel.displayHandlers;
+    var model = context.read<AssetDashboardPageViewModel>();
+    var displayHandlers = model.displayHandlers;
 
     IAssetDisplayHandler? result = await showDialog<IAssetDisplayHandler>(
       context: context,
@@ -24,7 +26,22 @@ class AssetDashboardPage extends StatelessWidget {
     );
 
     if (result != null) {
-      assetDashboardViewModel.changeDisplayHandler(result);
+      model.changeDisplayHandler(result);
+    }
+  }
+
+  Future<void> openAssetFilterDialog(BuildContext context) async {
+    var model = context.read<AssetDashboardPageViewModel>();
+
+    bool? result = await showDialog(
+      context: context,
+      builder: (context) => AssetFilterDialog(
+        assets: model.assets,
+      ),
+    );
+
+    if (result == true) {
+      model.showAssets();
     }
   }
 
@@ -37,7 +54,7 @@ class AssetDashboardPage extends StatelessWidget {
           TableAssetDisplayHandler(),
         ],
         assetService: AssetService(),
-        assetLocationTracker: AssetLocationTracker(),
+        assetLocationTracker: FakeAssetLocationTracker(),
         floorMapService: FloorMapService(),
         initFloorMapId: initFloorMapId,
       ),
@@ -47,7 +64,7 @@ class AssetDashboardPage extends StatelessWidget {
             title: const Text('Dashboard'),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => openAssetFilterDialog(context),
                 icon: const FaIcon(FontAwesomeIcons.filter),
               ),
               const SizedBox(width: 10),
