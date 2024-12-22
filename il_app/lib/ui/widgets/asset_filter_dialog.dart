@@ -18,12 +18,38 @@ class AssetFilterDialog extends StatefulWidget {
 class _AssetFilterDialogState extends State<AssetFilterDialog> {
   final tcSearch = TextEditingController();
 
-  late List<Asset> assets;
+  late List<Asset> allAssets;
+  late List<Asset> currentAssets;
 
   @override
   void initState() {
     super.initState();
-    assets = widget.assets.map((e) => e.copy()).toList();
+    allAssets = widget.assets.map((e) => e.copy()).toList();
+    currentAssets = allAssets;
+
+    tcSearch.addListener(() {
+      onSearch();
+    });
+  }
+
+  void onSearch() {
+    String search = tcSearch.text.trim().toLowerCase();
+
+    setState(() {
+      if (search.isEmpty) {
+        currentAssets = allAssets;
+      } else {
+        currentAssets = allAssets.where((asset) {
+          String name = asset.name.toLowerCase();
+
+          if (name.contains(search)) {
+            return true;
+          }
+
+          return false;
+        }).toList();
+      }
+    });
   }
 
   void changeVisibility(Asset asset) {
@@ -34,7 +60,7 @@ class _AssetFilterDialogState extends State<AssetFilterDialog> {
 
   void onHideAll() {
     setState(() {
-      for (var e in assets) {
+      for (var e in allAssets) {
         e.visible = false;
       }
     });
@@ -42,14 +68,14 @@ class _AssetFilterDialogState extends State<AssetFilterDialog> {
 
   void onShowAll() {
     setState(() {
-      for (var e in assets) {
+      for (var e in allAssets) {
         e.visible = true;
       }
     });
   }
 
   void onApply() {
-    List<bool> visibility = assets.map((e) => e.visible).toList();
+    List<bool> visibility = allAssets.map((e) => e.visible).toList();
     Navigator.of(context).pop(visibility);
   }
 
@@ -71,7 +97,7 @@ class _AssetFilterDialogState extends State<AssetFilterDialog> {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: assets.map((asset) {
+                children: currentAssets.map((asset) {
                   return ListTile(
                     title: Text(asset.name),
                     leading: const FaIcon(FontAwesomeIcons.box),
