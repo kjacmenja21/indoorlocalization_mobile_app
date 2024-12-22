@@ -57,6 +57,7 @@ class _AssetsWidgetState extends State<AssetsWidget> {
             color: AppColors.primaryBlueColor,
             width: 2,
           ),
+          color: Colors.grey.shade200,
         ),
         child: Stack(
           children: [
