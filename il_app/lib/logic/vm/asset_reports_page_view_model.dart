@@ -10,6 +10,8 @@ class AssetReportsPageViewModel extends ViewModel {
   List<Asset> _assets = [];
 
   Asset? _selectedAsset;
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   bool _isLoading = true;
 
@@ -25,12 +27,25 @@ class AssetReportsPageViewModel extends ViewModel {
 
   List<Asset> get assets => _assets;
   List<FloorMap> get floorMaps => _floorMaps;
+
   Asset? get selectedAsset => _selectedAsset;
+  DateTime? get startDate => _startDate;
+  DateTime? get endDate => _endDate;
 
   bool get isLoading => _isLoading;
 
   void selectAsset(Asset asset) {
     _selectedAsset = asset;
+    notifyListeners();
+  }
+
+  void setStartDate(DateTime value) {
+    _startDate = value;
+    notifyListeners();
+  }
+
+  void setEndDate(DateTime value) {
+    _endDate = value;
     notifyListeners();
   }
 
