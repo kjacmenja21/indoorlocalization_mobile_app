@@ -11,8 +11,12 @@ import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
 class AssetDashboardPage extends StatelessWidget {
-  final int? initFloorMapId;
-  const AssetDashboardPage({super.key, this.initFloorMapId});
+  late final int? initFloorMapId;
+  AssetDashboardPage({super.key, Object? extra}) {
+    if (extra is Map) {
+      initFloorMapId = extra['floorMapId'];
+    }
+  }
 
   Future<void> openDisplayModeDialog(BuildContext context) async {
     var assetDashboardViewModel = context.read<AssetDashboardPageViewModel>();
