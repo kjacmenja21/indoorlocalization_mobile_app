@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/vm/asset_reports_page_view_model.dart';
+import 'package:il_app/ui/widgets/message_card.dart';
 
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
+import 'package:il_app/ui/widgets/reports/asset_report_generators.dart';
 import 'package:il_app/ui/widgets/select_asset_dialog.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_widgets.dart';
@@ -47,6 +49,17 @@ class AssetReportsPage extends StatelessWidget {
       create: (context) => AssetReportsPageViewModel(
         assetService: AssetService(),
         floorMapService: FloorMapService(),
+        reportGenerators: [
+          AssetHeatmapReportGenerator(),
+        ],
+        openReportViewPage: (generator, data) {
+          var extra = {
+            'generator': generator,
+            'data': data,
+          };
+
+          context.push('/asset_report_view', extra: extra);
+        },
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -69,30 +82,45 @@ class AssetReportsPage extends StatelessWidget {
         }
 
         var titleTextStyle = Theme.of(context).textTheme.titleLarge;
-        var bodyTextStyle = Theme.of(context).textTheme.bodyLarge;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //
             Text('Asset', style: titleTextStyle),
             buildSelectedAsset(context, model),
             const SizedBox(height: 20),
+
             Text('Start date', style: titleTextStyle),
             DateTimePicker(
               value: model.startDate,
               onUpdate: (value) => model.setStartDate(value),
             ),
             const SizedBox(height: 20),
+
             Text('End date', style: titleTextStyle),
             DateTimePicker(
               value: model.endDate,
               onUpdate: (value) => model.setEndDate(value),
             ),
             const SizedBox(height: 20),
-            FilledButton(
-              onPressed: () => openGenerateReport(context),
-              child: const Text('Generate'),
-            ),
+
+            Text('Reports', style: titleTextStyle),
+
+            if (model.message != null)
+              MessageCard(
+                message: model.message!,
+                onClose: () => model.clearMessage(),
+              ),
+
+            ...model.reportGenerators.map((e) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: e.buildDisplayWidget(
+                  onTap: () => model.generateReport(e),
+                ),
+              );
+            })
           ],
         );
       },

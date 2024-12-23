@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:il_app/ui/widgets/reports/heatmap_report.dart';
+import 'package:il_app/ui/widgets/reports/asset_heatmap_report.dart';
 import 'package:il_core/il_core.dart';
 
 class AssetHeatmapReportGenerator implements IAssetReportGenerator {
   @override
   Widget buildDisplayWidget({required VoidCallback onTap}) {
-    return FilledButton(
+    return OutlinedButton(
       onPressed: () => onTap(),
       child: const Text('Generate heatmap'),
     );
@@ -13,7 +13,7 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
 
   @override
   Widget buildWidget(BuildContext context, data) {
-    return HeatmapReportWidget();
+    return const HeatmapReportWidget();
   }
 
   @override
