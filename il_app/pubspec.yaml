@@ -29,6 +29,9 @@ dependencies:
   
   il_display_assets_table:
     path: ../features/il_display_assets_table 
+  
+  il_reports:
+    path: ../features/il_reports
 
 dev_dependencies:
   flutter_test:

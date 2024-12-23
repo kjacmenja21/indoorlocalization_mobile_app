@@ -204,6 +204,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  il_reports:
+    dependency: "direct main"
+    description:
+      path: "../features/il_reports"
+      relative: true
+    source: path
+    version: "0.0.1"
   il_ws:
     dependency: "direct main"
     description:
