@@ -20,11 +20,11 @@ class AssetPositionHistory {
   factory AssetPositionHistory.fromJson(Map<String, dynamic> json) {
     return AssetPositionHistory(
       id: json['id'],
-      assetId: json['asset_id'],
-      x: json['x'],
-      y: json['y'],
-      timestamp: json['timestamp'],
-      floorMapId: json['floormap_id'],
+      assetId: json['assetId'],
+      x: json['x'].toDouble(),
+      y: json['y'].toDouble(),
+      timestamp: DateTime.parse(json['timestamp']),
+      floorMapId: json['floorMapId'],
     );
   }
 }
