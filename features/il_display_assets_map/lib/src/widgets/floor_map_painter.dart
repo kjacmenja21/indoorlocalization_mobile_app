@@ -7,15 +7,17 @@ class FloorMapPainter extends CustomPainter {
   final FloorMap floorMap;
   final PictureInfo svg;
 
+  late FloorMapRenderer floorMapRenderer;
+
   FloorMapPainter({
     required this.floorMap,
     required this.svg,
-  });
+  }) {
+    floorMapRenderer = FloorMapRenderer();
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-    var floorMapRenderer = FloorMapRenderer();
-
     floorMapRenderer.drawFloorMapSvg(canvas, size, svg);
     floorMapRenderer.drawZones(canvas, floorMap);
   }
