@@ -56,8 +56,7 @@ class AssetReportsPageViewModel extends ViewModel {
       _checkUserInput();
 
       dynamic data = await generator.generateData(
-        assetId: _selectedAsset!.id,
-        floorMapId: _selectedAsset!.floorMap!.id,
+        asset: _selectedAsset!,
         startDate: _startDate!,
         endDate: _endDate!,
       );

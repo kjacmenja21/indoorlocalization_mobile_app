@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:il_core/il_entities.dart';
 
 abstract class IAssetReportGenerator {
   Future<dynamic> generateData({
-    required int assetId,
-    required int floorMapId,
+    required Asset asset,
     required DateTime startDate,
     required DateTime endDate,
   });

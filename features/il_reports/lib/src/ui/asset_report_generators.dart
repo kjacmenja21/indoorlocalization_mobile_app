@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:il_core/il_core.dart';
+import 'package:il_core/il_entities.dart';
 import 'package:il_reports/src/ui/widgets/asset_heatmap_report.dart';
 
 class AssetHeatmapReportGenerator implements IAssetReportGenerator {
@@ -17,7 +18,7 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
   }
 
   @override
-  Future generateData({required int assetId, required int floorMapId, required DateTime startDate, required DateTime endDate}) async {
+  Future generateData({required Asset asset, required DateTime startDate, required DateTime endDate}) async {
     return 0;
   }
 }
