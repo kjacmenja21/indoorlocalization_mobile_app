@@ -8,7 +8,6 @@ import 'package:il_app/ui/widgets/select_asset_dialog.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_widgets.dart';
 import 'package:il_reports/il_reports.dart';
-import 'package:il_ws/il_fake_services.dart';
 import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
@@ -51,7 +50,7 @@ class AssetReportsPage extends StatelessWidget {
         floorMapService: FloorMapService(),
         reportGenerators: [
           AssetHeatmapReportGenerator(
-            positionHistoryService: FakeAssetPositionHistoryService(),
+            positionHistoryService: AssetPositionHistoryService(),
           ),
         ],
         openReportViewPage: (generator, data) {

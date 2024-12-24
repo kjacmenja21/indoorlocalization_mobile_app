@@ -12,9 +12,12 @@ import 'package:provider/provider.dart';
 
 class AssetDashboardPage extends StatelessWidget {
   late final int? initFloorMapId;
+
   AssetDashboardPage({super.key, Object? extra}) {
     if (extra is Map) {
       initFloorMapId = extra['floorMapId'];
+    } else {
+      initFloorMapId = null;
     }
   }
 
