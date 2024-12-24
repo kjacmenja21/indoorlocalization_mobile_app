@@ -17,6 +17,8 @@ dependencies:
   il_ws:
     path: ../../il_ws
 
+  flutter_svg: ^2.0.16
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

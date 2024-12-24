@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'dart:math' as math;
 
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_helpers.dart';
 import 'package:il_reports/src/models/asset_heatmap_data.dart';
 
 class AssetHeatmapDataGenerator {
@@ -87,13 +88,9 @@ class AssetHeatmapDataGenerator {
 
   Offset lerpPosition(Offset a, Offset b, double t) {
     return Offset(
-      lerpDouble(a.dx, b.dx, t),
-      lerpDouble(a.dy, b.dy, t),
+      MathHelper.lerpDouble(a.dx, b.dx, t),
+      MathHelper.lerpDouble(a.dy, b.dy, t),
     );
-  }
-
-  double lerpDouble(double a, double b, double t) {
-    return a * (1.0 - t) + b * t;
   }
 
   double _calculateDt(Offset p1, Offset p2, double cellSize) {
