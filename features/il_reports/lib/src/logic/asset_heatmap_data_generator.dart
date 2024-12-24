@@ -5,7 +5,7 @@ import 'package:il_core/il_entities.dart';
 import 'package:il_reports/src/models/asset_heatmap_data.dart';
 
 class AssetHeatmapDataGenerator {
-  void generateHeatmapData({
+  AssetHeatmapData generateHeatmapData({
     required Asset asset,
     required List<AssetPositionHistory> positionHistory,
     required Size cellSize,
@@ -23,10 +23,9 @@ class AssetHeatmapDataGenerator {
       var pos = positionHistory[i];
       var cell = data.cellFromPosition(pos.x, pos.y);
 
-      if (cell == lastCell) {
-        addTimeToCells(data, lastCell, cell, lastPos, pos);
-      }
+      addTimeToCells(data, lastCell, cell, lastPos, pos);
     }
+    return data;
   }
 
   void addTimeToCells(AssetHeatmapData data, AssetHeatmapCell c1, AssetHeatmapCell c2, AssetPositionHistory t1, AssetPositionHistory t2) {
