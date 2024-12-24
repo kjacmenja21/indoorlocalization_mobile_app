@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:il_app/ui/widgets/reports/asset_heatmap_report.dart';
 import 'package:il_core/il_core.dart';
+import 'package:il_reports/src/ui/widgets/asset_heatmap_report.dart';
 
 class AssetHeatmapReportGenerator implements IAssetReportGenerator {
   @override

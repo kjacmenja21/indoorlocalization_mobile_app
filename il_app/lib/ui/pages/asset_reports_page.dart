@@ -3,12 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/vm/asset_reports_page_view_model.dart';
 import 'package:il_app/ui/widgets/message_card.dart';
-
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
-import 'package:il_app/ui/widgets/reports/asset_report_generators.dart';
 import 'package:il_app/ui/widgets/select_asset_dialog.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_widgets.dart';
+import 'package:il_reports/il_reports.dart';
 import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
