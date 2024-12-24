@@ -35,8 +35,8 @@ class AssetHeatmapPainter extends CustomPainter {
   Color getCellColor(AssetHeatmapCell cell) {
     double minutes = cell.minutes;
 
-    if (minutes <= 120) {
-      var a = lerpDouble(0, 255, minutes / 120).round();
+    if (minutes <= 60) {
+      var a = lerpDouble(0, 255, minutes / 60).round();
       if (a > 255) a = 255;
       return Color.fromARGB(a, 255, 153, 0);
     }

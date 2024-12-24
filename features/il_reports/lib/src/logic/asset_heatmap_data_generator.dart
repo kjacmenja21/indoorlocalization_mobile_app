@@ -24,6 +24,8 @@ class AssetHeatmapDataGenerator {
       var cell = data.cellFromPosition(pos.x, pos.y);
 
       addTimeToCells(data, lastCell, cell, lastPos, pos);
+      lastPos = pos;
+      lastCell = cell;
     }
     return data;
   }
