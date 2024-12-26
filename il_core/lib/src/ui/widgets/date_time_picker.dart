@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:il_core/il_helpers.dart';
 
 class DateTimePicker extends StatelessWidget {
-  final dateFormat = DateFormat('dd.MM.yyyy.  HH:mm');
-
   final DateTime? value;
   final void Function(DateTime value) onUpdate;
 
-  DateTimePicker({
+  const DateTimePicker({
     super.key,
     required this.value,
     required this.onUpdate,
@@ -15,7 +13,7 @@ class DateTimePicker extends StatelessWidget {
 
   String getDateTimeText() {
     if (value != null) {
-      return dateFormat.format(value!);
+      return DateFormats.dateTime.format(value!);
     } else {
       return 'Select date';
     }
