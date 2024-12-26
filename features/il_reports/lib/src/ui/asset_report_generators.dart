@@ -23,7 +23,7 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
 
   @override
   Widget buildWidget(BuildContext context, data) {
-    return HeatmapReportWidget(data: data);
+    return AssetHeatmapReportWidget(data: data);
   }
 
   @override
@@ -45,6 +45,9 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
       positionHistory: positionHistory,
       cellSize: const Size.square(50),
     );
+
+    data.startDate = startDate;
+    data.endDate = endDate;
 
     return data;
   }

@@ -1,19 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:il_core/il_helpers.dart';
 import 'package:il_core/il_theme.dart';
 import 'package:il_reports/src/models/asset_heatmap_data.dart';
 import 'package:il_reports/src/ui/widgets/asset_heatmap_painter.dart';
 
-class HeatmapReportWidget extends StatefulWidget {
+class AssetHeatmapReportWidget extends StatelessWidget {
   final AssetHeatmapData data;
 
-  const HeatmapReportWidget({super.key, required this.data});
+  const AssetHeatmapReportWidget({
+    super.key,
+    required this.data,
+  });
 
   @override
-  State<HeatmapReportWidget> createState() => _HeatmapReportWidgetState();
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _ReportInfo(data: data),
+        const SizedBox(height: 10),
+        Expanded(
+          child: _HeatmapReportWidget(data: data),
+        ),
+      ],
+    );
+  }
 }
 
-class _HeatmapReportWidgetState extends State<HeatmapReportWidget> {
+class _ReportInfo extends StatelessWidget {
+  final AssetHeatmapData data;
+
+  const _ReportInfo({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    var bodyTextStyle = Theme.of(context).textTheme.bodyLarge;
+
+    var startDate = DateFormats.dateTime.format(data.startDate!);
+    var endDate = DateFormats.dateTime.format(data.endDate!);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(data.asset.name, style: Theme.of(context).textTheme.titleLarge),
+        Text('Start date: $startDate', style: bodyTextStyle),
+        Text('End date: $endDate', style: bodyTextStyle),
+      ],
+    );
+  }
+}
+
+class _HeatmapReportWidget extends StatefulWidget {
+  final AssetHeatmapData data;
+
+  const _HeatmapReportWidget({required this.data});
+
+  @override
+  State<_HeatmapReportWidget> createState() => _HeatmapReportWidgetState();
+}
+
+class _HeatmapReportWidgetState extends State<_HeatmapReportWidget> {
   var transformationController = TransformationController();
 
   late AssetHeatmapData data;
@@ -27,7 +75,7 @@ class _HeatmapReportWidgetState extends State<HeatmapReportWidget> {
   }
 
   @override
-  void didUpdateWidget(covariant HeatmapReportWidget oldWidget) {
+  void didUpdateWidget(covariant _HeatmapReportWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     data = widget.data;
   }

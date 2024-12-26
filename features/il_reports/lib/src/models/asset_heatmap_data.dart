@@ -10,6 +10,9 @@ class AssetHeatmapData {
   Asset asset;
   late FloorMap floorMap;
 
+  DateTime? startDate;
+  DateTime? endDate;
+
   late Size mapSize = Size.zero;
   Size cellSize = Size.zero;
 
