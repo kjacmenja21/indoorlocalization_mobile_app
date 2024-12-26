@@ -107,6 +107,9 @@ class AssetReportsPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
+            createPredefinedPeriodMenu(context, model),
+            const SizedBox(height: 20),
+
             Text('Reports', style: titleTextStyle),
 
             if (model.message != null)
@@ -153,6 +156,30 @@ class AssetReportsPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 0),
         child: child,
       ),
+    );
+  }
+
+  Widget createPredefinedPeriodMenu(BuildContext context, AssetReportsPageViewModel model) {
+    return MenuAnchor(
+      menuChildren: model.predefinedPeriods.map((e) {
+        var (text, duration) = e;
+        return MenuItemButton(
+          onPressed: () => model.setPredefinedPeriod(duration),
+          child: Text(text),
+        );
+      }).toList(),
+      builder: (context, controller, child) {
+        return TextButton(
+          onPressed: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+          child: const Text('Predefined period'),
+        );
+      },
     );
   }
 }

@@ -6,6 +6,14 @@ import 'package:il_core/il_exceptions.dart';
 import 'package:il_ws/il_ws.dart';
 
 class AssetReportsPageViewModel extends ViewModel {
+  final predefinedPeriods = [
+    ('Last 6 hours', const Duration(hours: 6)),
+    ('Last 12 hours', const Duration(hours: 12)),
+    ('Last 24 hours', const Duration(hours: 24)),
+    ('Last week', const Duration(days: 7)),
+    ('Last 2 weeks', const Duration(days: 14)),
+  ];
+
   late final IAssetService _assetService;
   late final IFloorMapService _floorMapService;
 
@@ -88,6 +96,14 @@ class AssetReportsPageViewModel extends ViewModel {
 
   void setEndDate(DateTime value) {
     _endDate = value;
+    notifyListeners();
+  }
+
+  void setPredefinedPeriod(Duration duration) {
+    var now = DateTime.now();
+
+    _startDate = now.subtract(duration);
+    _endDate = now;
     notifyListeners();
   }
 
