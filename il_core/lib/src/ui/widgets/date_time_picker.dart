@@ -29,10 +29,8 @@ class DateTimePicker extends StatelessWidget {
     );
 
     if (result != null) {
-      DateTime value = this.value ?? DateTime.now();
-
-      int hour = value.hour;
-      int minute = value.minute;
+      int hour = value?.hour ?? 0;
+      int minute = value?.minute ?? 0;
 
       onUpdate(DateTime(result.year, result.month, result.day, hour, minute));
     }
