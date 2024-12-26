@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:il_core/il_helpers.dart';
+import 'package:il_core/il_ui_helpers.dart';
 import 'package:il_reports/src/models/asset_heatmap_data.dart';
 
 class AssetHeatmapBackgroundPainter extends CustomPainter {

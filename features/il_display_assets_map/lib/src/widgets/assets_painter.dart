@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:il_core/il_entities.dart';
-import 'package:il_core/il_helpers.dart';
 import 'package:il_core/il_theme.dart';
+import 'package:il_core/il_ui_helpers.dart';
 
 class AssetsPainter extends CustomPainter {
   final Matrix4 transform;
