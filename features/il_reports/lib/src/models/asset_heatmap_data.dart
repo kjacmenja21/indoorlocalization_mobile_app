@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/painting.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_helpers.dart';
 
@@ -22,33 +21,37 @@ class AssetHeatmapData {
   int columns = 0;
 
   List<AssetHeatmapCell> cells = [];
+  LinearGradient? gradient;
 
-  AssetHeatmapData(this.asset) {
+  AssetHeatmapData(this.asset, [this.gradient]) {
     floorMap = asset.floorMap!;
   }
 
   Color getCellColor(AssetHeatmapCell cell) {
     double p = cell.p;
 
-    if (p < 0.001) {
+    if (p < 0.01) {
       return const Color.fromARGB(0, 0, 0, 0);
     }
 
-    if (p <= 0.4) {
-      var a = MathHelper.lerpDouble(20, 255, p / 0.4).round();
-      return const Color.fromARGB(255, 255, 196, 0).withAlpha(a);
+    var gradient = this.gradient!;
+
+    for (int i = 1; i < gradient.stops!.length; i++) {
+      double sp1 = gradient.stops![i - 1];
+      double sp2 = gradient.stops![i];
+
+      if (p <= sp2) {
+        double t = (p - sp1) / (sp2 - sp1);
+
+        Color c1 = gradient.colors[i - 1];
+        Color c2 = gradient.colors[i];
+
+        var c = MathHelper.lerpColor(c1, c2, t);
+        return c;
+      }
     }
 
-    if (p <= 0.9) {
-      var c = MathHelper.lerpColor(
-        const Color.fromARGB(255, 255, 196, 0),
-        const Color.fromARGB(255, 255, 0, 0),
-        (p - 0.4) / 0.5,
-      );
-      return c;
-    }
-
-    return const Color.fromARGB(255, 255, 0, 0);
+    return gradient.colors.last;
   }
 
   AssetHeatmapCell cellAt(int x, int y) {
