@@ -71,6 +71,64 @@ class AssetHeatmapForegroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     floorMapRenderer.drawZoneLabels(canvas, data.floorMap);
+    _drawLegend(canvas, size);
+  }
+
+  void _drawLegend(Canvas canvas, Size size) {
+    var paint = Paint();
+
+    var lPadding = const EdgeInsets.only(top: 20, bottom: 20, right: 20);
+    var lSize = Size(20, size.height - lPadding.vertical);
+    var lRect = Rect.fromLTWH(
+      size.width - lSize.width - lPadding.right,
+      lPadding.top,
+      lSize.width,
+      lSize.height,
+    );
+
+    // draw white rect
+
+    paint.style = PaintingStyle.fill;
+    paint.color = const Color.fromARGB(255, 255, 255, 255);
+    canvas.drawRect(lRect, paint);
+
+    // draw gradient
+
+    Shader shader = data.gradient!.createShader(lRect);
+    paint.shader = shader;
+
+    canvas.drawRect(lRect, paint);
+    shader.dispose();
+
+    // draw rect border
+
+    paint.color = const Color.fromARGB(255, 0, 0, 0);
+    paint.style = PaintingStyle.stroke;
+    paint.strokeWidth = 2;
+    paint.shader = null;
+
+    canvas.drawRect(lRect, paint);
+
+    // draw labels
+
+    Offset start = Offset(lRect.left - 5, lRect.top + lRect.height);
+
+    for (double p = 0; p <= 1.0; p += 0.2) {
+      Offset lpos = Offset(start.dx, start.dy - p * lRect.height);
+
+      var textPainter = TextPainter(
+        textDirection: TextDirection.ltr,
+        text: TextSpan(
+          text: '${(p * 100).round()}%',
+          style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 16),
+        ),
+      );
+
+      textPainter.layout();
+
+      Offset tpos = lpos - Offset(textPainter.width, textPainter.height / 2);
+      textPainter.paint(canvas, tpos);
+    }
   }
 
   @override

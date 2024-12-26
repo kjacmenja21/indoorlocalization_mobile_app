@@ -49,6 +49,23 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
     data.startDate = startDate;
     data.endDate = endDate;
 
+    data.gradient = const LinearGradient(
+      begin: Alignment.bottomCenter,
+      end: Alignment.topCenter,
+      colors: [
+        Color.fromARGB(0, 255, 196, 0),
+        Color.fromARGB(255, 255, 196, 0),
+        Color.fromARGB(255, 255, 0, 0),
+        Color.fromARGB(255, 255, 0, 0),
+      ],
+      stops: [
+        0.0,
+        0.4,
+        0.9,
+        1.0,
+      ],
+    );
+
     return data;
   }
 }

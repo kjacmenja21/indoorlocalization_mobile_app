@@ -141,8 +141,7 @@ class _HeatmapReportWidgetState extends State<_HeatmapReportWidget> {
   Widget buildHeatmapForeground(Size size, Matrix4 transform) {
     return ClipRect(
       child: CustomPaint(
-        willChange: false,
-        isComplex: true,
+        willChange: true,
         size: size,
         painter: AssetHeatmapForegroundPainter(
           transform: transform,
