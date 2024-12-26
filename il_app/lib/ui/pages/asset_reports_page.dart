@@ -102,6 +102,7 @@ class AssetReportsPage extends StatelessWidget {
             Text('End date', style: titleTextStyle),
             DateTimePicker(
               value: model.endDate,
+              defaultTime: const TimeOfDay(hour: 23, minute: 59),
               onUpdate: (value) => model.setEndDate(value),
             ),
             const SizedBox(height: 20),

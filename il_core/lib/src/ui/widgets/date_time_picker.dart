@@ -5,10 +5,13 @@ class DateTimePicker extends StatelessWidget {
   final DateTime? value;
   final void Function(DateTime value) onUpdate;
 
+  final TimeOfDay? defaultTime;
+
   const DateTimePicker({
     super.key,
     required this.value,
     required this.onUpdate,
+    this.defaultTime,
   });
 
   String getDateTimeText() {
@@ -27,8 +30,11 @@ class DateTimePicker extends StatelessWidget {
     );
 
     if (result != null) {
-      int hour = value?.hour ?? 0;
-      int minute = value?.minute ?? 0;
+      int defaultHour = defaultTime?.hour ?? 0;
+      int defaultMinute = defaultTime?.minute ?? 0;
+
+      int hour = value?.hour ?? defaultHour;
+      int minute = value?.minute ?? defaultMinute;
 
       onUpdate(DateTime(result.year, result.month, result.day, hour, minute));
     }
