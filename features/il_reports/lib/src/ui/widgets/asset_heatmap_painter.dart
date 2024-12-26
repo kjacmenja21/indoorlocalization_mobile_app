@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:il_core/il_helpers.dart';
 import 'package:il_core/il_ui_helpers.dart';
 import 'package:il_reports/src/models/asset_heatmap_data.dart';
 
@@ -38,24 +37,12 @@ class AssetHeatmapBackgroundPainter extends CustomPainter {
     for (double y = 0; y < mapHeight; y += cellHeight) {
       for (double x = 0; x < mapWidth; x += cellWidth) {
         var cell = data.cells[i];
-        paint.color = _getCellColor(cell);
+        paint.color = data.getCellColor(cell);
 
         canvas.drawCircle(Offset(x + cellWidth / 2, y + cellHeight / 2), cellWidth / 2 - 4, paint);
         i++;
       }
     }
-  }
-
-  Color _getCellColor(AssetHeatmapCell cell) {
-    double minutes = cell.minutes;
-
-    if (minutes <= 60) {
-      var a = MathHelper.lerpDouble(0, 255, minutes / 60).round();
-      if (a > 255) a = 255;
-      return Color.fromARGB(a, 255, 153, 0);
-    }
-
-    return Color.fromARGB(255, 255, 153, 0);
   }
 
   @override

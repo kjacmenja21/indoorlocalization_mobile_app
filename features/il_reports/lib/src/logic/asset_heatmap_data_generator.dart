@@ -28,7 +28,23 @@ class AssetHeatmapDataGenerator {
       lastPos = pos;
       lastCell = cell;
     }
+
+    calculateCellPercentage(data);
     return data;
+  }
+
+  void calculateCellPercentage(AssetHeatmapData data) {
+    double maxMinutes = 0;
+
+    for (var cell in data.cells) {
+      if (cell.minutes >= maxMinutes) {
+        maxMinutes = cell.minutes;
+      }
+    }
+
+    for (var cell in data.cells) {
+      cell.p = cell.minutes / maxMinutes;
+    }
   }
 
   void addTimeToCells(AssetHeatmapData data, AssetHeatmapCell c1, AssetHeatmapCell c2, AssetPositionHistory t1, AssetPositionHistory t2) {

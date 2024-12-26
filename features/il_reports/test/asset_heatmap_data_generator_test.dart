@@ -88,6 +88,39 @@ void main() {
       },
     );
   });
+
+  group('calculateCellPercentage', () {
+    var generator = AssetHeatmapDataGenerator();
+    var mapSize = const Size(10000, 10000);
+    var cellSize = const Size(100, 100);
+
+    late AssetHeatmapData data;
+
+    setUp(() {
+      data = AssetHeatmapData(createAsset(mapSize));
+      data.cellSize = cellSize;
+      generator.generateCells(data);
+    });
+
+    test('calculateCellPercentage, given minutes, calculate cell percentage', () {
+      var c1 = data.cellAt(0, 0);
+      var c2 = data.cellAt(20, 30);
+      var c3 = data.cellAt(50, 50);
+      var c4 = data.cellAt(52, 54);
+
+      c1.minutes = 10;
+      c2.minutes = 20;
+      c3.minutes = 80;
+      c4.minutes = 100;
+
+      generator.calculateCellPercentage(data);
+
+      expect(c1.p, 0.1);
+      expect(c2.p, 0.2);
+      expect(c3.p, 0.8);
+      expect(c4.p, 1);
+    });
+  });
 }
 
 Asset createAsset(Size mapSize) {
