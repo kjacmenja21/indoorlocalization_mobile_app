@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_exceptions.dart';
 import 'package:il_reports/src/logic/asset_heatmap_data_generator.dart';
 import 'package:il_reports/src/ui/widgets/asset_heatmap_report.dart';
 import 'package:il_ws/il_ws.dart';
@@ -33,6 +34,10 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
       startDate: startDate,
       endDate: endDate,
     );
+
+    if (positionHistory.isEmpty) {
+      throw AppException('Cannot generate heatmap report because there is no available data.');
+    }
 
     var generator = AssetHeatmapDataGenerator();
     var data = generator.generateHeatmapData(
