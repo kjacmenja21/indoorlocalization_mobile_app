@@ -4,7 +4,7 @@ import 'package:il_core/il_entities.dart';
 import 'package:il_ws/il_ws.dart';
 
 class FakeFloorMapService implements IFloorMapService {
-  final _testSvg = '''
+  static final testSvg = '''
   
   <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
@@ -117,14 +117,14 @@ class FakeFloorMapService implements IFloorMapService {
           name: 'Floor map 1',
           trackingArea: Rect.fromLTWH(0, 0, 3000, 2000),
           size: Size(3000, 2000),
-          svgImage: _testSvg,
+          svgImage: testSvg,
         ),
         FloorMap(
           id: 2,
           name: 'Floor map 2',
           trackingArea: Rect.fromLTWH(0, 0, 3000, 2000),
           size: Size(3000, 2000),
-          svgImage: _testSvg,
+          svgImage: testSvg,
         ),
       ];
     });
