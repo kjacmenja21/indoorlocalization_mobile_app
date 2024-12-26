@@ -51,26 +51,55 @@ class _HeatmapReportWidgetState extends State<HeatmapReportWidget> {
           ),
           color: Colors.grey.shade200,
         ),
-        child: InteractiveViewer(
-          transformationController: transformationController,
-          constrained: false,
-          minScale: 0.01,
-          maxScale: 2,
-          boundaryMargin: const EdgeInsets.all(500),
-          child: buildHeatmapPaint(),
+        child: Stack(
+          children: [
+            InteractiveViewer(
+              transformationController: transformationController,
+              constrained: false,
+              minScale: 0.01,
+              maxScale: 2,
+              boundaryMargin: const EdgeInsets.all(500),
+              child: buildHeatmapBackground(),
+            ),
+            IgnorePointer(
+              child: ListenableBuilder(
+                listenable: transformationController,
+                builder: (context, child) {
+                  return buildHeatmapForeground(
+                    constraints.biggest,
+                    transformationController.value,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       );
     });
   }
 
-  Widget buildHeatmapPaint() {
+  Widget buildHeatmapBackground() {
     return CustomPaint(
       willChange: false,
       isComplex: true,
       size: data.floorMap.size,
-      painter: AssetHeatmapPainter(
+      painter: AssetHeatmapBackgroundPainter(
         data: data,
         svg: floorMapSvg!,
+      ),
+    );
+  }
+
+  Widget buildHeatmapForeground(Size size, Matrix4 transform) {
+    return ClipRect(
+      child: CustomPaint(
+        willChange: false,
+        isComplex: true,
+        size: size,
+        painter: AssetHeatmapForegroundPainter(
+          transform: transform,
+          data: data,
+        ),
       ),
     );
   }

@@ -3,13 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:il_core/il_helpers.dart';
 import 'package:il_reports/src/models/asset_heatmap_data.dart';
 
-class AssetHeatmapPainter extends CustomPainter {
+class AssetHeatmapBackgroundPainter extends CustomPainter {
   final AssetHeatmapData data;
   final PictureInfo svg;
 
   late FloorMapRenderer floorMapRenderer;
 
-  AssetHeatmapPainter({
+  AssetHeatmapBackgroundPainter({
     required this.data,
     required this.svg,
   }) {
@@ -19,6 +19,7 @@ class AssetHeatmapPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     floorMapRenderer.drawFloorMapSvg(canvas, size, svg);
+    floorMapRenderer.drawZones(canvas, data.floorMap, fill: false);
     _drawHeatmap(canvas);
   }
 
@@ -58,8 +59,36 @@ class AssetHeatmapPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    if (oldDelegate is AssetHeatmapPainter) {
+    if (oldDelegate is AssetHeatmapBackgroundPainter) {
       return data != oldDelegate.data || svg != oldDelegate.svg;
+    }
+    return false;
+  }
+}
+
+class AssetHeatmapForegroundPainter extends CustomPainter {
+  final Matrix4 transform;
+  final AssetHeatmapData data;
+
+  late FloorMapRenderer floorMapRenderer;
+
+  AssetHeatmapForegroundPainter({
+    required this.transform,
+    required this.data,
+  }) {
+    floorMapRenderer = FloorMapRenderer();
+    floorMapRenderer.transform = transform;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    floorMapRenderer.drawZoneLabels(canvas, data.floorMap);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    if (oldDelegate is AssetHeatmapForegroundPainter) {
+      return data != oldDelegate.data;
     }
     return false;
   }

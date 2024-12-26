@@ -14,17 +14,24 @@ class FloorMapRenderer {
     canvas.drawPicture(svg.picture);
   }
 
-  void drawZones(Canvas canvas, FloorMap floorMap) {
+  void drawZones(Canvas canvas, FloorMap floorMap, {bool fill = true}) {
     var zones = floorMap.zones!;
 
     var paint = Paint();
-    paint.style = PaintingStyle.fill;
+    paint.style = fill ? PaintingStyle.fill : PaintingStyle.stroke;
+
+    if (!fill) {
+      paint.strokeWidth = 4;
+    }
 
     for (var zone in zones) {
       var points = zone.points;
 
-      var color = zone.color.withOpacity(0.2);
-      paint.color = color;
+      if (fill) {
+        paint.color = zone.color.withOpacity(0.2);
+      } else {
+        paint.color = Color.fromARGB(255, 0, 0, 0);
+      }
 
       var path = Path();
 

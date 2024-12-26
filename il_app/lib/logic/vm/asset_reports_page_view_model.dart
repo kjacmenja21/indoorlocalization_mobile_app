@@ -55,6 +55,9 @@ class AssetReportsPageViewModel extends ViewModel {
     try {
       _checkUserInput();
 
+      var floorMap = _selectedAsset!.floorMap!;
+      floorMap.zones ??= await _floorMapService.getFloorMapZones(floorMap.id);
+
       dynamic data = await generator.generateData(
         asset: _selectedAsset!,
         startDate: _startDate!,
