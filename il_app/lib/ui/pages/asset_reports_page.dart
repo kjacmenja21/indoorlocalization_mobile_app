@@ -52,6 +52,7 @@ class AssetReportsPage extends StatelessWidget {
           AssetHeatmapReportGenerator(
             positionHistoryService: AssetPositionHistoryService(),
           ),
+          AssetTailmapReportGenerator(),
         ],
         openReportViewPage: (generator, data) {
           var extra = {

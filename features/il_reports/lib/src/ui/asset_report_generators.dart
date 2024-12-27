@@ -69,3 +69,27 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
     return data;
   }
 }
+
+class AssetTailmapReportGenerator implements IAssetReportGenerator {
+  @override
+  Widget buildDisplayWidget({required VoidCallback onTap}) {
+    return OutlinedButton(
+      onPressed: () => onTap(),
+      child: const Text('Generate tailmap'),
+    );
+  }
+
+  @override
+  Widget buildWidget(BuildContext context, data) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future generateData({
+    required Asset asset,
+    required DateTime startDate,
+    required DateTime endDate,
+  }) {
+    throw UnimplementedError();
+  }
+}
