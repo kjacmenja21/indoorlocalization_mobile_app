@@ -4,6 +4,7 @@ import 'package:il_core/il_helpers.dart';
 import 'package:il_core/il_theme.dart';
 import 'package:il_reports/src/models/asset_heatmap_data.dart';
 import 'package:il_reports/src/ui/widgets/asset_heatmap_painter.dart';
+import 'package:il_reports/src/ui/widgets/asset_report_info.dart';
 
 class AssetHeatmapReportWidget extends StatelessWidget {
   final AssetHeatmapData data;
@@ -18,35 +19,15 @@ class AssetHeatmapReportWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _ReportInfo(data: data),
+        AssetReportInfo(
+          asset: data.asset,
+          startDate: data.startDate!,
+          endDate: data.endDate!,
+        ),
         const SizedBox(height: 10),
         Expanded(
           child: _HeatmapReportWidget(data: data),
         ),
-      ],
-    );
-  }
-}
-
-class _ReportInfo extends StatelessWidget {
-  final AssetHeatmapData data;
-
-  const _ReportInfo({required this.data});
-
-  @override
-  Widget build(BuildContext context) {
-    var bodyTextStyle = Theme.of(context).textTheme.bodyLarge;
-
-    var startDate = DateFormats.dateTime.format(data.startDate!);
-    var endDate = DateFormats.dateTime.format(data.endDate!);
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(data.asset.name, style: Theme.of(context).textTheme.titleLarge),
-        Text('Start date: $startDate', style: bodyTextStyle),
-        Text('End date: $endDate', style: bodyTextStyle),
       ],
     );
   }
