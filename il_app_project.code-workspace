@@ -23,6 +23,9 @@
     {
       "name": "il_display_assets_table",
       "path": "features/il_display_assets_table"
+    },
+    {
+      "path": "features/il_reports"
     }
   ],
   "settings": {

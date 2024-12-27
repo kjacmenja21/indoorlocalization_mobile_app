@@ -1,54 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_ui_helpers.dart';
 
 class FloorMapPainter extends CustomPainter {
   final FloorMap floorMap;
   final PictureInfo svg;
 
+  late FloorMapRenderer floorMapRenderer;
+
   FloorMapPainter({
     required this.floorMap,
     required this.svg,
-  });
+  }) {
+    floorMapRenderer = FloorMapRenderer();
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint();
-    paint.style = PaintingStyle.fill;
-    paint.color = Colors.white;
-
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
-
-    canvas.drawPicture(svg.picture);
-
-    for (var zone in floorMap.zones!) {
-      _drawZone(canvas, zone);
-    }
-  }
-
-  void _drawZone(Canvas canvas, FloorMapZone zone) {
-    var points = zone.points;
-
-    var paint = Paint();
-    paint.style = PaintingStyle.fill;
-
-    var color = zone.color.withOpacity(0.2);
-    paint.color = color;
-
-    var path = Path();
-
-    for (int i = 0; i < points.length; i++) {
-      var p = points[i];
-
-      if (i == 0) {
-        path.moveTo(p.dx, p.dy);
-      } else {
-        path.lineTo(p.dx, p.dy);
-      }
-    }
-
-    path.close();
-    canvas.drawPath(path, paint);
+    floorMapRenderer.drawFloorMapSvg(canvas, size, svg);
+    floorMapRenderer.drawZones(canvas, floorMap);
   }
 
   @override

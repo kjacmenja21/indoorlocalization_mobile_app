@@ -204,6 +204,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  il_reports:
+    dependency: "direct main"
+    description:
+      path: "../features/il_reports"
+      relative: true
+    source: path
+    version: "0.0.1"
   il_ws:
     dependency: "direct main"
     description:
@@ -211,6 +218,14 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: "00f33b908655e606b86d2ade4710a231b802eec6f11e87e4ea3783fd72077a50"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.20.1"
   leak_tracker:
     dependency: transitive
     description:

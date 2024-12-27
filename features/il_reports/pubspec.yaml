@@ -1,7 +1,7 @@
-name: il_display_assets_map
+name: il_reports
 description:
-publish_to: 'none'
 version: 0.0.1
+publish_to: 'none'
 
 environment:
   sdk: ^3.5.4
@@ -10,12 +10,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
-  flutter_svg: ^2.0.16
-  font_awesome_flutter: ^10.8.0
 
   il_core:
     path: ../../il_core
+
+  il_ws:
+    path: ../../il_ws
+
+  flutter_svg: ^2.0.16
 
 dev_dependencies:
   flutter_test:
