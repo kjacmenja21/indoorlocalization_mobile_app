@@ -39,7 +39,10 @@ class AssetDashboardPageViewModel extends ViewModel {
       return;
     }
 
-    _currentDisplayHandler.showAssets(floorMap: _currentFloorMap!, assets: _assets);
+    var floorMap = _currentFloorMap!;
+    var assets = _assets.where((e) => e.visible).toList();
+
+    _currentDisplayHandler.showAssets(floorMap: floorMap, assets: assets);
   }
 
   Future<void> changeFloorMap(FloorMap floorMap) async {
@@ -88,11 +91,26 @@ class AssetDashboardPageViewModel extends ViewModel {
     showAssets();
   }
 
+  void updateAssetVisibility(List<bool> visibility) {
+    if (_assets.length != visibility.length) {
+      throw ArgumentError('Visibility list length must be same as assets list length.');
+    }
+
+    for (var i = 0; i < _assets.length; i++) {
+      _assets[i].visible = visibility[i];
+    }
+
+    notifyListeners();
+    showAssets();
+  }
+
   List<IAssetDisplayHandler> get displayHandlers => _displayHandlers;
   IAssetDisplayHandler get currentDisplayHandler => _currentDisplayHandler;
 
   List<FloorMap> get floorMaps => _floorMaps;
   FloorMap? get currentFloorMap => _currentFloorMap;
+
+  List<Asset> get assets => _assets;
 
   bool get isLoading => _isLoading;
 

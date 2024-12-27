@@ -16,6 +16,8 @@ class Asset {
   int floorMapId;
   FloorMap? floorMap;
 
+  bool visible;
+
   Asset({
     required this.id,
     required this.name,
@@ -25,6 +27,7 @@ class Asset {
     required this.active,
     required this.floorMapId,
     this.floorMap,
+    this.visible = true,
   });
 
   /// Returns the zone in which the asset is currently located.
@@ -46,6 +49,20 @@ class Asset {
     }
 
     return null;
+  }
+
+  Asset copy() {
+    return Asset(
+      id: id,
+      name: name,
+      x: x,
+      y: y,
+      lastSync: lastSync,
+      active: active,
+      floorMapId: floorMapId,
+      floorMap: floorMap,
+      visible: visible,
+    );
   }
 
   factory Asset.fromJson(Map<String, dynamic> json) {
