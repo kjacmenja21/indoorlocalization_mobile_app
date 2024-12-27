@@ -62,18 +62,6 @@ class AssetDashboardPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Dashboard'),
-            actions: [
-              IconButton(
-                onPressed: () => openAssetFilterDialog(context),
-                icon: const FaIcon(FontAwesomeIcons.filter),
-              ),
-              const SizedBox(width: 10),
-              IconButton(
-                onPressed: () => openDisplayModeDialog(context),
-                icon: const FaIcon(FontAwesomeIcons.display),
-              ),
-              const SizedBox(width: 10),
-            ],
           ),
           drawer: const AppNavigationDrawer(),
           body: Padding(
@@ -97,27 +85,7 @@ class AssetDashboardPage extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DropdownMenu<FloorMap>(
-              initialSelection: model.currentFloorMap,
-              label: const Text('Facility'),
-              enabled: !model.isLoading,
-              width: 200,
-              enableSearch: false,
-              requestFocusOnTap: false,
-              enableFilter: false,
-              onSelected: (value) {
-                if (value != null) {
-                  model.changeFloorMap(value);
-                }
-              },
-              dropdownMenuEntries: model.floorMaps.map((e) {
-                return DropdownMenuEntry(
-                  value: e,
-                  label: e.name,
-                  leadingIcon: const FaIcon(FontAwesomeIcons.building),
-                );
-              }).toList(),
-            ),
+            createHeader(context, model),
             if (model.currentFloorMap == null)
               Expanded(
                 child: Center(
@@ -142,6 +110,50 @@ class AssetDashboardPage extends StatelessWidget {
       },
     );
   }
+
+  Widget createHeader(BuildContext context, AssetDashboardPageViewModel model) {
+    bool enableButtons = model.isLoading == false && model.currentFloorMap != null;
+
+    return Row(
+      children: [
+        Expanded(child: createFacilityMenu(model)),
+        const SizedBox(width: 10),
+        IconButton(
+          onPressed: enableButtons ? () => openAssetFilterDialog(context) : null,
+          icon: const Icon(Icons.filter_list),
+        ),
+        const SizedBox(width: 10),
+        IconButton(
+          onPressed: enableButtons ? () => openDisplayModeDialog(context) : null,
+          icon: const FaIcon(FontAwesomeIcons.display),
+        ),
+      ],
+    );
+  }
+
+  Widget createFacilityMenu(AssetDashboardPageViewModel model) {
+    return DropdownMenu<FloorMap>(
+      initialSelection: model.currentFloorMap,
+      label: const Text('Facility'),
+      enabled: !model.isLoading,
+      enableSearch: false,
+      requestFocusOnTap: false,
+      enableFilter: false,
+      expandedInsets: const EdgeInsets.all(0),
+      onSelected: (value) {
+        if (value != null) {
+          model.changeFloorMap(value);
+        }
+      },
+      dropdownMenuEntries: model.floorMaps.map((e) {
+        return DropdownMenuEntry(
+          value: e,
+          label: e.name,
+          leadingIcon: const FaIcon(FontAwesomeIcons.building),
+        );
+      }).toList(),
+    );
+  }
 }
 
 class _AssetDisplayModeDialog extends StatelessWidget {
@@ -157,6 +169,12 @@ class _AssetDisplayModeDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: displayHandlers.map((e) => getDisplayWidget(e, context)).toList(),
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+      ],
     );
   }
 

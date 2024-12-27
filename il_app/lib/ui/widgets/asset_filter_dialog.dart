@@ -87,45 +87,49 @@ class _AssetFilterDialogState extends State<AssetFilterDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Filter assets'),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CustomSearchBar(controller: tcSearch),
-          const SizedBox(height: 20),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: currentAssets.map((asset) {
-                  return ListTile(
-                    title: Text(asset.name),
-                    leading: const FaIcon(FontAwesomeIcons.box),
-                    trailing: IconButton(
-                      onPressed: () => changeVisibility(asset),
-                      icon: getVisibilityIcon(asset.visible),
-                    ),
-                  );
-                }).toList(),
+      insetPadding: const EdgeInsets.all(50),
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomSearchBar(controller: tcSearch),
+            const SizedBox(height: 20),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: currentAssets.map((asset) {
+                    return ListTile(
+                      title: Text(asset.name),
+                      leading: const FaIcon(FontAwesomeIcons.box),
+                      trailing: IconButton(
+                        onPressed: () => changeVisibility(asset),
+                        icon: getVisibilityIcon(asset.visible),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () => onHideAll(),
-                child: const Text('Hide all'),
-              ),
-              const SizedBox(width: 10),
-              TextButton(
-                onPressed: () => onShowAll(),
-                child: const Text('Show all'),
-              ),
-            ],
-          ),
-        ],
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => onHideAll(),
+                  child: const Text('Hide all'),
+                ),
+                const SizedBox(width: 10),
+                TextButton(
+                  onPressed: () => onShowAll(),
+                  child: const Text('Show all'),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(
