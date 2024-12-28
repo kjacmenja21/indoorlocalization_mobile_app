@@ -58,16 +58,14 @@ class AssetTailmapForegroundPainter extends CustomPainter {
     Rect trackingArea = data.floorMap.trackingArea;
 
     var positionHistory = data.positionHistory;
+    int currentPositionIndex = data.currentPositionIndex;
 
     var paint = Paint();
     paint.style = PaintingStyle.stroke;
 
-    var fullPath = Path();
-    var currentPath = Path();
+    var path = Path();
 
-    int currentPosIndex = data.currentPositionIndex;
-
-    for (int i = 0; i < positionHistory.length; i++) {
+    for (int i = 0; i <= currentPositionIndex; i++) {
       var posHistory = positionHistory[i];
       double px = posHistory.x + trackingArea.left;
       double py = posHistory.y + trackingArea.top;
@@ -76,29 +74,16 @@ class AssetTailmapForegroundPainter extends CustomPainter {
       double y = py * scale + translation.y;
 
       if (i == 0) {
-        fullPath.moveTo(x, y);
+        path.moveTo(x, y);
       } else {
-        fullPath.lineTo(x, y);
-      }
-
-      if (i <= currentPosIndex) {
-        if (i == 0) {
-          currentPath.moveTo(x, y);
-        } else {
-          currentPath.lineTo(x, y);
-        }
+        path.lineTo(x, y);
       }
     }
 
-    paint.color = Colors.orange;
+    paint.color = Colors.red;
     paint.strokeWidth = 2;
 
-    canvas.drawPath(fullPath, paint);
-
-    paint.color = Colors.red;
-    paint.strokeWidth = 4;
-
-    canvas.drawPath(currentPath, paint);
+    canvas.drawPath(path, paint);
 
     _drawCurrentPosition(canvas);
   }
