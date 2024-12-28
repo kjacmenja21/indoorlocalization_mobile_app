@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_core/il_helpers.dart';
 import 'package:il_core/il_widgets.dart';
 import 'package:il_reports/src/models/asset_tailmap_data.dart';
@@ -20,6 +24,9 @@ class AssetTailmapReportWidget extends StatefulWidget {
 class _AssetTailmapReportWidgetState extends State<AssetTailmapReportWidget> {
   late AssetTailmapData data;
 
+  bool paused = true;
+  Timer? playTimer;
+
   @override
   void initState() {
     super.initState();
@@ -27,17 +34,57 @@ class _AssetTailmapReportWidgetState extends State<AssetTailmapReportWidget> {
   }
 
   void updateCurrentPosition(int positionIndex) {
+    if (positionIndex < 0) {
+      positionIndex = 0;
+    } else if (positionIndex >= data.positionHistory.length - 1) {
+      positionIndex = data.positionHistory.length - 1;
+    }
+
     setState(() {
       data.currentPositionIndex = positionIndex;
     });
   }
 
+  void start() {
+    playTimer?.cancel();
+
+    if (data.currentPositionIndex == data.positionHistory.length - 1) {
+      data.currentPositionIndex = 0;
+    }
+
+    playTimer = Timer.periodic(
+      const Duration(milliseconds: 50),
+      (timer) => onPlayTimerTick(),
+    );
+
+    setState(() {
+      paused = false;
+    });
+  }
+
+  void pause() {
+    playTimer?.cancel();
+    playTimer = null;
+
+    setState(() {
+      paused = true;
+    });
+  }
+
+  void onPlayTimerTick() {
+    int index = data.currentPositionIndex;
+    if (index == data.positionHistory.length - 1) {
+      pause();
+      return;
+    }
+
+    setState(() {
+      data.currentPositionIndex = index + 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var currentDate = DateFormats.dateTime.format(data.currentDate);
-    var x = data.currentPosition.dx.round();
-    var y = data.currentPosition.dy.round();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -51,13 +98,34 @@ class _AssetTailmapReportWidgetState extends State<AssetTailmapReportWidget> {
           child: _TailmapReportWidget(data),
         ),
         const SizedBox(height: 10),
-        Text('Date: $currentDate', style: Theme.of(context).textTheme.bodyLarge),
-        Text('Position: $x $y', style: Theme.of(context).textTheme.bodyLarge),
         Slider(
           value: data.currentPositionIndex.toDouble(),
           min: 0,
           max: (data.positionHistory.length - 1).toDouble(),
-          onChanged: (value) => updateCurrentPosition(value.round()),
+          onChanged: (value) {
+            if (!paused) {
+              pause();
+            }
+
+            updateCurrentPosition(value.round());
+          },
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+              onPressed: () {
+                if (paused) {
+                  start();
+                } else {
+                  pause();
+                }
+              },
+              icon: paused ? const FaIcon(FontAwesomeIcons.play) : const FaIcon(FontAwesomeIcons.pause),
+            ),
+            const SizedBox(width: 20),
+            Text(DateFormats.dateTime.format(data.currentDate), style: Theme.of(context).textTheme.bodyLarge),
+          ],
         ),
       ],
     );
