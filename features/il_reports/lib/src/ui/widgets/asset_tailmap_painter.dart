@@ -61,10 +61,11 @@ class AssetTailmapForegroundPainter extends CustomPainter {
 
     var paint = Paint();
     paint.style = PaintingStyle.stroke;
-    paint.color = Colors.orange;
-    paint.strokeWidth = 2;
 
-    var path = Path();
+    var fullPath = Path();
+    var currentPath = Path();
+
+    int currentPosIndex = data.currentPositionIndex;
 
     for (int i = 0; i < positionHistory.length; i++) {
       var posHistory = positionHistory[i];
@@ -75,19 +76,38 @@ class AssetTailmapForegroundPainter extends CustomPainter {
       double y = py * scale + translation.y;
 
       if (i == 0) {
-        path.moveTo(x, y);
+        fullPath.moveTo(x, y);
       } else {
-        path.lineTo(x, y);
+        fullPath.lineTo(x, y);
+      }
+
+      if (i <= currentPosIndex) {
+        if (i == 0) {
+          currentPath.moveTo(x, y);
+        } else {
+          currentPath.lineTo(x, y);
+        }
       }
     }
 
-    canvas.drawPath(path, paint);
+    paint.color = Colors.orange;
+    paint.strokeWidth = 2;
 
-    var lastPos = positionHistory.last;
-    double lx = lastPos.x + trackingArea.left;
-    double ly = lastPos.y + trackingArea.top;
+    canvas.drawPath(fullPath, paint);
 
-    floorMapRenderer.drawAsset(canvas, data.asset.name, Offset(lx, ly));
+    paint.color = Colors.red;
+    paint.strokeWidth = 4;
+
+    canvas.drawPath(currentPath, paint);
+
+    _drawCurrentPosition(canvas);
+  }
+
+  void _drawCurrentPosition(Canvas canvas) {
+    var trackingArea = data.floorMap.trackingArea;
+    var pos = data.currentPosition + trackingArea.topLeft;
+
+    floorMapRenderer.drawAsset(canvas, data.asset.name, pos);
   }
 
   @override
