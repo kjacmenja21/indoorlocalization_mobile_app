@@ -48,8 +48,8 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
       cellSize: const Size.square(50),
     );
 
-    data.startDate = startDate;
-    data.endDate = endDate;
+    data.startDate = positionHistory.first.timestamp;
+    data.endDate = positionHistory.last.timestamp;
 
     data.gradient = const LinearGradient(
       begin: Alignment.bottomCenter,
@@ -113,8 +113,8 @@ class AssetTailmapReportGenerator implements IAssetReportGenerator {
 
     return AssetTailmapData(
       asset: asset,
-      startDate: startDate,
-      endDate: endDate,
+      startDate: positionHistory.first.timestamp,
+      endDate: positionHistory.last.timestamp,
       positionHistory: positionHistory,
     );
   }
