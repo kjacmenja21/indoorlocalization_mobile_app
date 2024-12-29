@@ -9,12 +9,12 @@ class MathHelper {
     return a * (1.0 - t) + b * t;
   }
 
-  static Color lerpColor(Color a, Color b, double t) {
-    return Color.fromARGB(
-      lerpInt(a.alpha, b.alpha, t),
-      lerpInt(a.red, b.red, t),
-      lerpInt(a.green, b.green, t),
-      lerpInt(a.blue, b.blue, t),
+  static Color lerpColor(Color c1, Color c2, double t) {
+    return Color.from(
+      alpha: lerpDouble(c1.a, c2.a, t),
+      red: lerpDouble(c1.r, c2.r, t),
+      green: lerpDouble(c1.g, c2.g, t),
+      blue: lerpDouble(c1.b, c2.b, t),
     );
   }
 }
