@@ -1,6 +1,7 @@
-import 'package:flutter/rendering.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_theme.dart';
 
 class FloorMapRenderer {
   Matrix4 transform = Matrix4.identity();
@@ -12,6 +13,48 @@ class FloorMapRenderer {
 
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
     canvas.drawPicture(svg.picture);
+  }
+
+  void drawAsset(Canvas canvas, String name, Offset position) {
+    const double assetCircleRadius = 4.0;
+    const double labelBottomMargin = 10;
+    const double labelFontSize = 16;
+
+    // transform asset position
+
+    double scale = transform.getMaxScaleOnAxis();
+    var translation = transform.getTranslation();
+
+    double ax = position.dx * scale + translation.x;
+    double ay = position.dy * scale + translation.y;
+    Offset assetPosition = Offset(ax, ay);
+
+    // draw position circle
+
+    Paint paint = Paint();
+    paint.color = AppColors.primaryBlueColor;
+    paint.style = PaintingStyle.fill;
+
+    canvas.drawCircle(assetPosition, assetCircleRadius, paint);
+
+    // draw asset name
+
+    var textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+      text: TextSpan(
+        text: name,
+        style: const TextStyle(color: Colors.white, fontSize: labelFontSize),
+      ),
+    );
+
+    textPainter.layout();
+
+    var labelPosition = assetPosition - Offset(textPainter.width / 2, textPainter.height + labelBottomMargin);
+    var labelRectPosition = labelPosition - const Offset(12, 2);
+    var labelRectSize = Offset(textPainter.width + 24, textPainter.height + 4);
+
+    drawRRect(canvas, labelRectPosition, labelRectSize, labelRectSize.dy / 2, paint);
+    textPainter.paint(canvas, labelPosition);
   }
 
   void drawZones(Canvas canvas, FloorMap floorMap, {bool fill = true}) {
