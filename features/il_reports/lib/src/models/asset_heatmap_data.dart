@@ -39,7 +39,7 @@ class AssetHeatmapData {
       return const Color.fromARGB(0, 0, 0, 0);
     }
 
-    var gradient = this.gradient!;
+    var gradient = this.gradient;
 
     for (int i = 1; i < gradient.stops!.length; i++) {
       double sp1 = gradient.stops![i - 1];

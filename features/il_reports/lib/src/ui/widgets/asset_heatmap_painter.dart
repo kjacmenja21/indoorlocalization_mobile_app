@@ -94,7 +94,7 @@ class AssetHeatmapForegroundPainter extends CustomPainter {
 
     // draw gradient
 
-    Shader shader = data.gradient!.createShader(lRect);
+    Shader shader = data.gradient.createShader(lRect);
     paint.shader = shader;
 
     canvas.drawRect(lRect, paint);
