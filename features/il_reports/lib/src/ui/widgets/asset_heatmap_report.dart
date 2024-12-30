@@ -21,8 +21,8 @@ class AssetHeatmapReportWidget extends StatelessWidget {
         children: [
           AssetReportInfo(
             asset: data.asset,
-            startDate: data.startDate!,
-            endDate: data.endDate!,
+            startDate: data.startDate,
+            endDate: data.endDate,
           ),
           const SizedBox(height: 10),
           Expanded(

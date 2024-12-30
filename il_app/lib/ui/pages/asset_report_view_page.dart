@@ -21,7 +21,7 @@ class AssetReportViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Report view'),
+        title: Text(generator.getReportName()),
       ),
       //  drawer: const AppNavigationDrawer(),
       body: generator.buildWidget(context, data),

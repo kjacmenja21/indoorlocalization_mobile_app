@@ -74,10 +74,7 @@ class AssetReportsPage extends StatelessWidget {
           title: const Text('Asset reports'),
         ),
         drawer: const AppNavigationDrawer(),
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: buildBody(),
-        ),
+        body: buildBody(),
       ),
     );
   }
@@ -91,49 +88,56 @@ class AssetReportsPage extends StatelessWidget {
 
         var titleTextStyle = Theme.of(context).textTheme.titleLarge;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //
-            Text('Asset', style: titleTextStyle),
-            buildSelectedAsset(context, model),
-            const SizedBox(height: 20),
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //
+                Text('Asset', style: titleTextStyle),
+                buildSelectedAsset(context, model),
+                const SizedBox(height: 20),
 
-            Text('Start date', style: titleTextStyle),
-            DateTimePicker(
-              value: model.startDate,
-              onUpdate: (value) => model.setStartDate(value),
-            ),
-            const SizedBox(height: 20),
-
-            Text('End date', style: titleTextStyle),
-            DateTimePicker(
-              value: model.endDate,
-              defaultTime: const TimeOfDay(hour: 23, minute: 59),
-              onUpdate: (value) => model.setEndDate(value),
-            ),
-            const SizedBox(height: 20),
-
-            createPredefinedPeriodMenu(context, model),
-            const SizedBox(height: 20),
-
-            Text('Reports', style: titleTextStyle),
-
-            if (model.message != null)
-              MessageCard(
-                message: model.message!,
-                onClose: () => model.clearMessage(),
-              ),
-
-            ...model.reportGenerators.map((e) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: e.buildDisplayWidget(
-                  onTap: () => model.generateReport(e),
+                Text('Start date', style: titleTextStyle),
+                DateTimePicker(
+                  value: model.startDate,
+                  onUpdate: (value) => model.setStartDate(value),
                 ),
-              );
-            })
-          ],
+                const SizedBox(height: 20),
+
+                Text('End date', style: titleTextStyle),
+                DateTimePicker(
+                  value: model.endDate,
+                  defaultTime: const TimeOfDay(hour: 23, minute: 59),
+                  onUpdate: (value) => model.setEndDate(value),
+                ),
+                const SizedBox(height: 20),
+
+                createPredefinedPeriodMenu(context, model),
+                const SizedBox(height: 20),
+
+                Text('Reports', style: titleTextStyle),
+
+                if (model.message != null)
+                  MessageCard(
+                    message: model.message!,
+                    onClose: () => model.clearMessage(),
+                  ),
+
+                const SizedBox(height: 10),
+
+                ...model.reportGenerators.map((e) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: e.buildGenerateReportButton(
+                      onTap: () => model.generateReport(e),
+                    ),
+                  );
+                })
+              ],
+            ),
+          ),
         );
       },
     );
@@ -176,7 +180,7 @@ class AssetReportsPage extends StatelessWidget {
         );
       }).toList(),
       builder: (context, controller, child) {
-        return TextButton(
+        return OutlinedButton.icon(
           onPressed: () {
             if (controller.isOpen) {
               controller.close();
@@ -184,7 +188,8 @@ class AssetReportsPage extends StatelessWidget {
               controller.open();
             }
           },
-          child: const Text('Predefined period'),
+          icon: const FaIcon(FontAwesomeIcons.clock),
+          label: const Text('Use predefined period'),
         );
       },
     );

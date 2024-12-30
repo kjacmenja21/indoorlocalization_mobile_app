@@ -78,7 +78,7 @@ class AssetHeatmapForegroundPainter extends CustomPainter {
     var paint = Paint();
 
     var lPadding = const EdgeInsets.only(top: 20, bottom: 20, right: 20);
-    var lSize = Size(20, size.height - lPadding.vertical);
+    var lSize = Size(10, size.height - lPadding.vertical);
     var lRect = Rect.fromLTWH(
       size.width - lSize.width - lPadding.right,
       lPadding.top,
@@ -94,7 +94,7 @@ class AssetHeatmapForegroundPainter extends CustomPainter {
 
     // draw gradient
 
-    Shader shader = data.gradient!.createShader(lRect);
+    Shader shader = data.gradient.createShader(lRect);
     paint.shader = shader;
 
     canvas.drawRect(lRect, paint);
@@ -120,7 +120,7 @@ class AssetHeatmapForegroundPainter extends CustomPainter {
         textDirection: TextDirection.ltr,
         text: TextSpan(
           text: '${(p * 100).round()}%',
-          style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 16),
+          style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 14),
         ),
       );
 
