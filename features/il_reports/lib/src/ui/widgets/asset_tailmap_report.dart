@@ -84,49 +84,52 @@ class _AssetTailmapReportWidgetState extends State<AssetTailmapReportWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AssetReportInfo(
-          asset: data.asset,
-          startDate: data.startDate,
-          endDate: data.endDate,
-        ),
-        const SizedBox(height: 10),
-        Expanded(
-          child: _TailmapReportWidget(data),
-        ),
-        const SizedBox(height: 10),
-        Slider(
-          value: data.currentPositionIndex.toDouble(),
-          min: 0,
-          max: (data.positionHistory.length - 1).toDouble(),
-          onChanged: (value) {
-            if (!paused) {
-              pause();
-            }
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AssetReportInfo(
+            asset: data.asset,
+            startDate: data.startDate,
+            endDate: data.endDate,
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: _TailmapReportWidget(data),
+          ),
+          const SizedBox(height: 10),
+          Slider(
+            value: data.currentPositionIndex.toDouble(),
+            min: 0,
+            max: (data.positionHistory.length - 1).toDouble(),
+            onChanged: (value) {
+              if (!paused) {
+                pause();
+              }
 
-            updateCurrentPosition(value.round());
-          },
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            IconButton(
-              onPressed: () {
-                if (paused) {
-                  start();
-                } else {
-                  pause();
-                }
-              },
-              icon: paused ? const FaIcon(FontAwesomeIcons.play) : const FaIcon(FontAwesomeIcons.pause),
-            ),
-            const SizedBox(width: 20),
-            Text(DateFormats.dateTime.format(data.currentDate), style: Theme.of(context).textTheme.bodyLarge),
-          ],
-        ),
-      ],
+              updateCurrentPosition(value.round());
+            },
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                onPressed: () {
+                  if (paused) {
+                    start();
+                  } else {
+                    pause();
+                  }
+                },
+                icon: paused ? const FaIcon(FontAwesomeIcons.play) : const FaIcon(FontAwesomeIcons.pause),
+              ),
+              const SizedBox(width: 20),
+              Text(DateFormats.dateTime.format(data.currentDate), style: Theme.of(context).textTheme.bodyLarge),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

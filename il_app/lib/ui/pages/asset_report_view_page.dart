@@ -24,10 +24,7 @@ class AssetReportViewPage extends StatelessWidget {
         title: const Text('Report view'),
       ),
       //  drawer: const AppNavigationDrawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: generator.buildWidget(context, data),
-      ),
+      body: generator.buildWidget(context, data),
     );
   }
 }

@@ -17,6 +17,7 @@ dependencies:
   il_ws:
     path: ../../il_ws
 
+  fl_chart: ^0.70.0
   flutter_svg: ^2.0.16
   font_awesome_flutter: ^10.8.0
 

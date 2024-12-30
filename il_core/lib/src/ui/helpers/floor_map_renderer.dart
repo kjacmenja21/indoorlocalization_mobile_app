@@ -71,7 +71,7 @@ class FloorMapRenderer {
       var points = zone.points;
 
       if (fill) {
-        paint.color = zone.color.withOpacity(0.2);
+        paint.color = zone.color.withValues(alpha: 0.2);
       } else {
         paint.color = Color.fromARGB(255, 0, 0, 0);
       }

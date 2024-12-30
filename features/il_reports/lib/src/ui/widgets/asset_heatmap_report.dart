@@ -14,19 +14,22 @@ class AssetHeatmapReportWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AssetReportInfo(
-          asset: data.asset,
-          startDate: data.startDate!,
-          endDate: data.endDate!,
-        ),
-        const SizedBox(height: 10),
-        Expanded(
-          child: _HeatmapReportWidget(data),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AssetReportInfo(
+            asset: data.asset,
+            startDate: data.startDate!,
+            endDate: data.endDate!,
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: _HeatmapReportWidget(data),
+          ),
+        ],
+      ),
     );
   }
 }
