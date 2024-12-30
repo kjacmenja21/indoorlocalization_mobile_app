@@ -47,7 +47,7 @@ class AssetTailmapReportGenerator implements IAssetReportGenerator {
     );
 
     if (positionHistory.isEmpty) {
-      throw AppException('Cannot generate heatmap report because there is no available data.');
+      throw AppException('Cannot generate tailmap report because there is no available data.');
     }
 
     positionHistory.sort((a, b) => a.timestamp.compareTo(b.timestamp));

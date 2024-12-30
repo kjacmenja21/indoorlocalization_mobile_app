@@ -15,7 +15,7 @@ class AssetZoneRetentionDataGenerator {
 
   AssetZoneRetentionReportData generate() {
     if (zoneHistoryData.isEmpty) {
-      throw AppException('Cannot generate zone retention time report because there is no available data.');
+      throw AppException('Cannot generate zone retention report because there is no available data.');
     }
 
     zoneHistoryData.sort((a, b) => a.enterDateTime.compareTo(b.enterDateTime));
