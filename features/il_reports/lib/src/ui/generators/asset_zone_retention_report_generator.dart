@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_reports/src/logic/asset_zone_retention_data_generator.dart';
@@ -16,9 +17,10 @@ class AssetZoneRetentionTimeReportGenerator implements IAssetReportGenerator {
 
   @override
   Widget buildDisplayWidget({required VoidCallback onTap}) {
-    return OutlinedButton(
+    return OutlinedButton.icon(
       onPressed: () => onTap(),
-      child: const Text('Generate zone retention time report'),
+      icon: const FaIcon(FontAwesomeIcons.chartPie),
+      label: const Text('Generate zone retention report'),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_exceptions.dart';
@@ -15,9 +16,10 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
 
   @override
   Widget buildDisplayWidget({required VoidCallback onTap}) {
-    return OutlinedButton(
+    return OutlinedButton.icon(
       onPressed: () => onTap(),
-      child: const Text('Generate heatmap'),
+      icon: const FaIcon(FontAwesomeIcons.solidMap),
+      label: const Text('Generate heatmap report'),
     );
   }
 
