@@ -7,7 +7,7 @@ class AssetZoneRetention {
   final String zoneName;
   final Color color;
 
-  double retentionInHours = 0;
+  Duration retention = const Duration();
   double percentage = 0;
 
   AssetZoneRetention({
@@ -22,8 +22,7 @@ class AssetZoneRetention {
         color = zone.color;
 
   void addRetention(Duration retention) {
-    double minutes = retention.inMinutes.toDouble();
-    retentionInHours += minutes / 60.0;
+    this.retention += retention;
   }
 }
 
@@ -33,12 +32,14 @@ class AssetZoneRetentionReportData {
   final DateTime startDate;
   final DateTime endDate;
 
+  List<AssetZoneHistory> zoneHistoryData;
   List<AssetZoneRetention> zoneRetentionData;
 
   AssetZoneRetentionReportData({
     required this.asset,
     required this.startDate,
     required this.endDate,
+    required this.zoneHistoryData,
     required this.zoneRetentionData,
   });
 }

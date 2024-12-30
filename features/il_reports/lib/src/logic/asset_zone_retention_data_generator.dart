@@ -20,6 +20,10 @@ class AssetZoneRetentionDataGenerator {
 
     zoneHistoryData.sort((a, b) => a.enterDateTime.compareTo(b.enterDateTime));
 
+    for (var zoneHistory in zoneHistoryData) {
+      zoneHistory.zone = zones.firstWhere((e) => e.id == zoneHistory.zoneId);
+    }
+
     List<AssetZoneRetention> zoneRetentionData = [
       ...zones.map((zone) {
         return AssetZoneRetention.fromZone(zone);
@@ -34,6 +38,7 @@ class AssetZoneRetentionDataGenerator {
       asset: asset,
       startDate: zoneHistoryData.first.enterDateTime,
       endDate: zoneHistoryData.last.exitDateTime,
+      zoneHistoryData: zoneHistoryData,
       zoneRetentionData: zoneRetentionData,
     );
   }
@@ -58,14 +63,14 @@ class AssetZoneRetentionDataGenerator {
   }
 
   void calculateRetentionPercentage(List<AssetZoneRetention> zoneRetentionData) {
-    double totalHours = 0;
+    int totalMinutes = 0;
 
     for (var e in zoneRetentionData) {
-      totalHours += e.retentionInHours;
+      totalMinutes += e.retention.inMinutes;
     }
 
     for (var e in zoneRetentionData) {
-      e.percentage = e.retentionInHours / totalHours;
+      e.percentage = e.retention.inMinutes / totalMinutes;
     }
   }
 
