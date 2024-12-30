@@ -7,6 +7,7 @@ import 'package:il_reports/src/logic/asset_zone_retention_data_generator.dart';
 import 'package:il_reports/src/models/asset_tailmap_data.dart';
 import 'package:il_reports/src/ui/widgets/asset_heatmap_report.dart';
 import 'package:il_reports/src/ui/widgets/asset_tailmap_report.dart';
+import 'package:il_reports/src/ui/widgets/asset_zone_retention_report.dart';
 import 'package:il_ws/il_ws.dart';
 
 class AssetHeatmapReportGenerator implements IAssetReportGenerator {
@@ -140,7 +141,7 @@ class AssetZoneRetentionTimeReportGenerator implements IAssetReportGenerator {
 
   @override
   Widget buildWidget(BuildContext context, data) {
-    return Placeholder();
+    return AssetZoneRetentionReportWidget(data: data);
   }
 
   @override
