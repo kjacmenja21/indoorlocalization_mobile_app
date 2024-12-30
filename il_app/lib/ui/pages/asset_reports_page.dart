@@ -125,9 +125,11 @@ class AssetReportsPage extends StatelessWidget {
                 onClose: () => model.clearMessage(),
               ),
 
+            const SizedBox(height: 10),
+
             ...model.reportGenerators.map((e) {
               return Padding(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 10),
                 child: e.buildDisplayWidget(
                   onTap: () => model.generateReport(e),
                 ),
@@ -176,7 +178,7 @@ class AssetReportsPage extends StatelessWidget {
         );
       }).toList(),
       builder: (context, controller, child) {
-        return TextButton(
+        return OutlinedButton.icon(
           onPressed: () {
             if (controller.isOpen) {
               controller.close();
@@ -184,7 +186,8 @@ class AssetReportsPage extends StatelessWidget {
               controller.open();
             }
           },
-          child: const Text('Predefined period'),
+          icon: const FaIcon(FontAwesomeIcons.clock),
+          label: const Text('Use predefined period'),
         );
       },
     );
