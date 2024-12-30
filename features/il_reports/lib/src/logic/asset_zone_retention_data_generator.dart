@@ -95,7 +95,7 @@ class AssetZoneRetentionDataGenerator {
     return AssetZoneRetention(
       zoneId: 0,
       zoneName: 'Outside zone',
-      color: Colors.grey.shade400,
+      color: Colors.grey.shade200,
     );
   }
 }
