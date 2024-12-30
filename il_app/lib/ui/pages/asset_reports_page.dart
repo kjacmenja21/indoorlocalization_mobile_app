@@ -130,7 +130,7 @@ class AssetReportsPage extends StatelessWidget {
             ...model.reportGenerators.map((e) {
               return Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: e.buildDisplayWidget(
+                child: e.buildGenerateReportButton(
                   onTap: () => model.generateReport(e),
                 ),
               );

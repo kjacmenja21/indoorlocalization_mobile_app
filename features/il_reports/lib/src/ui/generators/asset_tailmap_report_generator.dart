@@ -15,7 +15,7 @@ class AssetTailmapReportGenerator implements IAssetReportGenerator {
   });
 
   @override
-  Widget buildDisplayWidget({required VoidCallback onTap}) {
+  Widget buildGenerateReportButton({required VoidCallback onTap}) {
     return OutlinedButton.icon(
       onPressed: () => onTap(),
       icon: const FaIcon(FontAwesomeIcons.mapLocationDot),
