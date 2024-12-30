@@ -16,6 +16,11 @@ class AssetZoneRetentionTimeReportGenerator implements IAssetReportGenerator {
   });
 
   @override
+  String getReportName() {
+    return 'Zone retention report';
+  }
+
+  @override
   Widget buildGenerateReportButton({required VoidCallback onTap}) {
     return OutlinedButton.icon(
       onPressed: () => onTap(),

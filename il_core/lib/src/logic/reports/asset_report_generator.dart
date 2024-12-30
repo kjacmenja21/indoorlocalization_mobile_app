@@ -8,6 +8,7 @@ abstract class IAssetReportGenerator {
     required DateTime endDate,
   });
 
+  String getReportName();
   Widget buildGenerateReportButton({required VoidCallback onTap});
   Widget buildWidget(BuildContext context, dynamic data);
 }

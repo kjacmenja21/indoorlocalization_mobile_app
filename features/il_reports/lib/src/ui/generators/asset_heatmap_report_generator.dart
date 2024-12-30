@@ -15,6 +15,11 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
   });
 
   @override
+  String getReportName() {
+    return 'Heatmap report';
+  }
+
+  @override
   Widget buildGenerateReportButton({required VoidCallback onTap}) {
     return OutlinedButton.icon(
       onPressed: () => onTap(),

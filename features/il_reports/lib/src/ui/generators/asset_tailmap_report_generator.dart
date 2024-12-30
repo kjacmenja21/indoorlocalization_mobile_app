@@ -15,6 +15,11 @@ class AssetTailmapReportGenerator implements IAssetReportGenerator {
   });
 
   @override
+  String getReportName() {
+    return 'Tailmap report';
+  }
+
+  @override
   Widget buildGenerateReportButton({required VoidCallback onTap}) {
     return OutlinedButton.icon(
       onPressed: () => onTap(),
