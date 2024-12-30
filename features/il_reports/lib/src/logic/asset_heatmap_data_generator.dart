@@ -1,21 +1,39 @@
-import 'dart:ui';
 import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_exceptions.dart';
 import 'package:il_core/il_helpers.dart';
 import 'package:il_reports/src/models/asset_heatmap_data.dart';
 
 class AssetHeatmapDataGenerator {
-  AssetHeatmapData generateHeatmapData({
-    required Asset asset,
-    required List<AssetPositionHistory> positionHistory,
-    required Size cellSize,
-  }) {
-    var data = AssetHeatmapData(asset);
+  final Asset asset;
+
+  Size cellSize;
+  LinearGradient gradient;
+  List<AssetPositionHistory> positionHistory = [];
+
+  AssetHeatmapDataGenerator({
+    required this.asset,
+    required this.cellSize,
+    required this.gradient,
+  });
+
+  AssetHeatmapData generate() {
+    if (positionHistory.isEmpty) {
+      throw AppException('Cannot generate heatmap report because there is no available data.');
+    }
+
     sortPositionHistory(positionHistory);
 
-    data.cellSize = cellSize;
-    generateCells(data);
+    var data = AssetHeatmapData(
+      asset: asset,
+      startDate: positionHistory.first.timestamp,
+      endDate: positionHistory.last.timestamp,
+      gradient: gradient,
+    );
+
+    data.generateCells(cellSize);
 
     AssetPositionHistory lastPos = positionHistory.first;
     AssetHeatmapCell lastCell = data.cellFromPosition(lastPos.x, lastPos.y);
@@ -43,7 +61,7 @@ class AssetHeatmapDataGenerator {
     }
 
     for (var cell in data.cells) {
-      cell.p = cell.minutes / maxMinutes;
+      cell.percentage = cell.minutes / maxMinutes;
     }
   }
 
@@ -81,21 +99,6 @@ class AssetHeatmapDataGenerator {
   double getTimeDifferenceMinutes(AssetPositionHistory t1, AssetPositionHistory t2) {
     Duration d = t2.timestamp.difference(t1.timestamp);
     return d.inMinutes.toDouble();
-  }
-
-  void generateCells(AssetHeatmapData data) {
-    Size floorMapSize = data.floorMap.size;
-
-    int columns = (floorMapSize.width / data.cellSize.width).floor();
-    int rows = (floorMapSize.height / data.cellSize.height).floor();
-
-    data.rows = rows;
-    data.columns = columns;
-
-    int cellCount = rows * columns;
-    data.cells = List.generate(cellCount, (index) => AssetHeatmapCell(), growable: false);
-
-    data.mapSize = Size(data.columns * data.cellSize.width, data.rows * data.cellSize.height);
   }
 
   void sortPositionHistory(List<AssetPositionHistory> positionHistory) {

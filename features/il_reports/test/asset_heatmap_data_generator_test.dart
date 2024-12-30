@@ -12,9 +12,16 @@ void main() {
     't4': createPosHistory('10:40', 320, 20),
   };
 
-  group('getTimeDifferenceMinutes', () {
-    var generator = AssetHeatmapDataGenerator();
+  var mapSize = const Size(10000, 10000);
+  var cellSize = const Size(100, 100);
 
+  var generator = AssetHeatmapDataGenerator(
+    asset: createAsset(mapSize),
+    cellSize: cellSize,
+    gradient: createGradient(),
+  );
+
+  group('getTimeDifferenceMinutes', () {
     test('getTimeDifferenceMinutes, given 2 pos history, time diff is correct', () {
       var t1 = posHistory['t1']!;
       var t2 = posHistory['t2']!;
@@ -26,16 +33,16 @@ void main() {
   });
 
   group('addTimeToCells', () {
-    var generator = AssetHeatmapDataGenerator();
-    var mapSize = const Size(10000, 10000);
-    var cellSize = const Size(100, 100);
-
     late AssetHeatmapData data;
 
     setUp(() {
-      data = AssetHeatmapData(createAsset(mapSize));
-      data.cellSize = cellSize;
-      generator.generateCells(data);
+      data = AssetHeatmapData(
+        asset: generator.asset,
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        gradient: generator.gradient,
+      );
+      data.generateCells(generator.cellSize);
     });
 
     test(
@@ -90,16 +97,16 @@ void main() {
   });
 
   group('calculateCellPercentage', () {
-    var generator = AssetHeatmapDataGenerator();
-    var mapSize = const Size(10000, 10000);
-    var cellSize = const Size(100, 100);
-
     late AssetHeatmapData data;
 
     setUp(() {
-      data = AssetHeatmapData(createAsset(mapSize));
-      data.cellSize = cellSize;
-      generator.generateCells(data);
+      data = AssetHeatmapData(
+        asset: generator.asset,
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        gradient: generator.gradient,
+      );
+      data.generateCells(generator.cellSize);
     });
 
     test('calculateCellPercentage, given minutes, calculate cell percentage', () {
@@ -115,10 +122,10 @@ void main() {
 
       generator.calculateCellPercentage(data);
 
-      expect(c1.p, 0.1);
-      expect(c2.p, 0.2);
-      expect(c3.p, 0.8);
-      expect(c4.p, 1);
+      expect(c1.percentage, 0.1);
+      expect(c2.percentage, 0.2);
+      expect(c3.percentage, 0.8);
+      expect(c4.percentage, 1);
     });
   });
 }
@@ -138,4 +145,8 @@ Asset createAsset(Size mapSize) {
 
 AssetPositionHistory createPosHistory(String time, double x, double y) {
   return AssetPositionHistory(id: 0, assetId: 0, x: x, y: y, timestamp: DateTime.parse('2024-10-01 $time'), floorMapId: 0);
+}
+
+LinearGradient createGradient() {
+  return const LinearGradient(colors: []);
 }

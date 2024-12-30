@@ -42,21 +42,7 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
       endDate: endDate,
     );
 
-    if (positionHistory.isEmpty) {
-      throw AppException('Cannot generate heatmap report because there is no available data.');
-    }
-
-    var generator = AssetHeatmapDataGenerator();
-    var data = generator.generateHeatmapData(
-      asset: asset,
-      positionHistory: positionHistory,
-      cellSize: const Size.square(50),
-    );
-
-    data.startDate = positionHistory.first.timestamp;
-    data.endDate = positionHistory.last.timestamp;
-
-    data.gradient = const LinearGradient(
+    var gradient = const LinearGradient(
       begin: Alignment.bottomCenter,
       end: Alignment.topCenter,
       colors: [
@@ -72,6 +58,15 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
         1.0,
       ],
     );
+
+    var generator = AssetHeatmapDataGenerator(
+      asset: asset,
+      cellSize: const Size.square(50),
+      gradient: gradient,
+    );
+
+    generator.positionHistory = positionHistory;
+    var data = generator.generate();
 
     return data;
   }

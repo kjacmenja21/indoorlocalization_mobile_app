@@ -4,31 +4,36 @@ import 'package:il_core/il_helpers.dart';
 
 class AssetHeatmapCell {
   double minutes = 0;
-  double p = 0;
+  double percentage = 0;
 }
 
 class AssetHeatmapData {
   Asset asset;
   late FloorMap floorMap;
 
-  DateTime? startDate;
-  DateTime? endDate;
+  DateTime startDate;
+  DateTime endDate;
 
-  late Size mapSize = Size.zero;
-  Size cellSize = Size.zero;
+  LinearGradient gradient;
 
-  int rows = 0;
-  int columns = 0;
+  Size _mapSize = Size.zero;
+  Size _cellSize = Size.zero;
 
-  List<AssetHeatmapCell> cells = [];
-  LinearGradient? gradient;
+  int _rows = 0;
+  int _columns = 0;
+  List<AssetHeatmapCell> _cells = [];
 
-  AssetHeatmapData(this.asset, [this.gradient]) {
+  AssetHeatmapData({
+    required this.asset,
+    required this.startDate,
+    required this.endDate,
+    required this.gradient,
+  }) {
     floorMap = asset.floorMap!;
   }
 
   Color getCellColor(AssetHeatmapCell cell) {
-    double p = cell.p;
+    double p = cell.percentage;
 
     if (p < 0.01) {
       return const Color.fromARGB(0, 0, 0, 0);
@@ -54,14 +59,36 @@ class AssetHeatmapData {
     return gradient.colors.last;
   }
 
+  void generateCells(Size cellSize) {
+    if (cellSize.shortestSide < 10) {
+      throw ArgumentError('Cell size must be >= 10.');
+    }
+
+    _cellSize = cellSize;
+    Size floorMapSize = floorMap.size;
+
+    _columns = (floorMapSize.width / _cellSize.width).floor();
+    _rows = (floorMapSize.height / _cellSize.height).floor();
+
+    int cellCount = _rows * _columns;
+    _cells = List.generate(cellCount, (index) => AssetHeatmapCell(), growable: false);
+
+    _mapSize = Size(_columns * _cellSize.width, _rows * _cellSize.height);
+  }
+
+  Size get mapSize => _mapSize;
+  Size get cellSize => _cellSize;
+
+  List<AssetHeatmapCell> get cells => _cells;
+
   AssetHeatmapCell cellAt(int x, int y) {
-    return cells[x + y * columns];
+    return _cells[x + y * _columns];
   }
 
   AssetHeatmapCell cellFromPosition(double x, double y) {
-    int cx = (x / cellSize.width).floor();
-    int cy = (y / cellSize.height).floor();
+    int cx = (x / _cellSize.width).floor();
+    int cy = (y / _cellSize.height).floor();
 
-    return cells[cx + cy * columns];
+    return _cells[cx + cy * _columns];
   }
 }
