@@ -12,24 +12,12 @@ class AssetZoneRetentionTable extends StatelessWidget {
   Widget build(BuildContext context) {
     var dataTable = DataTable(
       horizontalMargin: 0,
-      columnSpacing: 20,
+      columnSpacing: 10,
       columns: const [
-        DataColumn(
-          label: Text('Zone'),
-          headingRowAlignment: MainAxisAlignment.center,
-        ),
-        DataColumn(
-          label: Text('Enter date'),
-          headingRowAlignment: MainAxisAlignment.center,
-        ),
-        DataColumn(
-          label: Text('Exit date'),
-          headingRowAlignment: MainAxisAlignment.center,
-        ),
-        DataColumn(
-          label: Text('Retention'),
-          headingRowAlignment: MainAxisAlignment.center,
-        ),
+        DataColumn(label: Text('Zone')),
+        DataColumn(label: Text('Enter date')),
+        DataColumn(label: Text('Exit date')),
+        DataColumn(label: Text('Retention')),
       ],
       rows: data.zoneHistoryData.map((e) => getDataRow(e)).toList(),
     );
@@ -50,10 +38,10 @@ class AssetZoneRetentionTable extends StatelessWidget {
 
     return DataRow(
       cells: [
-        DataCell(Text(zoneHistory.zone?.name ?? '', textAlign: TextAlign.center)),
-        DataCell(Text(enterDateTime, textAlign: TextAlign.center)),
-        DataCell(Text(exitDateTime, textAlign: TextAlign.center)),
-        DataCell(Text(retention, textAlign: TextAlign.center)),
+        DataCell(Text(zoneHistory.zone?.name ?? '')),
+        DataCell(Text(enterDateTime)),
+        DataCell(Text(exitDateTime)),
+        DataCell(Text(retention)),
       ],
     );
   }
