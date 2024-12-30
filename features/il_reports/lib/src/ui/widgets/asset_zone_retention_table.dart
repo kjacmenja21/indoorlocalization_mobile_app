@@ -14,10 +14,22 @@ class AssetZoneRetentionTable extends StatelessWidget {
       horizontalMargin: 0,
       columnSpacing: 20,
       columns: const [
-        DataColumn(label: Text('Zone', textAlign: TextAlign.center)),
-        DataColumn(label: Text('Enter date', textAlign: TextAlign.center)),
-        DataColumn(label: Text('Exit date', textAlign: TextAlign.center)),
-        DataColumn(label: Text('Retention', textAlign: TextAlign.center)),
+        DataColumn(
+          label: Text('Zone'),
+          headingRowAlignment: MainAxisAlignment.center,
+        ),
+        DataColumn(
+          label: Text('Enter date'),
+          headingRowAlignment: MainAxisAlignment.center,
+        ),
+        DataColumn(
+          label: Text('Exit date'),
+          headingRowAlignment: MainAxisAlignment.center,
+        ),
+        DataColumn(
+          label: Text('Retention'),
+          headingRowAlignment: MainAxisAlignment.center,
+        ),
       ],
       rows: data.zoneHistoryData.map((e) => getDataRow(e)).toList(),
     );
