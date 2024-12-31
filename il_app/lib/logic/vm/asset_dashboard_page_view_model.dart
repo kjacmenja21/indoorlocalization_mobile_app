@@ -68,6 +68,8 @@ class AssetDashboardPageViewModel extends ViewModel {
 
       asset.x = location.x;
       asset.y = location.y;
+      asset.lastSync = DateTime.now();
+
       showAssets();
     });
 
