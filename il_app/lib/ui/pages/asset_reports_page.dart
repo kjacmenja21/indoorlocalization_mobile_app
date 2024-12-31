@@ -12,7 +12,15 @@ import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
 class AssetReportsPage extends StatelessWidget {
-  const AssetReportsPage({super.key});
+  late final int? initAssetId;
+
+  AssetReportsPage({super.key, Object? extra}) {
+    if (extra is Map) {
+      initAssetId = extra['assetId'];
+    } else {
+      initAssetId = null;
+    }
+  }
 
   Future<void> openSelectAssetDialog(BuildContext context) async {
     var model = context.read<AssetReportsPageViewModel>();
@@ -68,6 +76,7 @@ class AssetReportsPage extends StatelessWidget {
 
           context.push('/asset_report_view', extra: extra);
         },
+        initAssetId: initAssetId,
       ),
       child: Scaffold(
         appBar: AppBar(

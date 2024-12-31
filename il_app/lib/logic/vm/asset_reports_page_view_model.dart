@@ -36,12 +36,13 @@ class AssetReportsPageViewModel extends ViewModel {
     required IFloorMapService floorMapService,
     required List<IAssetReportGenerator> reportGenerators,
     required this.openReportViewPage,
+    int? initAssetId,
   }) {
     _assetService = assetService;
     _floorMapService = floorMapService;
     _reportGenerators = reportGenerators;
 
-    _loadData();
+    _loadData(initAssetId);
   }
 
   List<Asset> get assets => _assets;
@@ -130,7 +131,7 @@ class AssetReportsPageViewModel extends ViewModel {
     }
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadData(int? initAssetId) async {
     await Future.wait([
       _loadAssets(),
       _loadFloorMaps(),
@@ -138,6 +139,14 @@ class AssetReportsPageViewModel extends ViewModel {
 
     _isLoading = false;
     notifyListeners();
+
+    if (initAssetId != null) {
+      var i = _assets.indexWhere((e) => e.id == initAssetId);
+
+      if (i != -1) {
+        selectAsset(_assets[i]);
+      }
+    }
   }
 
   Future<void> _loadAssets() async {

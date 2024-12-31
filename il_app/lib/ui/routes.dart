@@ -33,7 +33,7 @@ final goRouter = GoRouter(
     ),
     GoRoute(
       path: '/asset_reports',
-      builder: (context, state) => const AssetReportsPage(),
+      builder: (context, state) => AssetReportsPage(extra: state.extra),
     ),
     GoRoute(
       path: '/asset_report_view',
