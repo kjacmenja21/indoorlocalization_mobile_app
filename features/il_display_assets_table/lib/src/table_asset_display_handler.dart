@@ -34,10 +34,10 @@ class TableAssetDisplayHandler implements IAssetDisplayHandler {
 
   @override
   Widget buildSelectWidget({required VoidCallback onTap}) {
-    return ListTile(
-      title: const Text('Table'),
-      leading: const FaIcon(FontAwesomeIcons.table),
-      onTap: onTap,
+    return MenuItemButton(
+      onPressed: () => onTap(),
+      leadingIcon: const FaIcon(FontAwesomeIcons.tableCells),
+      child: const Text('Show table'),
     );
   }
 

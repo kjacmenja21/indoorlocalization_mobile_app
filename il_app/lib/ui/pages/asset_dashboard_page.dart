@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/vm/asset_dashboard_page_view_model.dart';
 import 'package:il_app/ui/widgets/asset_filter_dialog.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
@@ -20,20 +19,6 @@ class AssetDashboardPage extends StatelessWidget {
       initFloorMapId = extra['floorMapId'];
     } else {
       initFloorMapId = null;
-    }
-  }
-
-  Future<void> openDisplayModeDialog(BuildContext context) async {
-    var model = context.read<AssetDashboardPageViewModel>();
-    var displayHandlers = model.displayHandlers;
-
-    IAssetDisplayHandler? result = await showDialog<IAssetDisplayHandler>(
-      context: context,
-      builder: (context) => _AssetDisplayModeDialog(displayHandlers: displayHandlers),
-    );
-
-    if (result != null) {
-      model.changeDisplayHandler(result);
     }
   }
 
@@ -129,11 +114,7 @@ class AssetDashboardPage extends StatelessWidget {
           onPressed: enableButtons ? () => openAssetFilterDialog(context) : null,
           icon: const Icon(Icons.filter_list),
         ),
-        const SizedBox(width: 10),
-        IconButton(
-          onPressed: enableButtons ? () => openDisplayModeDialog(context) : null,
-          icon: const FaIcon(FontAwesomeIcons.display),
-        ),
+        createAssetDisplayModeMenu(context, enableButtons, model.displayHandlers),
       ],
     );
   }
@@ -161,34 +142,30 @@ class AssetDashboardPage extends StatelessWidget {
       }).toList(),
     );
   }
-}
 
-class _AssetDisplayModeDialog extends StatelessWidget {
-  final List<IAssetDisplayHandler> displayHandlers;
-
-  const _AssetDisplayModeDialog({required this.displayHandlers});
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Asset display mode'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: displayHandlers.map((e) => buildSelectWidget(e, context)).toList(),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
-        ),
-      ],
-    );
-  }
-
-  Widget buildSelectWidget(IAssetDisplayHandler displayHandler, BuildContext context) {
-    return displayHandler.buildSelectWidget(
-      onTap: () {
-        context.pop(displayHandler);
+  Widget createAssetDisplayModeMenu(BuildContext context, bool enable, List<IAssetDisplayHandler> handlers) {
+    return MenuAnchor(
+      menuChildren: handlers.map((handler) {
+        return handler.buildSelectWidget(
+          onTap: () {
+            var model = context.read<AssetDashboardPageViewModel>();
+            model.changeDisplayHandler(handler);
+          },
+        );
+      }).toList(),
+      builder: (context, controller, child) {
+        return IconButton(
+          onPressed: enable
+              ? () {
+                  if (controller.isOpen) {
+                    controller.close();
+                  } else {
+                    controller.open();
+                  }
+                }
+              : null,
+          icon: const Icon(Icons.monitor),
+        );
       },
     );
   }

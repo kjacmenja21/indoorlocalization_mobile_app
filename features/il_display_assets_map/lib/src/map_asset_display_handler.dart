@@ -34,10 +34,10 @@ class MapAssetDisplayHandler implements IAssetDisplayHandler {
 
   @override
   Widget buildSelectWidget({required VoidCallback onTap}) {
-    return ListTile(
-      title: const Text('Map'),
-      leading: const FaIcon(FontAwesomeIcons.solidMap),
-      onTap: onTap,
+    return MenuItemButton(
+      onPressed: () => onTap(),
+      leadingIcon: const FaIcon(FontAwesomeIcons.map),
+      child: const Text('Show map'),
     );
   }
 
