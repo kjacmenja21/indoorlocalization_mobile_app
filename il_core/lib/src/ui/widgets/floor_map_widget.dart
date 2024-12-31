@@ -6,12 +6,15 @@ import 'package:il_core/il_theme.dart';
 class FloorMapWidget extends StatefulWidget {
   final FloorMap floorMap;
 
+  final void Function(TapDownDetails details, Matrix4 transform)? onDoubleTapDown;
+
   final CustomPaint Function(PictureInfo svg) backgroundBuilder;
   final CustomPaint Function(Size size, Matrix4 transform) foregroundBuilder;
 
   const FloorMapWidget({
     super.key,
     required this.floorMap,
+    this.onDoubleTapDown,
     required this.backgroundBuilder,
     required this.foregroundBuilder,
   });
@@ -66,13 +69,19 @@ class _FloorMapWidgetState extends State<FloorMapWidget> {
         ),
         child: Stack(
           children: [
-            InteractiveViewer(
-              transformationController: transformationController,
-              constrained: false,
-              minScale: 0.01,
-              maxScale: 2,
-              boundaryMargin: const EdgeInsets.all(500),
-              child: widget.backgroundBuilder(floorMapSvg!),
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onDoubleTapDown: (details) {
+                widget.onDoubleTapDown?.call(details, transformationController.value);
+              },
+              child: InteractiveViewer(
+                transformationController: transformationController,
+                constrained: false,
+                minScale: 0.01,
+                maxScale: 2,
+                boundaryMargin: const EdgeInsets.all(500),
+                child: widget.backgroundBuilder(floorMapSvg!),
+              ),
             ),
             IgnorePointer(
               child: ListenableBuilder(
