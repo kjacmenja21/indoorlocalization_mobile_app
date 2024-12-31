@@ -1,41 +1,32 @@
 import 'package:flutter/widgets.dart';
 import 'package:il_core/il_entities.dart';
 
-class AssetDisplayChangeNotifier extends ChangeNotifier {
-  FloorMap? floorMap;
-  List<Asset> assets = [];
+class AssetsChangeNotifier extends ChangeNotifier {
+  final FloorMap _floorMap;
+  List<Asset> _assets = [];
 
-  bool _disposed = false;
+  AssetsChangeNotifier(FloorMap floorMap) : _floorMap = floorMap;
 
-  void show({required FloorMap floorMap, required List<Asset> assets}) {
-    this.floorMap = floorMap;
-    this.assets = assets;
-
+  void showAssets(List<Asset> assets) {
+    _assets = assets;
     notifyListeners();
   }
 
-  @override
-  void notifyListeners() {
-    if (_disposed) return;
-    super.notifyListeners();
-  }
-
-  @override
-  void dispose() {
-    _disposed = true;
-    super.dispose();
-  }
+  FloorMap get floorMap => _floorMap;
+  List<Asset> get assets => _assets;
 }
 
 abstract class IAssetDisplayHandler {
   @protected
-  late AssetDisplayChangeNotifier changeNotifier;
+  AssetsChangeNotifier? assetsChangeNotifier;
 
-  Widget buildDisplayWidget({required VoidCallback onTap});
+  void activate(FloorMap floorMap);
+  void deactivate();
 
+  void showAssets(List<Asset> assets);
+
+  Widget buildSelectWidget({required VoidCallback onTap});
   Widget buildWidget(BuildContext context);
-
-  void showAssets({required FloorMap floorMap, required List<Asset> assets});
 
   void dispose();
 }

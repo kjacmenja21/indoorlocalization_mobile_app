@@ -6,14 +6,34 @@ import 'package:il_display_assets_map/src/widgets/assets_widget.dart';
 
 class MapAssetDisplayHandler implements IAssetDisplayHandler {
   @override
-  late AssetDisplayChangeNotifier changeNotifier;
+  AssetsChangeNotifier? assetsChangeNotifier;
 
-  MapAssetDisplayHandler() {
-    changeNotifier = AssetDisplayChangeNotifier();
+  MapAssetDisplayHandler();
+
+  @override
+  void activate(FloorMap floorMap) {
+    if (assetsChangeNotifier != null) {
+      deactivate();
+    }
+
+    assetsChangeNotifier = AssetsChangeNotifier(floorMap);
   }
 
   @override
-  Widget buildDisplayWidget({required VoidCallback onTap}) {
+  void deactivate() {
+    assetsChangeNotifier?.dispose();
+    assetsChangeNotifier = null;
+  }
+
+  @override
+  void showAssets(List<Asset> assets) {
+    if (assetsChangeNotifier != null) {
+      assetsChangeNotifier!.showAssets(assets);
+    }
+  }
+
+  @override
+  Widget buildSelectWidget({required VoidCallback onTap}) {
     return ListTile(
       title: const Text('Map'),
       leading: const FaIcon(FontAwesomeIcons.solidMap),
@@ -23,28 +43,23 @@ class MapAssetDisplayHandler implements IAssetDisplayHandler {
 
   @override
   Widget buildWidget(BuildContext context) {
-    return ListenableBuilder(
-      listenable: changeNotifier,
-      builder: (context, child) {
-        if (changeNotifier.floorMap == null) {
-          return Container();
-        }
+    if (assetsChangeNotifier == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
+    return ListenableBuilder(
+      listenable: assetsChangeNotifier!,
+      builder: (context, child) {
         return AssetsWidget(
-          floorMap: changeNotifier.floorMap!,
-          assets: changeNotifier.assets,
+          floorMap: assetsChangeNotifier!.floorMap,
+          assets: assetsChangeNotifier!.assets,
         );
       },
     );
   }
 
   @override
-  void showAssets({required FloorMap floorMap, required List<Asset> assets}) {
-    changeNotifier.show(floorMap: floorMap, assets: assets);
-  }
-
-  @override
   void dispose() {
-    changeNotifier.dispose();
+    deactivate();
   }
 }
