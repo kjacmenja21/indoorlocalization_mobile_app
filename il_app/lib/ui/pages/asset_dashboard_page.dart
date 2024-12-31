@@ -174,7 +174,7 @@ class _AssetDisplayModeDialog extends StatelessWidget {
       title: const Text('Asset display mode'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: displayHandlers.map((e) => getDisplayWidget(e, context)).toList(),
+        children: displayHandlers.map((e) => buildSelectWidget(e, context)).toList(),
       ),
       actions: [
         TextButton(
@@ -185,12 +185,11 @@ class _AssetDisplayModeDialog extends StatelessWidget {
     );
   }
 
-  Widget getDisplayWidget(IAssetDisplayHandler displayHandler, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: displayHandler.buildDisplayWidget(onTap: () {
+  Widget buildSelectWidget(IAssetDisplayHandler displayHandler, BuildContext context) {
+    return displayHandler.buildSelectWidget(
+      onTap: () {
         context.pop(displayHandler);
-      }),
+      },
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:il_ws/il_ws.dart';
 
 class AssetDashboardPageViewModel extends ViewModel {
   late final List<IAssetDisplayHandler> _displayHandlers;
+
   late final IAssetService _assetService;
   late final IAssetLocationTracker _assetLocationTracker;
   late final IFloorMapService _floorMapService;
@@ -35,14 +36,8 @@ class AssetDashboardPageViewModel extends ViewModel {
   }
 
   void showAssets() {
-    if (_currentFloorMap == null) {
-      return;
-    }
-
-    var floorMap = _currentFloorMap!;
     var assets = _assets.where((e) => e.visible).toList();
-
-    _currentDisplayHandler.showAssets(floorMap: floorMap, assets: assets);
+    _currentDisplayHandler.showAssets(assets);
   }
 
   Future<void> changeFloorMap(FloorMap floorMap) async {
@@ -76,6 +71,9 @@ class AssetDashboardPageViewModel extends ViewModel {
       showAssets();
     });
 
+    _currentDisplayHandler.deactivate();
+    _currentDisplayHandler.activate(floorMap);
+
     _isLoading = false;
     notifyListeners();
     showAssets();
@@ -86,7 +84,10 @@ class AssetDashboardPageViewModel extends ViewModel {
       return;
     }
 
+    _currentDisplayHandler.deactivate();
     _currentDisplayHandler = handler;
+    _currentDisplayHandler.activate(_currentFloorMap!);
+
     notifyListeners();
     showAssets();
   }
