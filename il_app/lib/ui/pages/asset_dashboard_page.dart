@@ -13,12 +13,15 @@ import 'package:provider/provider.dart';
 
 class AssetDashboardPage extends StatelessWidget {
   late final int? initFloorMapId;
+  late final int? initAssetId;
 
   AssetDashboardPage({super.key, Object? extra}) {
     if (extra is Map) {
       initFloorMapId = extra['floorMapId'];
+      initAssetId = extra['assetId'];
     } else {
       initFloorMapId = null;
+      initAssetId = null;
     }
   }
 
@@ -49,6 +52,7 @@ class AssetDashboardPage extends StatelessWidget {
         assetLocationTracker: FakeAssetLocationTracker(),
         floorMapService: FloorMapService(),
         initFloorMapId: initFloorMapId,
+        initAssetId: initAssetId,
       ),
       child: Builder(builder: (context) {
         return Scaffold(

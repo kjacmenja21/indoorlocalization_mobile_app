@@ -25,6 +25,7 @@ class AssetDashboardPageViewModel extends ViewModel {
     required IAssetLocationTracker assetLocationTracker,
     required IFloorMapService floorMapService,
     int? initFloorMapId,
+    int? initAssetId,
   }) {
     _displayHandlers = displayHandlers;
     _assetService = assetService;
@@ -32,7 +33,7 @@ class AssetDashboardPageViewModel extends ViewModel {
     _floorMapService = floorMapService;
 
     _currentDisplayHandler = displayHandlers.first;
-    _init(initFloorMapId);
+    _init(initFloorMapId, initAssetId);
   }
 
   void showAssets() {
@@ -117,14 +118,25 @@ class AssetDashboardPageViewModel extends ViewModel {
 
   bool get isLoading => _isLoading;
 
-  Future<void> _init(int? initFloorMapId) async {
+  Future<void> _init(int? initFloorMapId, int? initAssetId) async {
     await _loadFloorMaps();
 
     if (initFloorMapId != null) {
       var i = _floorMaps.indexWhere((e) => e.id == initFloorMapId);
 
       if (i != -1) {
-        changeFloorMap(_floorMaps[i]);
+        await changeFloorMap(_floorMaps[i]);
+      }
+    }
+
+    if (initAssetId != null) {
+      var i = _assets.indexWhere((e) => e.id == initAssetId);
+
+      if (i != -1) {
+        var visibility = List.filled(_assets.length, false);
+        visibility[i] = true;
+
+        updateAssetVisibility(visibility);
       }
     }
   }
