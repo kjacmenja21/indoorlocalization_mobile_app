@@ -47,15 +47,7 @@ class MapAssetDisplayHandler implements IAssetDisplayHandler {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return ListenableBuilder(
-      listenable: assetsChangeNotifier!,
-      builder: (context, child) {
-        return AssetsWidget(
-          floorMap: assetsChangeNotifier!.floorMap,
-          assets: assetsChangeNotifier!.assets,
-        );
-      },
-    );
+    return AssetsWidget(model: assetsChangeNotifier!);
   }
 
   @override
