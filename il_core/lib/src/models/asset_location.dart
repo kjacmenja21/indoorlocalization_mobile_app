@@ -12,4 +12,11 @@ class AssetLocation {
     required this.y,
     required this.floorMapId,
   });
+
+  @override
+  String toString() {
+    var x = this.x.toStringAsFixed(1);
+    var y = this.y.toStringAsFixed(1);
+    return 'AssetLocation(assetId: $id, floorMapId: $floorMapId, x: $x, y: $y)';
+  }
 }

@@ -1,6 +1,14 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 class GeometryHelper {
+  double distanceBetweenPoints(Offset p1, Offset p2) {
+    double dx = p2.dx - p1.dx;
+    double dy = p2.dy - p1.dy;
+
+    return math.sqrt(dx * dx + dy * dy);
+  }
+
   /// Returns whether a point is contained within the polygon.
   bool polygonContainsPoint({
     required List<Offset> polygon,

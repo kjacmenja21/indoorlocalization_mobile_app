@@ -6,45 +6,60 @@ import 'package:il_display_assets_table/src/widgets/assets_table_widget.dart';
 
 class TableAssetDisplayHandler implements IAssetDisplayHandler {
   @override
-  late AssetDisplayChangeNotifier changeNotifier;
+  AssetsChangeNotifier? assetsChangeNotifier;
 
-  TableAssetDisplayHandler() {
-    changeNotifier = AssetDisplayChangeNotifier();
+  TableAssetDisplayHandler();
+
+  @override
+  void activate(FloorMap floorMap) {
+    if (assetsChangeNotifier != null) {
+      deactivate();
+    }
+
+    assetsChangeNotifier = AssetsChangeNotifier(floorMap);
   }
 
   @override
-  Widget buildDisplayWidget({required VoidCallback onTap}) {
-    return ListTile(
-      title: const Text('Table'),
-      leading: const FaIcon(FontAwesomeIcons.table),
-      onTap: onTap,
+  void deactivate() {
+    assetsChangeNotifier?.dispose();
+    assetsChangeNotifier = null;
+  }
+
+  @override
+  void showAssets(List<Asset> assets) {
+    if (assetsChangeNotifier != null) {
+      assetsChangeNotifier!.showAssets(assets);
+    }
+  }
+
+  @override
+  Widget buildSelectWidget({required VoidCallback onTap}) {
+    return MenuItemButton(
+      onPressed: () => onTap(),
+      leadingIcon: const FaIcon(FontAwesomeIcons.tableCells),
+      child: const Text('Show table'),
     );
   }
 
   @override
   Widget buildWidget(BuildContext context) {
-    return ListenableBuilder(
-      listenable: changeNotifier,
-      builder: (context, child) {
-        if (changeNotifier.floorMap == null) {
-          return Container();
-        }
+    if (assetsChangeNotifier == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
+    return ListenableBuilder(
+      listenable: assetsChangeNotifier!,
+      builder: (context, child) {
         return AssetsTableWidget(
-          floorMap: changeNotifier.floorMap!,
-          assets: changeNotifier.assets,
+          floorMap: assetsChangeNotifier!.floorMap,
+          assets: assetsChangeNotifier!.assets,
         );
       },
     );
   }
 
   @override
-  void showAssets({required FloorMap floorMap, required List<Asset> assets}) {
-    changeNotifier.show(floorMap: floorMap, assets: assets);
-  }
-
-  @override
   void dispose() {
-    changeNotifier.dispose();
+    deactivate();
   }
 }

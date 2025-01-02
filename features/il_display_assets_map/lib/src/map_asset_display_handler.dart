@@ -6,45 +6,52 @@ import 'package:il_display_assets_map/src/widgets/assets_widget.dart';
 
 class MapAssetDisplayHandler implements IAssetDisplayHandler {
   @override
-  late AssetDisplayChangeNotifier changeNotifier;
+  AssetsChangeNotifier? assetsChangeNotifier;
 
-  MapAssetDisplayHandler() {
-    changeNotifier = AssetDisplayChangeNotifier();
+  MapAssetDisplayHandler();
+
+  @override
+  void activate(FloorMap floorMap) {
+    if (assetsChangeNotifier != null) {
+      deactivate();
+    }
+
+    assetsChangeNotifier = AssetsChangeNotifier(floorMap);
   }
 
   @override
-  Widget buildDisplayWidget({required VoidCallback onTap}) {
-    return ListTile(
-      title: const Text('Map'),
-      leading: const FaIcon(FontAwesomeIcons.solidMap),
-      onTap: onTap,
+  void deactivate() {
+    assetsChangeNotifier?.dispose();
+    assetsChangeNotifier = null;
+  }
+
+  @override
+  void showAssets(List<Asset> assets) {
+    if (assetsChangeNotifier != null) {
+      assetsChangeNotifier!.showAssets(assets);
+    }
+  }
+
+  @override
+  Widget buildSelectWidget({required VoidCallback onTap}) {
+    return MenuItemButton(
+      onPressed: () => onTap(),
+      leadingIcon: const FaIcon(FontAwesomeIcons.map),
+      child: const Text('Show map'),
     );
   }
 
   @override
   Widget buildWidget(BuildContext context) {
-    return ListenableBuilder(
-      listenable: changeNotifier,
-      builder: (context, child) {
-        if (changeNotifier.floorMap == null) {
-          return Container();
-        }
+    if (assetsChangeNotifier == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-        return AssetsWidget(
-          floorMap: changeNotifier.floorMap!,
-          assets: changeNotifier.assets,
-        );
-      },
-    );
-  }
-
-  @override
-  void showAssets({required FloorMap floorMap, required List<Asset> assets}) {
-    changeNotifier.show(floorMap: floorMap, assets: assets);
+    return AssetsWidget(model: assetsChangeNotifier!);
   }
 
   @override
   void dispose() {
-    changeNotifier.dispose();
+    deactivate();
   }
 }

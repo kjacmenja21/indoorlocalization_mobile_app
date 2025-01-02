@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/vm/assets_page_view_model.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
 import 'package:il_core/il_entities.dart';
@@ -56,10 +57,10 @@ class AssetsPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   var asset = assets[index];
                   return ListTile(
-                    onTap: () {},
                     title: Text(asset.name),
                     subtitle: Text(asset.floorMap?.name ?? ''),
                     leading: const FaIcon(FontAwesomeIcons.box),
+                    trailing: createAssetMenu(context, asset),
                   );
                 },
               ),
@@ -95,6 +96,44 @@ class AssetsPage extends StatelessWidget {
           );
         }),
       ],
+    );
+  }
+
+  Widget createAssetMenu(BuildContext context, Asset asset) {
+    return MenuAnchor(
+      menuChildren: [
+        MenuItemButton(
+          onPressed: () {
+            var extra = {
+              'floorMapId': asset.floorMapId,
+              'assetId': asset.id,
+            };
+            context.go('/asset_dashboard', extra: extra);
+          },
+          leadingIcon: const FaIcon(FontAwesomeIcons.solidMap),
+          child: const Text('Show dashboard'),
+        ),
+        MenuItemButton(
+          onPressed: () {
+            var extra = {'assetId': asset.id};
+            context.go('/asset_reports', extra: extra);
+          },
+          leadingIcon: const FaIcon(FontAwesomeIcons.solidChartBar),
+          child: const Text('Show reports'),
+        ),
+      ],
+      builder: (context, controller, child) {
+        return IconButton(
+          onPressed: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+          icon: const FaIcon(FontAwesomeIcons.ellipsis),
+        );
+      },
     );
   }
 }
