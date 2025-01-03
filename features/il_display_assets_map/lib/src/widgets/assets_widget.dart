@@ -58,14 +58,14 @@ class AssetsWidget extends StatelessWidget {
         return FloorMapWidget(
           floorMap: floorMap,
           onDoubleTapDown: (details, transform) => onDoubleTapDown(context, details, transform),
-          backgroundBuilder: (svg) {
+          backgroundBuilder: (imageRenderer) {
             return CustomPaint(
               willChange: false,
               isComplex: true,
               size: floorMap.size,
               painter: FloorMapPainter(
                 floorMap: floorMap,
-                svg: svg,
+                imageRenderer: imageRenderer,
               ),
             );
           },

@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_ui_helpers.dart';
 
 class FloorMapPainter extends CustomPainter {
   final FloorMap floorMap;
-  final PictureInfo svg;
+  final IFloorMapImageRenderer imageRenderer;
 
   late FloorMapRenderer floorMapRenderer;
 
   FloorMapPainter({
     required this.floorMap,
-    required this.svg,
+    required this.imageRenderer,
   }) {
     floorMapRenderer = FloorMapRenderer();
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    floorMapRenderer.drawFloorMapSvg(canvas, size, svg);
+    imageRenderer.draw(canvas);
     floorMapRenderer.drawZones(canvas, floorMap);
   }
 
