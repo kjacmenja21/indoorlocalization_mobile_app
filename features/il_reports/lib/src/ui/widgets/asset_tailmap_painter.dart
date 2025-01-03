@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:il_core/il_ui_helpers.dart';
 import 'package:il_reports/src/models/asset_tailmap_data.dart';
 
 class AssetTailmapBackgroundPainter extends CustomPainter {
   final AssetTailmapData data;
-  final PictureInfo svg;
+  final IFloorMapImageRenderer imageRenderer;
 
   late FloorMapRenderer floorMapRenderer;
 
   AssetTailmapBackgroundPainter({
     required this.data,
-    required this.svg,
+    required this.imageRenderer,
   }) {
     floorMapRenderer = FloorMapRenderer();
   }
 
   @override
   void paint(Canvas canvas, Size size) {
-    floorMapRenderer.drawFloorMapSvg(canvas, size, svg);
+    imageRenderer.draw(canvas);
     floorMapRenderer.drawZones(canvas, data.floorMap);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     if (oldDelegate is AssetTailmapBackgroundPainter) {
-      return data != oldDelegate.data || svg != oldDelegate.svg;
+      return data != oldDelegate.data || imageRenderer != oldDelegate.imageRenderer;
     }
     return false;
   }

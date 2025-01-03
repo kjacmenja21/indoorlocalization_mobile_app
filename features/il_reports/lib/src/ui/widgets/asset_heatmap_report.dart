@@ -43,14 +43,14 @@ class _HeatmapReportWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloorMapWidget(
       floorMap: data.floorMap,
-      backgroundBuilder: (svg) {
+      backgroundBuilder: (imageRenderer) {
         return CustomPaint(
           willChange: false,
           isComplex: true,
           size: data.floorMap.size,
           painter: AssetHeatmapBackgroundPainter(
             data: data,
-            svg: svg,
+            imageRenderer: imageRenderer,
           ),
         );
       },
