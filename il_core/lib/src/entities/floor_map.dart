@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:il_core/il_entities.dart';
@@ -9,7 +10,8 @@ class FloorMap {
   Rect trackingArea;
   Size size;
 
-  String svgImage;
+  Uint8List? image;
+  String? imageType;
 
   List<FloorMapZone>? zones;
 
@@ -18,7 +20,8 @@ class FloorMap {
     required this.name,
     required this.trackingArea,
     required this.size,
-    required this.svgImage,
+    this.image,
+    this.imageType,
     this.zones,
   });
 
@@ -36,7 +39,6 @@ class FloorMap {
         json['width'],
         json['height'],
       ),
-      svgImage: json['svg'],
     );
   }
 }
