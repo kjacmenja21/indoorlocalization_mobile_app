@@ -178,7 +178,7 @@ Asset createAsset(Size mapSize) {
     lastSync: DateTime.now(),
     active: true,
     floorMapId: 0,
-    floorMap: FloorMap(id: 0, name: '', trackingArea: Rect.zero, size: mapSize, svgImage: ''),
+    floorMap: FloorMap(id: 0, name: '', trackingArea: Rect.zero, size: mapSize),
   );
 }
 

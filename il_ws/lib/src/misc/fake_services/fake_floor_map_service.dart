@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:il_core/il_entities.dart';
@@ -117,14 +118,16 @@ class FakeFloorMapService implements IFloorMapService {
           name: 'Floor map 1',
           trackingArea: Rect.fromLTWH(0, 0, 3000, 2000),
           size: Size(3000, 2000),
-          svgImage: testSvg,
+          image: utf8.encode(testSvg),
+          imageType: 'svg',
         ),
         FloorMap(
           id: 2,
           name: 'Floor map 2',
           trackingArea: Rect.fromLTWH(0, 0, 3000, 2000),
           size: Size(3000, 2000),
-          svgImage: testSvg,
+          image: utf8.encode(testSvg),
+          imageType: 'svg',
         ),
       ];
     });
