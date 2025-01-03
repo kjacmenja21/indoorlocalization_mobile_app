@@ -28,10 +28,6 @@ class FloorMapSvgImageRenderer implements IFloorMapImageRenderer {
 
   @override
   Future<void> load() async {
-    if (floorMap.image == null) {
-      throw ArgumentError('Floor map image is null');
-    }
-
     _svg = await vg.loadPicture(SvgBytesLoader(floorMap.image!), null);
   }
 
