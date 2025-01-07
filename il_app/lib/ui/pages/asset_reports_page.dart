@@ -111,6 +111,8 @@ class AssetReportsPage extends StatelessWidget {
                 Text('Start date', style: titleTextStyle),
                 DateTimePicker(
                   value: model.startDate,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime.now(),
                   onUpdate: (value) => model.setStartDate(value),
                 ),
                 const SizedBox(height: 20),
@@ -118,6 +120,8 @@ class AssetReportsPage extends StatelessWidget {
                 Text('End date', style: titleTextStyle),
                 DateTimePicker(
                   value: model.endDate,
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime.now(),
                   defaultTime: const TimeOfDay(hour: 23, minute: 59),
                   onUpdate: (value) => model.setEndDate(value),
                 ),
