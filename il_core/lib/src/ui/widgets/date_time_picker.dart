@@ -25,6 +25,7 @@ class DateTimePicker extends StatelessWidget {
   Future<void> selectDate(BuildContext context) async {
     DateTime? result = await showDatePicker(
       context: context,
+      locale: Locale('en', 'GB'),
       firstDate: DateTime(2000),
       lastDate: DateTime(3000),
     );
