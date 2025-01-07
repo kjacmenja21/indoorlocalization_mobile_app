@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:il_app/ui/widgets/fullscreen_dialog.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_widgets.dart';
 
@@ -85,9 +86,9 @@ class _SelectAssetDialogState extends State<SelectAssetDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Select asset'),
-      content: buildAssets(),
+    return FullscreenDialog(
+      title: 'Select asset',
+      child: buildAssets(),
     );
   }
 
