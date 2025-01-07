@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_theme.dart';
+import 'package:il_core/src/ui/helpers/floor_map_image_renderer.dart';
 
 class FloorMapWidget extends StatefulWidget {
   final FloorMap floorMap;
 
   final void Function(TapDownDetails details, Matrix4 transform)? onDoubleTapDown;
 
-  final CustomPaint Function(PictureInfo svg) backgroundBuilder;
+  final CustomPaint Function(IFloorMapImageRenderer imageRenderer) backgroundBuilder;
   final CustomPaint Function(Size size, Matrix4 transform) foregroundBuilder;
 
   const FloorMapWidget({
@@ -26,31 +26,36 @@ class FloorMapWidget extends StatefulWidget {
 class _FloorMapWidgetState extends State<FloorMapWidget> {
   var transformationController = TransformationController();
 
-  late FloorMap floorMap;
-  PictureInfo? floorMapSvg;
+  late IFloorMapImageRenderer imageRenderer;
+
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    floorMap = widget.floorMap;
-    loadSvg(floorMap.svgImage);
+    imageRenderer = IFloorMapImageRenderer.fromFloorMap(widget.floorMap);
+    loadImage();
   }
 
   @override
   void didUpdateWidget(FloorMapWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (floorMap != oldWidget.floorMap) {
-      floorMap = widget.floorMap;
-      floorMapSvg = null;
-
-      loadSvg(floorMap.svgImage);
+    if (widget.floorMap != oldWidget.floorMap) {
+      imageRenderer = IFloorMapImageRenderer.fromFloorMap(widget.floorMap);
+      loadImage();
     }
+  }
+
+  Future<void> loadImage() async {
+    setState(() => isLoading = true);
+    await imageRenderer.load();
+    setState(() => isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (floorMapSvg == null) {
+    if (isLoading) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -80,7 +85,7 @@ class _FloorMapWidgetState extends State<FloorMapWidget> {
                 minScale: 0.01,
                 maxScale: 2,
                 boundaryMargin: const EdgeInsets.all(500),
-                child: widget.backgroundBuilder(floorMapSvg!),
+                child: widget.backgroundBuilder(imageRenderer),
               ),
             ),
             IgnorePointer(
@@ -102,14 +107,10 @@ class _FloorMapWidgetState extends State<FloorMapWidget> {
     });
   }
 
-  Future<void> loadSvg(String svgText) async {
-    var svg = await vg.loadPicture(SvgStringLoader(svgText), null);
-    setState(() => floorMapSvg = svg);
-  }
-
   @override
   void dispose() {
     transformationController.dispose();
+    imageRenderer.dispose();
     super.dispose();
   }
 }

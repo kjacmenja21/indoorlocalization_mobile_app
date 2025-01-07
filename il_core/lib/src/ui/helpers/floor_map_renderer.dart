@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_theme.dart';
 
 class FloorMapRenderer {
   Matrix4 transform = Matrix4.identity();
-
-  void drawFloorMapSvg(Canvas canvas, Size size, PictureInfo svg) {
-    var paint = Paint();
-    paint.style = PaintingStyle.fill;
-    paint.color = Color.fromARGB(255, 255, 255, 255);
-
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
-    canvas.drawPicture(svg.picture);
-  }
 
   void drawAsset(Canvas canvas, String name, Offset position) {
     const double assetCircleRadius = 4.0;
