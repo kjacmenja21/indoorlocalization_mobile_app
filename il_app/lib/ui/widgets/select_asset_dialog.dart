@@ -125,17 +125,18 @@ class _SelectAssetDialogState extends State<SelectAssetDialog> {
   Widget createFacilityMenu() {
     return DropdownMenu<FloorMap?>(
       label: const Text('Facility'),
-      width: 200,
       enableSearch: false,
       requestFocusOnTap: false,
       enableFilter: false,
+      expandedInsets: const EdgeInsets.all(0),
       onSelected: (value) {
         setFloorMapFilter(value);
       },
       dropdownMenuEntries: [
         const DropdownMenuEntry(
           value: null,
-          label: 'All facilities',
+          label: '',
+          labelWidget: Text('Show all facilities'),
           leadingIcon: FaIcon(FontAwesomeIcons.building),
         ),
         ...floorMaps.map((e) {
