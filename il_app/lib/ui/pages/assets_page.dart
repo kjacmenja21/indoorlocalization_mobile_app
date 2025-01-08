@@ -75,17 +75,18 @@ class AssetsPage extends StatelessWidget {
     return DropdownMenu<FloorMap?>(
       label: const Text('Facility'),
       enabled: !model.isLoading,
-      width: 200,
       enableSearch: false,
       requestFocusOnTap: false,
       enableFilter: false,
+      expandedInsets: const EdgeInsets.all(0),
       onSelected: (value) {
         model.setFloorMapFilter(value);
       },
       dropdownMenuEntries: [
         const DropdownMenuEntry(
           value: null,
-          label: 'All facilities',
+          label: '',
+          labelWidget: Text('Show all facilities'),
           leadingIcon: FaIcon(FontAwesomeIcons.building),
         ),
         ...model.floorMaps.map((e) {
