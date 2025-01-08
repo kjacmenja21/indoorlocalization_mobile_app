@@ -99,18 +99,6 @@ class _AssetTailmapReportWidgetState extends State<AssetTailmapReportWidget> {
             child: _TailmapReportWidget(data),
           ),
           const SizedBox(height: 10),
-          Slider(
-            value: data.currentPositionIndex.toDouble(),
-            min: 0,
-            max: (data.positionHistory.length - 1).toDouble(),
-            onChanged: (value) {
-              if (!paused) {
-                pause();
-              }
-
-              updateCurrentPosition(value.round());
-            },
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -124,9 +112,21 @@ class _AssetTailmapReportWidgetState extends State<AssetTailmapReportWidget> {
                 },
                 icon: paused ? const FaIcon(FontAwesomeIcons.play) : const FaIcon(FontAwesomeIcons.pause),
               ),
-              const SizedBox(width: 20),
+              const SizedBox(width: 10),
               Text(DateFormats.dateTime.format(data.currentDate), style: Theme.of(context).textTheme.bodyLarge),
             ],
+          ),
+          Slider(
+            value: data.currentPositionIndex.toDouble(),
+            min: 0,
+            max: (data.positionHistory.length - 1).toDouble(),
+            onChanged: (value) {
+              if (!paused) {
+                pause();
+              }
+
+              updateCurrentPosition(value.round());
+            },
           ),
         ],
       ),
