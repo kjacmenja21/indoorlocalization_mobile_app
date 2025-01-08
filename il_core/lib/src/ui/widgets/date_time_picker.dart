@@ -3,6 +3,9 @@ import 'package:il_core/il_helpers.dart';
 
 class DateTimePicker extends StatelessWidget {
   final DateTime? value;
+  final DateTime firstDate;
+  final DateTime lastDate;
+
   final void Function(DateTime value) onUpdate;
 
   final TimeOfDay? defaultTime;
@@ -10,6 +13,8 @@ class DateTimePicker extends StatelessWidget {
   const DateTimePicker({
     super.key,
     required this.value,
+    required this.firstDate,
+    required this.lastDate,
     required this.onUpdate,
     this.defaultTime,
   });
@@ -25,8 +30,9 @@ class DateTimePicker extends StatelessWidget {
   Future<void> selectDate(BuildContext context) async {
     DateTime? result = await showDatePicker(
       context: context,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(3000),
+      locale: Locale('en', 'GB'),
+      firstDate: firstDate,
+      lastDate: lastDate,
     );
 
     if (result != null) {
