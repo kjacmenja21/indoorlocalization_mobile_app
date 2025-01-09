@@ -1,20 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:il_core/il_entities.dart';
-
-class AssetsChangeNotifier extends ChangeNotifier {
-  final FloorMap _floorMap;
-  List<Asset> _assets = [];
-
-  AssetsChangeNotifier(FloorMap floorMap) : _floorMap = floorMap;
-
-  void showAssets(List<Asset> assets) {
-    _assets = assets;
-    notifyListeners();
-  }
-
-  FloorMap get floorMap => _floorMap;
-  List<Asset> get assets => _assets;
-}
+import 'package:il_core/src/logic/display_assets/assets_change_notifier.dart';
 
 abstract class IAssetDisplayHandler {
   @protected
