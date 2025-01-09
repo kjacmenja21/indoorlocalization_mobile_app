@@ -7,8 +7,23 @@ class AssetsChangeNotifier extends ChangeNotifier {
 
   AssetsChangeNotifier(FloorMap floorMap) : _floorMap = floorMap;
 
-  void showAssets(List<Asset> assets) {
+  void setAssets(List<Asset> assets) {
     _assets = assets;
+    notifyListeners();
+  }
+
+  void updateAssetLocation(AssetLocation location) {
+    int i = _assets.indexWhere((e) => e.id == location.id);
+    if (i == -1) {
+      return;
+    }
+
+    var asset = _assets[i];
+
+    asset.x = location.x;
+    asset.y = location.y;
+    asset.lastSync = DateTime.now();
+
     notifyListeners();
   }
 
