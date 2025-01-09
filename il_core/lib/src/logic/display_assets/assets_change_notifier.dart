@@ -12,19 +12,15 @@ class AssetsChangeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateAssetLocation(AssetLocation location) {
+  bool updateAssetLocation(AssetLocation location) {
     int i = _assets.indexWhere((e) => e.id == location.id);
     if (i == -1) {
-      return;
+      return false;
     }
 
-    var asset = _assets[i];
-
-    asset.x = location.x;
-    asset.y = location.y;
-    asset.lastSync = DateTime.now();
-
+    _assets[i].updateLocation(location);
     notifyListeners();
+    return true;
   }
 
   FloorMap get floorMap => _floorMap;
