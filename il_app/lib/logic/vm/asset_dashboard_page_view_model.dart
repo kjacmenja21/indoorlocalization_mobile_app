@@ -126,12 +126,12 @@ class AssetDashboardPageViewModel extends ViewModel {
     }
 
     if (initAssetId != null) {
-      var i = assets.indexWhere((e) => e.id == initAssetId);
-
-      if (i != -1) {
-        _visibleAssets = [assets[i]];
-        _currentDisplayHandler.changeNotifier.setAssets(visibleAssets);
+      for (var asset in assets) {
+        asset.visible = asset.id == initAssetId;
       }
+
+      _visibleAssets = assets.where((e) => e.visible).toList();
+      _currentDisplayHandler.changeNotifier.setAssets(visibleAssets);
     }
   }
 
