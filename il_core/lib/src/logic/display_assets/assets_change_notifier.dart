@@ -8,7 +8,7 @@ class AssetsChangeNotifier extends ChangeNotifier {
   AssetsChangeNotifier(this.floorMap);
 
   void setAssets(List<Asset> assets) {
-    assets = assets;
+    this.assets = assets;
     notifyListeners();
   }
 
