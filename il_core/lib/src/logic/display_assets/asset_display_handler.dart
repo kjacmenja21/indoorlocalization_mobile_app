@@ -9,7 +9,7 @@ abstract class IAssetDisplayHandler {
   void activate(FloorMap floorMap);
   void deactivate();
 
-  void showAssets(List<Asset> assets);
+  AssetsChangeNotifier get changeNotifier;
 
   Widget buildSelectWidget({required VoidCallback onTap});
   Widget buildWidget(BuildContext context);

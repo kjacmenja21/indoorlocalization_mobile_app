@@ -26,11 +26,7 @@ class TableAssetDisplayHandler implements IAssetDisplayHandler {
   }
 
   @override
-  void showAssets(List<Asset> assets) {
-    if (assetsChangeNotifier != null) {
-      assetsChangeNotifier!.showAssets(assets);
-    }
-  }
+  AssetsChangeNotifier get changeNotifier => assetsChangeNotifier!;
 
   @override
   Widget buildSelectWidget({required VoidCallback onTap}) {

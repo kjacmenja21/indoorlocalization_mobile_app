@@ -38,7 +38,7 @@ class AssetDashboardPageViewModel extends ViewModel {
 
   void showAssets() {
     var assets = _assets.where((e) => e.visible).toList();
-    _currentDisplayHandler.showAssets(assets);
+    _currentDisplayHandler.changeNotifier.setAssets(assets);
   }
 
   Future<void> changeFloorMap(FloorMap floorMap) async {
@@ -60,22 +60,12 @@ class AssetDashboardPageViewModel extends ViewModel {
         return;
       }
 
-      int i = _assets.indexWhere((e) => e.id == location.id);
-      if (i == -1) {
-        return;
-      }
-
-      var asset = _assets[i];
-
-      asset.x = location.x;
-      asset.y = location.y;
-      asset.lastSync = DateTime.now();
-
-      showAssets();
+      _currentDisplayHandler.changeNotifier.updateAssetLocation(location);
     });
 
     _currentDisplayHandler.deactivate();
     _currentDisplayHandler.activate(floorMap);
+    _currentDisplayHandler.changeNotifier.setAssets(assets);
 
     _isLoading = false;
     notifyListeners();
