@@ -30,6 +30,12 @@ class Asset {
     this.visible = true,
   });
 
+  void updateLocation(AssetLocation location) {
+    x = location.x;
+    y = location.y;
+    lastSync = DateTime.now();
+  }
+
   /// Returns the zone in which the asset is currently located.
   /// If the asset is not in any zone, returns null.
   FloorMapZone? getCurrentZone([FloorMap? floorMap]) {
