@@ -14,18 +14,8 @@ class AssetInfoChangeNotifier extends AssetsChangeNotifier {
   }
 
   @override
-  bool updateAssetLocation(AssetLocation location) {
-    int i = assets.indexWhere((e) => e.id == location.id);
-    if (i == -1) {
-      return false;
-    }
-
-    var asset = assets[i];
-
-    asset.updateLocation(location);
-    assetData[i] = AssetInfo.fromAsset(asset, floorMap);
-
-    notifyListeners();
-    return true;
+  void updatedAssetLocation(int index, Asset asset) {
+    assetData[index] = AssetInfo.fromAsset(asset, floorMap);
+    super.updatedAssetLocation(index, asset);
   }
 }
