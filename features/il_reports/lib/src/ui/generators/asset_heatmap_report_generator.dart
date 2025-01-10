@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_reports/src/logic/asset_heatmap_data_generator.dart';
+import 'package:il_reports/src/models/asset_heatmap_data.dart';
+import 'package:il_reports/src/models/heatmap_data.dart';
 import 'package:il_reports/src/ui/widgets/asset_heatmap_report.dart';
 import 'package:il_ws/il_ws.dart';
 
@@ -41,32 +43,21 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
       endDate: endDate,
     );
 
-    var gradient = const LinearGradient(
-      begin: Alignment.bottomCenter,
-      end: Alignment.topCenter,
-      colors: [
-        Color.fromARGB(0, 255, 196, 0),
-        Color.fromARGB(255, 255, 196, 0),
-        Color.fromARGB(255, 255, 0, 0),
-        Color.fromARGB(255, 255, 0, 0),
-      ],
-      stops: [
-        0.0,
-        0.4,
-        0.9,
-        1.0,
-      ],
-    );
-
     var generator = AssetHeatmapDataGenerator(
-      asset: asset,
+      floorMapSize: asset.floorMap!.size,
       cellSize: const Size.square(50),
-      gradient: gradient,
+      gradient: HeatmapData.defaultGradient,
     );
 
     generator.positionHistory = positionHistory;
     var data = generator.generate();
 
-    return data;
+    return AssetHeatmapData(
+      asset: asset,
+      floorMap: asset.floorMap!,
+      startDate: data.startDate,
+      endDate: data.endDate,
+      gradient: data.gradient,
+    );
   }
 }
