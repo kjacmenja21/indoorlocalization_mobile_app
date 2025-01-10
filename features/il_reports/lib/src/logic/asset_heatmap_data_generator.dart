@@ -34,20 +34,26 @@ class AssetHeatmapDataGenerator {
 
     data.generateCells(floorMapSize, cellSize);
 
-    AssetPositionHistory lastPos = positionHistory.first;
-    HeatmapCell lastCell = data.cellFromPosition(lastPos.x, lastPos.y);
+    addTimeToAllCells(data);
+    calculateCellPercentage(data);
 
-    for (int i = 1; i < positionHistory.length; i++) {
-      var pos = positionHistory[i];
-      var cell = data.cellFromPosition(pos.x, pos.y);
+    return data;
+  }
 
-      addTimeToCells(data, lastCell, cell, lastPos, pos);
-      lastPos = pos;
-      lastCell = cell;
+  void updateHeatmapData(HeatmapData data) {
+    if (positionHistory.length < 2) {
+      throw AppException('Cannot update heatmap report because there is not enough data.');
     }
 
-    calculateCellPercentage(data);
-    return data;
+    if (positionHistory.first.timestamp.compareTo(data.startDate) < 0) {
+      data.startDate = positionHistory.first.timestamp;
+    }
+
+    if (positionHistory.last.timestamp.compareTo(data.endDate) > 0) {
+      data.endDate = positionHistory.last.timestamp;
+    }
+
+    addTimeToAllCells(data);
   }
 
   void calculateCellPercentage(HeatmapData data) {
@@ -61,6 +67,20 @@ class AssetHeatmapDataGenerator {
 
     for (var cell in data.cells) {
       cell.percentage = cell.minutes / maxMinutes;
+    }
+  }
+
+  void addTimeToAllCells(HeatmapData data) {
+    AssetPositionHistory lastPos = positionHistory.first;
+    HeatmapCell lastCell = data.cellFromPosition(lastPos.x, lastPos.y);
+
+    for (int i = 1; i < positionHistory.length; i++) {
+      var pos = positionHistory[i];
+      var cell = data.cellFromPosition(pos.x, pos.y);
+
+      addTimeToCells(data, lastCell, cell, lastPos, pos);
+      lastPos = pos;
+      lastCell = cell;
     }
   }
 
