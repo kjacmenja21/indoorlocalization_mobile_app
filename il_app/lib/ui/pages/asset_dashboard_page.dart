@@ -47,6 +47,7 @@ class AssetDashboardPage extends StatelessWidget {
         displayHandlers: [
           MapAssetDisplayHandler(),
           TableAssetDisplayHandler(),
+          LiveHeatmapAssetDisplayHandler(),
         ],
         assetService: AssetService(),
         assetLocationTracker: FakeAssetLocationTracker(),
