@@ -50,14 +50,12 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
     );
 
     generator.positionHistory = positionHistory;
-    var data = generator.generate();
+    var heatmapData = generator.generate();
 
     return AssetHeatmapData(
       asset: asset,
       floorMap: asset.floorMap!,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      gradient: data.gradient,
+      heatmapData: heatmapData,
     );
   }
 }

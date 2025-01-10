@@ -1,15 +1,15 @@
 import 'package:il_core/il_entities.dart';
 import 'package:il_reports/src/models/heatmap_data.dart';
 
-class AssetHeatmapData extends HeatmapData {
+class AssetHeatmapData {
   final Asset asset;
   final FloorMap floorMap;
+
+  final HeatmapData heatmapData;
 
   AssetHeatmapData({
     required this.asset,
     required this.floorMap,
-    required super.startDate,
-    required super.endDate,
-    required super.gradient,
+    required this.heatmapData,
   });
 }

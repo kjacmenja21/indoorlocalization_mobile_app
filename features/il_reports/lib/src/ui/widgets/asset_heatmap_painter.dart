@@ -22,7 +22,7 @@ class AssetHeatmapBackgroundPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     imageRenderer.draw(canvas);
     floorMapRenderer.drawZones(canvas, data.floorMap, fill: false);
-    heatmapRenderer.drawHeatmap(canvas, data);
+    heatmapRenderer.drawHeatmap(canvas, data.heatmapData);
   }
 
   @override
@@ -64,7 +64,7 @@ class AssetHeatmapForegroundPainter extends CustomPainter {
       lSize.height,
     );
 
-    heatmapRenderer.drawLegend(canvas, lRect, data);
+    heatmapRenderer.drawLegend(canvas, lRect, data.heatmapData);
   }
 
   @override
