@@ -20,8 +20,8 @@ class AssetHeatmapDataGenerator {
   });
 
   HeatmapData generate() {
-    if (positionHistory.isEmpty) {
-      throw AppException('Cannot generate heatmap report because there is no available data.');
+    if (positionHistory.length < 2) {
+      throw AppException('Cannot generate heatmap report because there is not enough data.');
     }
 
     sortPositionHistory(positionHistory);
