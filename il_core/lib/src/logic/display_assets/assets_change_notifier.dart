@@ -12,14 +12,7 @@ class AssetsChangeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool updateAssetLocation(AssetLocation location) {
-    int i = assets.indexWhere((e) => e.id == location.id);
-    if (i == -1) {
-      return false;
-    }
-
-    assets[i].updateLocation(location);
+  void updatedAssetLocation(int index, Asset asset) {
     notifyListeners();
-    return true;
   }
 }

@@ -58,14 +58,11 @@ class AssetDashboardPageViewModel extends ViewModel {
         return;
       }
 
-      bool updated = _currentDisplayHandler.changeNotifier.updateAssetLocation(location);
+      int i = _assets.indexWhere((e) => e.id == location.id);
 
-      if (!updated) {
-        int i = _assets.indexWhere((e) => e.id == location.id);
-
-        if (i != -1) {
-          _assets[i].updateLocation(location);
-        }
+      if (i != -1) {
+        _assets[i].updateLocation(location);
+        _currentDisplayHandler.changeNotifier.updatedAssetLocation(i, _assets[i]);
       }
     });
 
