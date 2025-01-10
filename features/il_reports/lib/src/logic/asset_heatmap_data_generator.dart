@@ -97,7 +97,7 @@ class AssetHeatmapDataGenerator {
 
   double getTimeDifferenceMinutes(AssetPositionHistory t1, AssetPositionHistory t2) {
     Duration d = t2.timestamp.difference(t1.timestamp);
-    return d.inMinutes.toDouble();
+    return d.inMilliseconds / (1000 * 60);
   }
 
   void sortPositionHistory(List<AssetPositionHistory> positionHistory) {
