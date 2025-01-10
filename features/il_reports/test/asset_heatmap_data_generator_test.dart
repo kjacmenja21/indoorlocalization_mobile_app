@@ -2,14 +2,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_reports/src/logic/asset_heatmap_data_generator.dart';
-import 'package:il_reports/src/models/asset_heatmap_data.dart';
+import 'package:il_reports/src/models/heatmap_data.dart';
 
 void main() {
   var mapSize = const Size(10000, 10000);
   var cellSize = const Size(100, 100);
 
   var generator = AssetHeatmapDataGenerator(
-    asset: createAsset(mapSize),
+    floorMapSize: mapSize,
     cellSize: cellSize,
     gradient: createGradient(),
   );
@@ -26,16 +26,15 @@ void main() {
   });
 
   group('addTimeToCells()', () {
-    late AssetHeatmapData data;
+    late HeatmapData data;
 
     setUp(() {
-      data = AssetHeatmapData(
-        asset: generator.asset,
+      data = HeatmapData(
         startDate: DateTime.now(),
         endDate: DateTime.now(),
         gradient: generator.gradient,
       );
-      data.generateCells(generator.cellSize);
+      data.generateCells(mapSize, generator.cellSize);
     });
 
     test(
@@ -90,16 +89,15 @@ void main() {
   });
 
   group('calculateCellPercentage()', () {
-    late AssetHeatmapData data;
+    late HeatmapData data;
 
     setUp(() {
-      data = AssetHeatmapData(
-        asset: generator.asset,
+      data = HeatmapData(
         startDate: DateTime.now(),
         endDate: DateTime.now(),
         gradient: generator.gradient,
       );
-      data.generateCells(generator.cellSize);
+      data.generateCells(mapSize, generator.cellSize);
     });
 
     test('given minutes, calculate cell percentage', () {
@@ -167,19 +165,6 @@ void main() {
       expect(data.cellAt(3, 2).minutes, 15);
     });
   });
-}
-
-Asset createAsset(Size mapSize) {
-  return Asset(
-    id: 0,
-    name: '',
-    x: 0,
-    y: 0,
-    lastSync: DateTime.now(),
-    active: true,
-    floorMapId: 0,
-    floorMap: FloorMap(id: 0, name: '', trackingArea: Rect.zero, size: mapSize),
-  );
 }
 
 AssetPositionHistory createPosHistory(String time, double x, double y) {
