@@ -17,22 +17,25 @@ class LiveHeatmapChangeNotifier extends AssetsChangeNotifier {
   }
 
   @override
-  bool updateAssetLocation(AssetLocation location) {
-    int i = assets.indexWhere((e) => e.id == location.id);
-    if (i == -1) {
-      return false;
-    }
-
-    assets[i].updateLocation(location);
-
-    var pHistory = AssetPositionHistory.fromAssetLocation(location);
+  void updatedAssetLocation(int index, Asset asset) {
+    var pHistory = _getPositionHistory(asset);
     heatmapGenerator.positionHistory.add(pHistory);
 
     if (heatmapGenerator.positionHistory.length >= 2) {
       heatmapData = heatmapGenerator.generate();
     }
 
-    notifyListeners();
-    return true;
+    super.updatedAssetLocation(index, asset);
+  }
+
+  AssetPositionHistory _getPositionHistory(Asset asset) {
+    return AssetPositionHistory(
+      id: 0,
+      assetId: asset.id,
+      x: asset.x,
+      y: asset.y,
+      timestamp: DateTime.now(),
+      floorMapId: floorMap.id,
+    );
   }
 }

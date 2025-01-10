@@ -1,5 +1,3 @@
-import 'package:il_core/src/models/asset_location.dart';
-
 class AssetPositionHistory {
   int id;
   int assetId;
@@ -27,17 +25,6 @@ class AssetPositionHistory {
       y: json['y'].toDouble(),
       timestamp: DateTime.parse(json['timestamp']),
       floorMapId: json['floorMapId'],
-    );
-  }
-
-  factory AssetPositionHistory.fromAssetLocation(AssetLocation location) {
-    return AssetPositionHistory(
-      id: 0,
-      assetId: location.id,
-      x: location.x,
-      y: location.y,
-      timestamp: DateTime.now(),
-      floorMapId: location.floorMapId,
     );
   }
 }
