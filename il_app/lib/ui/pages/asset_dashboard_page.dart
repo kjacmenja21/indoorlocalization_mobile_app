@@ -50,7 +50,7 @@ class AssetDashboardPage extends StatelessWidget {
           LiveHeatmapAssetDisplayHandler(),
         ],
         assetService: AssetService(),
-        assetLocationTracker: FakeAssetLocationTracker(),
+        assetLocationTracker: AssetLocationTracker(),
         floorMapService: FakeFloorMapService(),
         initFloorMapId: initFloorMapId,
         initAssetId: initAssetId,
