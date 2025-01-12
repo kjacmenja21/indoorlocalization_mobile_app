@@ -50,10 +50,12 @@ class AssetZoneRetentionTimeReportGenerator implements IAssetReportGenerator {
       getZones,
     ]);
 
-    var dataGenerator = AssetZoneRetentionDataGenerator(asset: asset);
-    dataGenerator.zoneHistoryData = results[0] as List<AssetZoneHistory>;
-    dataGenerator.zones = results[1] as List<FloorMapZone>;
+    var dataGenerator = AssetZoneRetentionDataGenerator();
 
-    return dataGenerator.generate();
+    return dataGenerator.generate(
+      asset: asset,
+      zones: results[1] as List<FloorMapZone>,
+      zoneHistoryData: results[0] as List<AssetZoneHistory>,
+    );
   }
 }
