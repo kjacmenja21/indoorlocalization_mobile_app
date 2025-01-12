@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:il_core/il_core.dart';
@@ -11,12 +12,24 @@ class LiveHeatmapChangeNotifier extends AssetsChangeNotifier {
 
   List<AssetHistoryData> _assetsHistoryData = [];
 
+  late Timer _updateHeatmapTimer;
+  bool _updateHeatmapFlag = false;
+
+  final Duration _updateHeatmapPeriod = const Duration(seconds: 5);
+
   LiveHeatmapChangeNotifier(super.floorMap) {
     _heatmapGenerator = AssetHeatmapDataGenerator(
       cellSize: const Size.square(50),
       floorMapSize: floorMap.size,
       gradient: HeatmapData.defaultGradient,
     );
+
+    _updateHeatmapTimer = Timer.periodic(_updateHeatmapPeriod, (timer) {
+      if (_updateHeatmapFlag) {
+        _updateHeatmapFlag = false;
+        _updateHeatmap();
+      }
+    });
   }
 
   @override
@@ -42,7 +55,7 @@ class LiveHeatmapChangeNotifier extends AssetsChangeNotifier {
   void updatedAssetLocation(int index, Asset asset) {
     var pHistory = _getPositionHistory(asset);
     _assetsHistoryData[index].positionHistory.add(pHistory);
-    _updateHeatmap();
+    _updateHeatmapFlag = true;
 
     super.updatedAssetLocation(index, asset);
   }
@@ -50,36 +63,40 @@ class LiveHeatmapChangeNotifier extends AssetsChangeNotifier {
   HeatmapData? get heatmapData => _heatmapData;
 
   void resetHeatmap() {
-    _heatmapData = null;
     for (var e in _assetsHistoryData) {
       e.positionHistory.clear();
     }
 
+    _heatmapData = null;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _updateHeatmapTimer.cancel();
+    super.dispose();
   }
 
   void _updateHeatmap() {
     for (var historyData in _assetsHistoryData) {
-      _updateHeatmapData(historyData);
+      var pHistory = historyData.positionHistory;
+
+      if (pHistory.length < 2) {
+        continue;
+      }
+
+      if (_heatmapData == null) {
+        _heatmapData = _heatmapGenerator.generate(pHistory);
+      } else {
+        _heatmapGenerator.updateHeatmapData(_heatmapData!, pHistory);
+      }
+
+      historyData.removeOldPositionHistory();
     }
 
-    _heatmapGenerator.calculateCellPercentage(_heatmapData!);
-    notifyListeners();
-  }
-
-  void _updateHeatmapData(AssetHistoryData historyData) {
-    var positionHistory = historyData.positionHistory;
-
-    if (positionHistory.length < 2) {
-      return;
-    }
-
-    _heatmapGenerator.positionHistory = historyData.positionHistory;
-
-    if (_heatmapData == null) {
-      _heatmapData = _heatmapGenerator.generate();
-    } else {
-      _heatmapGenerator.updateHeatmapData(_heatmapData!);
+    if (_heatmapData != null) {
+      _heatmapGenerator.calculateCellPercentage(_heatmapData!);
+      notifyListeners();
     }
   }
 
