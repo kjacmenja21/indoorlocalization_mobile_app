@@ -122,23 +122,23 @@ void main() {
 
   group('generate()', () {
     test('given pos history 1, generate heatmap data', () {
-      generator.positionHistory = [
+      var positionHistory = [
         createPosHistory('10:00', 20, 20),
         createPosHistory('10:40', 30, 30),
       ];
 
-      var data = generator.generate();
+      var data = generator.generate(positionHistory);
 
       expect(data.cellAt(0, 0).minutes, 40);
     });
 
     test('given pos history 2, generate heatmap data', () {
-      generator.positionHistory = [
+      var positionHistory = [
         createPosHistory('10:00', 20, 20),
         createPosHistory('10:40', 320, 20),
       ];
 
-      var data = generator.generate();
+      var data = generator.generate(positionHistory);
 
       expect(data.cellAt(0, 0).minutes, 10);
       expect(data.cellAt(1, 0).minutes, 10);
@@ -147,7 +147,7 @@ void main() {
     });
 
     test('given pos history 3, generate heatmap data', () {
-      generator.positionHistory = [
+      var positionHistory = [
         createPosHistory('10:00', 20, 20),
         createPosHistory('10:40', 320, 20),
         createPosHistory('11:00', 340, 50),
@@ -155,7 +155,7 @@ void main() {
         createPosHistory('12:30', 340, 250),
       ];
 
-      var data = generator.generate();
+      var data = generator.generate(positionHistory);
 
       expect(data.cellAt(0, 0).minutes, 10);
       expect(data.cellAt(1, 0).minutes, 10);

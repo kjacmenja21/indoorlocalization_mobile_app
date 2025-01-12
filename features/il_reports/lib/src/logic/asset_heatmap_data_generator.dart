@@ -11,7 +11,6 @@ class AssetHeatmapDataGenerator {
   Size floorMapSize;
 
   LinearGradient gradient;
-  List<AssetPositionHistory> positionHistory = [];
 
   AssetHeatmapDataGenerator({
     required this.cellSize,
@@ -19,7 +18,7 @@ class AssetHeatmapDataGenerator {
     required this.gradient,
   });
 
-  HeatmapData generate() {
+  HeatmapData generate(List<AssetPositionHistory> positionHistory) {
     if (positionHistory.length < 2) {
       throw AppException('Cannot generate heatmap report because there is not enough data.');
     }
@@ -34,13 +33,13 @@ class AssetHeatmapDataGenerator {
 
     data.generateCells(floorMapSize, cellSize);
 
-    addTimeToAllCells(data);
+    addTimeToAllCells(data, positionHistory);
     calculateCellPercentage(data);
 
     return data;
   }
 
-  void updateHeatmapData(HeatmapData data) {
+  void updateHeatmapData(HeatmapData data, List<AssetPositionHistory> positionHistory) {
     if (positionHistory.length < 2) {
       throw AppException('Cannot update heatmap report because there is not enough data.');
     }
@@ -53,7 +52,7 @@ class AssetHeatmapDataGenerator {
       data.endDate = positionHistory.last.timestamp;
     }
 
-    addTimeToAllCells(data);
+    addTimeToAllCells(data, positionHistory);
   }
 
   void calculateCellPercentage(HeatmapData data) {
@@ -70,7 +69,7 @@ class AssetHeatmapDataGenerator {
     }
   }
 
-  void addTimeToAllCells(HeatmapData data) {
+  void addTimeToAllCells(HeatmapData data, List<AssetPositionHistory> positionHistory) {
     AssetPositionHistory lastPos = positionHistory.first;
     HeatmapCell lastCell = data.cellFromPosition(lastPos.x, lastPos.y);
 

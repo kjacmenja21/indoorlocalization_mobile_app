@@ -49,8 +49,7 @@ class AssetHeatmapReportGenerator implements IAssetReportGenerator {
       gradient: HeatmapData.defaultGradient,
     );
 
-    generator.positionHistory = positionHistory;
-    var heatmapData = generator.generate();
+    var heatmapData = generator.generate(positionHistory);
 
     return AssetHeatmapData(
       asset: asset,
