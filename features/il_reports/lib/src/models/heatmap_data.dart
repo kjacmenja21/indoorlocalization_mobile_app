@@ -91,6 +91,8 @@ class HeatmapData {
   List<HeatmapCell> get cells => _cells;
 
   HeatmapCell cellAt(int x, int y) {
+    x = _clampCellIndex(x, _columns);
+    y = _clampCellIndex(y, _rows);
     return _cells[x + y * _columns];
   }
 
@@ -98,6 +100,19 @@ class HeatmapData {
     int cx = (x / _cellSize.width).floor();
     int cy = (y / _cellSize.height).floor();
 
+    cx = _clampCellIndex(cx, _columns);
+    cy = _clampCellIndex(cy, _rows);
+
     return _cells[cx + cy * _columns];
+  }
+
+  int _clampCellIndex(int c, int max) {
+    if (c < 0) {
+      return 0;
+    } else if (c >= max) {
+      return max - 1;
+    }
+
+    return c;
   }
 }
