@@ -76,7 +76,7 @@ class _AssetFilterDialogState extends State<AssetFilterDialog> {
   }
 
   void onApply() {
-    List<bool> visibility = allAssets.map((e) => e.visible).toList();
+    List<(int id, bool visible)> visibility = allAssets.map((e) => (e.id, e.visible)).toList();
     Navigator.of(context).pop(visibility);
   }
 

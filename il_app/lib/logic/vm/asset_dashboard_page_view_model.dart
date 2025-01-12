@@ -16,6 +16,7 @@ class AssetDashboardPageViewModel extends ViewModel {
   FloorMap? _currentFloorMap;
 
   List<Asset> _assets = [];
+  List<Asset> _visibleAssets = [];
 
   bool _isLoading = true;
 
@@ -36,11 +37,6 @@ class AssetDashboardPageViewModel extends ViewModel {
     _init(initFloorMapId, initAssetId);
   }
 
-  void showAssets() {
-    var assets = _assets.where((e) => e.visible).toList();
-    _currentDisplayHandler.showAssets(assets);
-  }
-
   Future<void> changeFloorMap(FloorMap floorMap) async {
     _isLoading = true;
     _currentFloorMap = floorMap;
@@ -53,6 +49,8 @@ class AssetDashboardPageViewModel extends ViewModel {
     }
 
     _assets = await _assetService.getAssetsByFloorMap(floorMap.id);
+    _visibleAssets = _assets;
+
     await _assetLocationTracker.connect();
 
     _assetLocationTracker.addListener((location) {
@@ -61,17 +59,11 @@ class AssetDashboardPageViewModel extends ViewModel {
       }
 
       int i = _assets.indexWhere((e) => e.id == location.id);
-      if (i == -1) {
-        return;
+
+      if (i != -1) {
+        _assets[i].updateLocation(location);
+        _currentDisplayHandler.changeNotifier.updatedAssetLocation(i, _assets[i]);
       }
-
-      var asset = _assets[i];
-
-      asset.x = location.x;
-      asset.y = location.y;
-      asset.lastSync = DateTime.now();
-
-      showAssets();
     });
 
     _currentDisplayHandler.deactivate();
@@ -79,7 +71,7 @@ class AssetDashboardPageViewModel extends ViewModel {
 
     _isLoading = false;
     notifyListeners();
-    showAssets();
+    _currentDisplayHandler.changeNotifier.setAssets(visibleAssets);
   }
 
   void changeDisplayHandler(IAssetDisplayHandler handler) {
@@ -92,20 +84,20 @@ class AssetDashboardPageViewModel extends ViewModel {
     _currentDisplayHandler.activate(_currentFloorMap!);
 
     notifyListeners();
-    showAssets();
+    _currentDisplayHandler.changeNotifier.setAssets(visibleAssets);
   }
 
-  void updateAssetVisibility(List<bool> visibility) {
-    if (_assets.length != visibility.length) {
-      throw ArgumentError('Visibility list length must be same as assets list length.');
+  void updateAssetVisibility(List<(int id, bool visible)> visibility) {
+    for (var (id, visible) in visibility) {
+      int i = _assets.indexWhere((e) => e.id == id);
+
+      if (i != -1) {
+        _assets[i].visible = visible;
+      }
     }
 
-    for (var i = 0; i < _assets.length; i++) {
-      _assets[i].visible = visibility[i];
-    }
-
-    notifyListeners();
-    showAssets();
+    _visibleAssets = assets.where((e) => e.visible).toList();
+    _currentDisplayHandler.changeNotifier.setAssets(visibleAssets);
   }
 
   List<IAssetDisplayHandler> get displayHandlers => _displayHandlers;
@@ -115,6 +107,7 @@ class AssetDashboardPageViewModel extends ViewModel {
   FloorMap? get currentFloorMap => _currentFloorMap;
 
   List<Asset> get assets => _assets;
+  List<Asset> get visibleAssets => _visibleAssets;
 
   bool get isLoading => _isLoading;
 
@@ -130,14 +123,12 @@ class AssetDashboardPageViewModel extends ViewModel {
     }
 
     if (initAssetId != null) {
-      var i = _assets.indexWhere((e) => e.id == initAssetId);
-
-      if (i != -1) {
-        var visibility = List.filled(_assets.length, false);
-        visibility[i] = true;
-
-        updateAssetVisibility(visibility);
+      for (var asset in assets) {
+        asset.visible = asset.id == initAssetId;
       }
+
+      _visibleAssets = assets.where((e) => e.visible).toList();
+      _currentDisplayHandler.changeNotifier.setAssets(visibleAssets);
     }
   }
 

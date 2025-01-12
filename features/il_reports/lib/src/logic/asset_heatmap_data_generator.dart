@@ -4,54 +4,58 @@ import 'package:flutter/material.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_exceptions.dart';
 import 'package:il_core/il_helpers.dart';
-import 'package:il_reports/src/models/asset_heatmap_data.dart';
+import 'package:il_reports/src/models/heatmap_data.dart';
 
 class AssetHeatmapDataGenerator {
-  final Asset asset;
-
   Size cellSize;
+  Size floorMapSize;
+
   LinearGradient gradient;
-  List<AssetPositionHistory> positionHistory = [];
 
   AssetHeatmapDataGenerator({
-    required this.asset,
     required this.cellSize,
+    required this.floorMapSize,
     required this.gradient,
   });
 
-  AssetHeatmapData generate() {
-    if (positionHistory.isEmpty) {
-      throw AppException('Cannot generate heatmap report because there is no available data.');
+  HeatmapData generate(List<AssetPositionHistory> positionHistory) {
+    if (positionHistory.length < 2) {
+      throw AppException('Cannot generate heatmap report because there is not enough data.');
     }
 
     sortPositionHistory(positionHistory);
 
-    var data = AssetHeatmapData(
-      asset: asset,
+    var data = HeatmapData(
       startDate: positionHistory.first.timestamp,
       endDate: positionHistory.last.timestamp,
       gradient: gradient,
     );
 
-    data.generateCells(cellSize);
+    data.generateCells(floorMapSize, cellSize);
 
-    AssetPositionHistory lastPos = positionHistory.first;
-    AssetHeatmapCell lastCell = data.cellFromPosition(lastPos.x, lastPos.y);
-
-    for (int i = 1; i < positionHistory.length; i++) {
-      var pos = positionHistory[i];
-      var cell = data.cellFromPosition(pos.x, pos.y);
-
-      addTimeToCells(data, lastCell, cell, lastPos, pos);
-      lastPos = pos;
-      lastCell = cell;
-    }
-
+    addTimeToAllCells(data, positionHistory);
     calculateCellPercentage(data);
+
     return data;
   }
 
-  void calculateCellPercentage(AssetHeatmapData data) {
+  void updateHeatmapData(HeatmapData data, List<AssetPositionHistory> positionHistory) {
+    if (positionHistory.length < 2) {
+      throw AppException('Cannot update heatmap report because there is not enough data.');
+    }
+
+    if (positionHistory.first.timestamp.compareTo(data.startDate) < 0) {
+      data.startDate = positionHistory.first.timestamp;
+    }
+
+    if (positionHistory.last.timestamp.compareTo(data.endDate) > 0) {
+      data.endDate = positionHistory.last.timestamp;
+    }
+
+    addTimeToAllCells(data, positionHistory);
+  }
+
+  void calculateCellPercentage(HeatmapData data) {
     double maxMinutes = 0;
 
     for (var cell in data.cells) {
@@ -65,7 +69,21 @@ class AssetHeatmapDataGenerator {
     }
   }
 
-  void addTimeToCells(AssetHeatmapData data, AssetHeatmapCell c1, AssetHeatmapCell c2, AssetPositionHistory t1, AssetPositionHistory t2) {
+  void addTimeToAllCells(HeatmapData data, List<AssetPositionHistory> positionHistory) {
+    AssetPositionHistory lastPos = positionHistory.first;
+    HeatmapCell lastCell = data.cellFromPosition(lastPos.x, lastPos.y);
+
+    for (int i = 1; i < positionHistory.length; i++) {
+      var pos = positionHistory[i];
+      var cell = data.cellFromPosition(pos.x, pos.y);
+
+      addTimeToCells(data, lastCell, cell, lastPos, pos);
+      lastPos = pos;
+      lastCell = cell;
+    }
+  }
+
+  void addTimeToCells(HeatmapData data, HeatmapCell c1, HeatmapCell c2, AssetPositionHistory t1, AssetPositionHistory t2) {
     double timeDifference = getTimeDifferenceMinutes(t1, t2);
 
     if (c1 == c2) {
@@ -76,7 +94,7 @@ class AssetHeatmapDataGenerator {
     Offset p1 = Offset(t1.x, t1.y);
     Offset p2 = Offset(t2.x, t2.y);
 
-    Set<AssetHeatmapCell> cells = {};
+    Set<HeatmapCell> cells = {};
     cells.add(c1);
 
     double dt = _calculateDt(p1, p2, data.cellSize.shortestSide);
@@ -84,7 +102,7 @@ class AssetHeatmapDataGenerator {
     for (double t = 0; t <= 1; t += dt) {
       Offset p = lerpPosition(p1, p2, t);
 
-      AssetHeatmapCell cell = data.cellFromPosition(p.dx, p.dy);
+      HeatmapCell cell = data.cellFromPosition(p.dx, p.dy);
       cells.add(cell);
     }
 
@@ -98,7 +116,7 @@ class AssetHeatmapDataGenerator {
 
   double getTimeDifferenceMinutes(AssetPositionHistory t1, AssetPositionHistory t2) {
     Duration d = t2.timestamp.difference(t1.timestamp);
-    return d.inMinutes.toDouble();
+    return d.inMilliseconds / (1000 * 60);
   }
 
   void sortPositionHistory(List<AssetPositionHistory> positionHistory) {

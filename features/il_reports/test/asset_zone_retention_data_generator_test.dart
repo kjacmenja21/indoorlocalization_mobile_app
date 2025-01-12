@@ -5,25 +5,31 @@ import 'package:il_core/il_entities.dart';
 import 'package:il_reports/src/logic/asset_zone_retention_data_generator.dart';
 
 void main() {
-  var generator = AssetZoneRetentionDataGenerator(asset: createAsset());
+  var generator = AssetZoneRetentionDataGenerator();
 
   group('generate()', () {
     test('given zone history data, generates zone retention data', () {
-      generator.zones = [
+      var asset = createAsset();
+
+      var zones = [
         createZone(1),
         createZone(2),
         createZone(3),
         createZone(4),
       ];
 
-      generator.zoneHistoryData = [
+      var zoneHistoryData = [
         createZoneHistory(1, '08:00', '10:00'),
         createZoneHistory(2, '11:00', '12:00'),
         createZoneHistory(3, '12:00', '13:00'),
         createZoneHistory(4, '14:00', '16:00'),
       ];
 
-      var data = generator.generate();
+      var data = generator.generate(
+        asset: asset,
+        zones: zones,
+        zoneHistoryData: zoneHistoryData,
+      );
 
       var z0 = data.zoneRetentionData.firstWhere((e) => e.zoneId == 0);
       var z1 = data.zoneRetentionData.firstWhere((e) => e.zoneId == 1);

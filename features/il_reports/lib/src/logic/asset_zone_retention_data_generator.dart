@@ -4,16 +4,13 @@ import 'package:il_core/il_exceptions.dart';
 import 'package:il_reports/src/models/asset_zone_retention_data.dart';
 
 class AssetZoneRetentionDataGenerator {
-  final Asset asset;
+  AssetZoneRetentionDataGenerator();
 
-  List<FloorMapZone> zones = [];
-  List<AssetZoneHistory> zoneHistoryData = [];
-
-  AssetZoneRetentionDataGenerator({
-    required this.asset,
-  });
-
-  AssetZoneRetentionReportData generate() {
+  AssetZoneRetentionReportData generate({
+    required Asset asset,
+    required List<FloorMapZone> zones,
+    required List<AssetZoneHistory> zoneHistoryData,
+  }) {
     if (zoneHistoryData.isEmpty) {
       throw AppException('Cannot generate zone retention report because there is no available data.');
     }

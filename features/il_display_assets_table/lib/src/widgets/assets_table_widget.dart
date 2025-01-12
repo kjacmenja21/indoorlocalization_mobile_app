@@ -1,69 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:il_core/il_entities.dart';
 import 'package:il_display_assets_table/src/models/asset_info.dart';
 
-class AssetsTableWidget extends StatefulWidget {
-  final FloorMap floorMap;
-  final List<Asset> assets;
+class AssetsTableWidget extends StatelessWidget {
+  final List<AssetInfo> assetData;
 
   const AssetsTableWidget({
     super.key,
-    required this.floorMap,
-    required this.assets,
+    required this.assetData,
   });
-
-  @override
-  State<AssetsTableWidget> createState() => _AssetsTableWidgetState();
-}
-
-class _AssetsTableWidgetState extends State<AssetsTableWidget> {
-  List<AssetInfo> assets = [];
-
-  @override
-  void initState() {
-    super.initState();
-    getAssetInfo();
-  }
-
-  @override
-  void didUpdateWidget(AssetsTableWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (widget.assets != oldWidget.assets) {
-      getAssetInfo();
-      return;
-    }
-
-    updateAssetInfo();
-  }
-
-  void getAssetInfo() {
-    assets = widget.assets.map((e) => AssetInfo.fromAsset(e, widget.floorMap)).toList();
-  }
-
-  void updateAssetInfo() {
-    if (assets.length != widget.assets.length) {
-      getAssetInfo();
-      return;
-    }
-
-    for (int i = 0; i < assets.length; i++) {
-      AssetInfo info = assets[i];
-      Asset asset = widget.assets[i];
-
-      if (info.id != asset.id) {
-        getAssetInfo();
-        return;
-      }
-
-      if (asset.x != info.x || asset.y != info.y) {
-        // asset position is changed
-        // zone must be updated
-        info = AssetInfo.fromAsset(asset, widget.floorMap);
-        assets[i] = info;
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +23,7 @@ class _AssetsTableWidgetState extends State<AssetsTableWidget> {
           DataColumn(label: Text('Y')),
           DataColumn(label: Text('Zone')),
         ],
-        rows: assets.map((e) {
+        rows: assetData.map((e) {
           return DataRow(cells: [
             DataCell(Text(e.name)),
             DataCell(Text('${e.x.round()}')),

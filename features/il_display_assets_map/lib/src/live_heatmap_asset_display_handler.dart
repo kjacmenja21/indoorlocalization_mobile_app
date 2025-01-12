@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
-import 'package:il_display_assets_map/src/widgets/assets_widget.dart';
+import 'package:il_display_assets_map/src/logic/live_heatmap_change_notifier.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:il_display_assets_map/src/widgets/live_heatmap_widget.dart';
 
-class MapAssetDisplayHandler implements IAssetDisplayHandler {
+class LiveHeatmapAssetDisplayHandler implements IAssetDisplayHandler {
   @override
   AssetsChangeNotifier? assetsChangeNotifier;
-
-  MapAssetDisplayHandler();
 
   @override
   void activate(FloorMap floorMap) {
@@ -16,7 +15,7 @@ class MapAssetDisplayHandler implements IAssetDisplayHandler {
       deactivate();
     }
 
-    assetsChangeNotifier = AssetsChangeNotifier(floorMap);
+    assetsChangeNotifier = LiveHeatmapChangeNotifier(floorMap);
   }
 
   @override
@@ -32,8 +31,8 @@ class MapAssetDisplayHandler implements IAssetDisplayHandler {
   Widget buildSelectWidget({required VoidCallback onTap}) {
     return MenuItemButton(
       onPressed: () => onTap(),
-      leadingIcon: const FaIcon(FontAwesomeIcons.map),
-      child: const Text('Show map'),
+      leadingIcon: const FaIcon(FontAwesomeIcons.solidMap),
+      child: const Text('Show live heatmap'),
     );
   }
 
@@ -43,7 +42,9 @@ class MapAssetDisplayHandler implements IAssetDisplayHandler {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return AssetsWidget(model: assetsChangeNotifier!);
+    var changeNotifier = assetsChangeNotifier! as LiveHeatmapChangeNotifier;
+
+    return LiveHeatmapWidget(model: changeNotifier);
   }
 
   @override

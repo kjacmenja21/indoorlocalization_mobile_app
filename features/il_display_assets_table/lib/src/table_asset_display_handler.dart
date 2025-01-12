@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_display_assets_table/src/logic/asset_info_change_notifier.dart';
 import 'package:il_display_assets_table/src/widgets/assets_table_widget.dart';
 
 class TableAssetDisplayHandler implements IAssetDisplayHandler {
@@ -16,7 +17,7 @@ class TableAssetDisplayHandler implements IAssetDisplayHandler {
       deactivate();
     }
 
-    assetsChangeNotifier = AssetsChangeNotifier(floorMap);
+    assetsChangeNotifier = AssetInfoChangeNotifier(floorMap);
   }
 
   @override
@@ -26,11 +27,7 @@ class TableAssetDisplayHandler implements IAssetDisplayHandler {
   }
 
   @override
-  void showAssets(List<Asset> assets) {
-    if (assetsChangeNotifier != null) {
-      assetsChangeNotifier!.showAssets(assets);
-    }
-  }
+  AssetsChangeNotifier get changeNotifier => assetsChangeNotifier!;
 
   @override
   Widget buildSelectWidget({required VoidCallback onTap}) {
@@ -47,12 +44,13 @@ class TableAssetDisplayHandler implements IAssetDisplayHandler {
       return const Center(child: CircularProgressIndicator());
     }
 
+    var changeNotifier = assetsChangeNotifier as AssetInfoChangeNotifier;
+
     return ListenableBuilder(
-      listenable: assetsChangeNotifier!,
+      listenable: changeNotifier,
       builder: (context, child) {
         return AssetsTableWidget(
-          floorMap: assetsChangeNotifier!.floorMap,
-          assets: assetsChangeNotifier!.assets,
+          assetData: changeNotifier.assetData,
         );
       },
     );

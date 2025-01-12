@@ -10,6 +10,7 @@ class FloorMapWidget extends StatefulWidget {
 
   final CustomPaint Function(IFloorMapImageRenderer imageRenderer) backgroundBuilder;
   final CustomPaint Function(Size size, Matrix4 transform) foregroundBuilder;
+  final Widget? child;
 
   const FloorMapWidget({
     super.key,
@@ -17,6 +18,7 @@ class FloorMapWidget extends StatefulWidget {
     this.onDoubleTapDown,
     required this.backgroundBuilder,
     required this.foregroundBuilder,
+    this.child,
   });
 
   @override
@@ -101,6 +103,7 @@ class _FloorMapWidgetState extends State<FloorMapWidget> {
                 },
               ),
             ),
+            if (widget.child != null) widget.child!,
           ],
         ),
       );

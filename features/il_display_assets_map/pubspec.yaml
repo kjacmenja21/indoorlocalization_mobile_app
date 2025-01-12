@@ -17,6 +17,9 @@ dependencies:
   il_core:
     path: ../../il_core
 
+  il_reports:
+    path: ../il_reports
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

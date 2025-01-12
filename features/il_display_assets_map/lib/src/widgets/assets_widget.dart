@@ -5,7 +5,6 @@ import 'package:il_core/il_helpers.dart';
 import 'package:il_core/il_widgets.dart';
 import 'package:il_display_assets_map/src/widgets/asset_details_dialog.dart';
 import 'package:il_display_assets_map/src/widgets/assets_painter.dart';
-import 'package:il_display_assets_map/src/widgets/floor_map_painter.dart';
 
 class AssetsWidget extends StatelessWidget {
   final AssetsChangeNotifier model;
@@ -63,7 +62,7 @@ class AssetsWidget extends StatelessWidget {
               willChange: false,
               isComplex: true,
               size: floorMap.size,
-              painter: FloorMapPainter(
+              painter: AssetsBackgroundPainter(
                 floorMap: floorMap,
                 imageRenderer: imageRenderer,
               ),
@@ -73,7 +72,7 @@ class AssetsWidget extends StatelessWidget {
             return CustomPaint(
               willChange: true,
               size: size,
-              painter: AssetsPainter(
+              painter: AssetsForegroundPainter(
                 transform: transform,
                 floorMap: floorMap,
                 assets: assets,
