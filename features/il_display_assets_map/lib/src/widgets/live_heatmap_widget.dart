@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_helpers.dart';
 import 'package:il_core/il_widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_display_assets_map/src/logic/live_heatmap_change_notifier.dart';
 import 'package:il_display_assets_map/src/widgets/asset_details_dialog.dart';
 import 'package:il_display_assets_map/src/widgets/live_heatmap_painter.dart';
@@ -55,33 +56,42 @@ class LiveHeatmapWidget extends StatelessWidget {
         var assets = model.assets;
 
         return FloorMapWidget(
-          floorMap: floorMap,
-          onDoubleTapDown: (details, transform) => onDoubleTapDown(context, details, transform),
-          backgroundBuilder: (imageRenderer) {
-            return CustomPaint(
-              willChange: false,
-              isComplex: true,
-              size: floorMap.size,
-              painter: LiveHeatmapBackgroundPainter(
-                floorMap: floorMap,
-                imageRenderer: imageRenderer,
-                heatmapData: model.heatmapData,
+            floorMap: floorMap,
+            onDoubleTapDown: (details, transform) => onDoubleTapDown(context, details, transform),
+            backgroundBuilder: (imageRenderer) {
+              return CustomPaint(
+                willChange: false,
+                isComplex: true,
+                size: floorMap.size,
+                painter: LiveHeatmapBackgroundPainter(
+                  floorMap: floorMap,
+                  imageRenderer: imageRenderer,
+                  heatmapData: model.heatmapData,
+                ),
+              );
+            },
+            foregroundBuilder: (size, transform) {
+              return CustomPaint(
+                willChange: true,
+                size: size,
+                painter: LiveHeatmapForegroundPainter(
+                  transform: transform,
+                  floorMap: floorMap,
+                  assets: assets,
+                  heatmapData: model.heatmapData,
+                ),
+              );
+            },
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: IconButton.filled(
+                  onPressed: () => model.resetHeatmap(),
+                  icon: const FaIcon(FontAwesomeIcons.arrowRotateRight),
+                ),
               ),
-            );
-          },
-          foregroundBuilder: (size, transform) {
-            return CustomPaint(
-              willChange: true,
-              size: size,
-              painter: LiveHeatmapForegroundPainter(
-                transform: transform,
-                floorMap: floorMap,
-                assets: assets,
-                heatmapData: model.heatmapData,
-              ),
-            );
-          },
-        );
+            ));
       },
     );
   }

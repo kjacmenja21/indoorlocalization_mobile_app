@@ -49,6 +49,15 @@ class LiveHeatmapChangeNotifier extends AssetsChangeNotifier {
 
   HeatmapData? get heatmapData => _heatmapData;
 
+  void resetHeatmap() {
+    _heatmapData = null;
+    for (var e in _assetsHistoryData) {
+      e.positionHistory.clear();
+    }
+
+    notifyListeners();
+  }
+
   void _updateHeatmap() {
     for (var historyData in _assetsHistoryData) {
       _updateHeatmapData(historyData);
