@@ -13,14 +13,14 @@ abstract class IAssetLocationTracker {
   Future<void> connect();
   Future<void> close();
 
-  void addListener(AssetLocationCallback onData);
+  Stream<AssetLocation> get stream;
 }
 
 class AssetLocationTracker implements IAssetLocationTracker {
   MqttServerClient? _client;
   StreamSubscription<List<MqttReceivedMessage<MqttMessage>>>? _streamSub;
 
-  final List<AssetLocationCallback> _listeners = [];
+  StreamController<AssetLocation>? _streamController;
 
   @override
   Future<void> connect() async {
@@ -47,22 +47,24 @@ class AssetLocationTracker implements IAssetLocationTracker {
         }
       }
     });
-  }
 
-  @override
-  void addListener(AssetLocationCallback onData) {
-    _listeners.add(onData);
+    _streamController = StreamController();
   }
 
   @override
   Future<void> close() async {
-    _listeners.clear();
+    _streamController?.close();
+    _streamController = null;
+
     _streamSub?.cancel();
     _client?.disconnect();
 
     _streamSub = null;
     _client = null;
   }
+
+  @override
+  Stream<AssetLocation> get stream => _streamController!.stream;
 
   void _handleMessage(String topic, Uint8List data) {
     try {
@@ -73,9 +75,7 @@ class AssetLocationTracker implements IAssetLocationTracker {
 
       var location = _parseLocation(json);
 
-      for (var l in _listeners) {
-        l.call(location);
-      }
+      _streamController!.sink.add(location);
     } catch (_) {}
   }
 
