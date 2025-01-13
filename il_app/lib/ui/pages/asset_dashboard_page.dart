@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:il_app/logic/vm/asset_dashboard_page_view_model.dart';
 import 'package:il_app/ui/widgets/asset_filter_dialog.dart';
+import 'package:il_app/ui/widgets/message_card.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
@@ -73,9 +74,37 @@ class AssetDashboardPage extends StatelessWidget {
   Widget buildBody() {
     return Consumer<AssetDashboardPageViewModel>(
       builder: (context, model, child) {
-        if (model.floorMaps.isEmpty) {
-          return const Center(
-            child: CircularProgressIndicator(),
+        Widget child;
+
+        if (model.isLoading) {
+          child = const Expanded(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (model.message != null) {
+          child = Column(
+            children: [
+              MessageCard(message: model.message!),
+              const SizedBox(height: 20),
+              TextButton(
+                onPressed: () => model.init(initFloorMapId, initAssetId),
+                child: const Text("Try again"),
+              ),
+            ],
+          );
+        } else if (model.currentFloorMap == null) {
+          child = Expanded(
+            child: Center(
+              child: Text('Select a facility', style: Theme.of(context).textTheme.titleLarge),
+            ),
+          );
+        } else {
+          child = Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: model.currentDisplayHandler.buildWidget(context),
+            ),
           );
         }
 
@@ -83,25 +112,7 @@ class AssetDashboardPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             createHeader(context, model),
-            if (model.currentFloorMap == null)
-              Expanded(
-                child: Center(
-                  child: Text('Select a facility', style: Theme.of(context).textTheme.titleLarge),
-                ),
-              ),
-            if (model.isLoading)
-              const Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            if (!model.isLoading && model.currentFloorMap != null)
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: model.currentDisplayHandler.buildWidget(context),
-                ),
-              ),
+            child,
           ],
         );
       },
@@ -128,7 +139,7 @@ class AssetDashboardPage extends StatelessWidget {
     return DropdownMenu<FloorMap>(
       initialSelection: model.currentFloorMap,
       label: const Text('Facility'),
-      enabled: !model.isLoading,
+      enabled: !model.isLoading && model.message == null,
       enableSearch: false,
       requestFocusOnTap: false,
       enableFilter: false,
