@@ -11,7 +11,7 @@ class FakeAssetLocationTracker implements IAssetLocationTracker {
   @override
   Future<void> connect() async {
     if (_timer != null) {
-      await close();
+      close();
     }
 
     _streamController = StreamController();
@@ -34,7 +34,7 @@ class FakeAssetLocationTracker implements IAssetLocationTracker {
   }
 
   @override
-  Future<void> close() async {
+  void close() {
     _streamController?.close();
     _streamController = null;
 
