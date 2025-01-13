@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
+import 'dart:math' as math;
 
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
@@ -38,8 +39,9 @@ class AssetLocationTracker implements IAssetLocationTracker {
 
     var username = BackendContext.mqttUsername;
     var password = BackendContext.mqttPassword;
+    var clientId = _generateClientId();
 
-    _client = MqttServerClient.withPort(server, 'flutter_app', port);
+    _client = MqttServerClient.withPort(server, clientId, port);
 
     await _client!.connect(username, password);
 
@@ -70,6 +72,13 @@ class AssetLocationTracker implements IAssetLocationTracker {
 
   @override
   Stream<AssetLocation> get stream => _streamController!.stream;
+
+  String _generateClientId() {
+    var random = math.Random();
+    var bytes = List.generate(32, (index) => random.nextInt(255));
+
+    return 'mobile-app-${base64Encode(bytes)}';
+  }
 
   void _onMqttMessage(List<MqttReceivedMessage<MqttMessage>> messages) {
     for (var message in messages) {
