@@ -34,7 +34,7 @@ class FloorMapZone {
     return FloorMapZone(
       id: json['id'],
       name: json['name'],
-      color: Color(color),
+      color: Color(color).withAlpha(255),
       points: points,
       floorMapId: json['floorMapId'],
     );
