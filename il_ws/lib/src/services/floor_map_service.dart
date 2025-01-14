@@ -1,5 +1,4 @@
 import 'package:il_core/il_entities.dart';
-import 'package:il_ws/il_fake_services.dart';
 import 'package:il_ws/src/services/web_service.dart';
 
 abstract class IFloorMapService {
@@ -21,13 +20,23 @@ class FloorMapService extends WebService implements IFloorMapService {
     var floorMaps = response['page'] as List<dynamic>;
 
     return floorMaps.map((e) {
-      e['svg'] = FakeFloorMapService.testSvg;
       return FloorMap.fromJson(e);
     }).toList();
   }
 
   @override
   Future<List<FloorMapZone>> getFloorMapZones(int floorMapId) async {
-    return FakeFloorMapService().getFloorMapZones(floorMapId);
+    var response = await httpGet(
+      path: '/api/v1/zones/',
+      queryParameters: {
+        'floorMapId': floorMapId,
+      },
+    );
+
+    var zones = response as List<dynamic>;
+
+    return zones.map((e) {
+      return FloorMapZone.fromJson(e);
+    }).toList();
   }
 }
