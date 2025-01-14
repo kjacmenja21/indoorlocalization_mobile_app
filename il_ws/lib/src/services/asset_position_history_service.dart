@@ -1,5 +1,4 @@
 import 'package:il_core/il_entities.dart';
-import 'package:il_ws/il_fake_services.dart';
 import 'package:il_ws/src/services/web_service.dart';
 
 abstract class IAssetPositionHistoryService {
@@ -49,7 +48,7 @@ class AssetPositionHistoryService extends WebService implements IAssetPositionHi
     required DateTime startDate,
     required DateTime endDate,
   }) async {
-    return FakeAssetPositionHistoryService().getZoneHistory(
+    return AssetPositionHistoryService().getZoneHistory(
       assetId: assetId,
       floorMapId: floorMapId,
       startDate: startDate,

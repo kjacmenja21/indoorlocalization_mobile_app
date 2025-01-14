@@ -1,5 +1,4 @@
 import 'package:il_core/il_entities.dart';
-import 'package:il_ws/il_fake_services.dart';
 import 'package:il_ws/il_ws.dart';
 
 class FakeAssetService implements IAssetService {
@@ -8,7 +7,7 @@ class FakeAssetService implements IAssetService {
     return Future.delayed(Duration(milliseconds: 500), () async {
       var assets = <Asset>[];
 
-      var floorMapService = FakeFloorMapService();
+      var floorMapService = FloorMapService();
       var floorMaps = await floorMapService.getAllFloorMaps();
 
       for (var floorMap in floorMaps) {
