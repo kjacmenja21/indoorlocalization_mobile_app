@@ -48,11 +48,19 @@ class AssetPositionHistoryService extends WebService implements IAssetPositionHi
     required DateTime startDate,
     required DateTime endDate,
   }) async {
-    return AssetPositionHistoryService().getZoneHistory(
-      assetId: assetId,
-      floorMapId: floorMapId,
-      startDate: startDate,
-      endDate: endDate,
+    var response = await httpGet(
+      path: '/api/v1/asset-zone-history/',
+      queryParameters: {
+        'assetId': assetId.toString(),
+        'startDate': startDate.toIso8601String(),
+        'endDate': endDate.toIso8601String(),
+      },
     );
+
+    var zoneHistory = response as List<dynamic>;
+
+    return zoneHistory.map((e) {
+      return AssetZoneHistory.fromJson(e);
+    }).toList();
   }
 }
