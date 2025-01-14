@@ -13,7 +13,7 @@ class FloorMapService extends WebService implements IFloorMapService {
       path: '/api/v1/floor-maps/',
       queryParameters: {
         'page': '0',
-        'limit': '100',
+        'limit': '10000',
       },
     );
 
@@ -29,7 +29,7 @@ class FloorMapService extends WebService implements IFloorMapService {
     var response = await httpGet(
       path: '/api/v1/zones/',
       queryParameters: {
-        'floorMapId': floorMapId,
+        'floorMapId': floorMapId.toString(),
       },
     );
 
