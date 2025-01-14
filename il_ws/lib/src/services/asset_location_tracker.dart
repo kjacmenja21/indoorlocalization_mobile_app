@@ -4,11 +4,11 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:math' as math;
 
-import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_core/il_exceptions.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:il_ws/src/services/authentication_service.dart';
 
 typedef AssetLocationCallback = void Function(AssetLocation location);
 
@@ -34,11 +34,14 @@ class AssetLocationTracker implements IAssetLocationTracker {
       return;
     }
 
-    var server = BackendContext.mqttServerAddress;
-    var port = BackendContext.mqttServerPort;
+    var authService = AuthenticationService();
+    var mqttCredentials = await authService.getMqttCredentials();
 
-    var username = BackendContext.mqttUsername;
-    var password = BackendContext.mqttPassword;
+    var server = mqttCredentials.serverAddress;
+    var port = mqttCredentials.serverPort;
+
+    var username = mqttCredentials.username;
+    var password = mqttCredentials.password;
     var clientId = _generateClientId();
 
     _client = MqttServerClient.withPort(server, clientId, port);
