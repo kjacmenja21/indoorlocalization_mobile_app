@@ -20,6 +20,13 @@ class FloorMapZone {
 
   factory FloorMapZone.fromJson(Map<String, dynamic> json) {
     var pointsJson = json['points'] as List<dynamic>;
+
+    pointsJson.sort((a, b) {
+      int n1 = a['ordinalNumber'];
+      int n2 = b['ordinalNumber'];
+
+      return n1.compareTo(n2);
+    });
     var points = pointsJson.map((e) => Offset(e['x'], e['y'])).toList();
 
     var color = json['color'] as int;
