@@ -4,6 +4,8 @@ import 'package:il_ws/src/services/web_service.dart';
 abstract class IAuthenticationService {
   Future<RegisteredUser> login(String username, String password);
   Future<RegisteredUser> renewSession(JwtToken refreshToken);
+
+  Future<MqttCredentials> getMqttCredentials();
 }
 
 class AuthenticationService extends WebService implements IAuthenticationService {
@@ -47,5 +49,11 @@ class AuthenticationService extends WebService implements IAuthenticationService
       accessToken: accessToken,
       refreshToken: newRefreshToken,
     );
+  }
+
+  @override
+  Future<MqttCredentials> getMqttCredentials() async {
+    var response = await httpGet(path: '/api/v1/mqtt/');
+    return MqttCredentials.fromJson(response);
   }
 }
