@@ -11,3 +11,4 @@ export 'src/entities/asset_zone_history.dart';
 export 'src/models/registered_user.dart';
 export 'src/models/asset_location.dart';
 export 'src/models/jwt_token.dart';
+export 'src/models/mqtt_credentials.dart';
