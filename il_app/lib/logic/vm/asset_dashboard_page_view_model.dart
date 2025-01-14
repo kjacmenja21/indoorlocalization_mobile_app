@@ -1,14 +1,21 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:il_app/logic/vm/view_model.dart';
+import 'package:il_app/models/message.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_exceptions.dart';
 import 'package:il_ws/il_ws.dart';
 
 class AssetDashboardPageViewModel extends ViewModel {
   late final List<IAssetDisplayHandler> _displayHandlers;
 
   late final IAssetService _assetService;
-  late final IAssetLocationTracker _assetLocationTracker;
   late final IFloorMapService _floorMapService;
+
+  late final IAssetLocationTracker _assetLocationTracker;
+  StreamSubscription<AssetLocation>? _assetLocationStreamSub;
 
   late IAssetDisplayHandler _currentDisplayHandler;
 
@@ -19,6 +26,7 @@ class AssetDashboardPageViewModel extends ViewModel {
   List<Asset> _visibleAssets = [];
 
   bool _isLoading = true;
+  Message? _message;
 
   AssetDashboardPageViewModel({
     required List<IAssetDisplayHandler> displayHandlers,
@@ -34,13 +42,16 @@ class AssetDashboardPageViewModel extends ViewModel {
     _floorMapService = floorMapService;
 
     _currentDisplayHandler = displayHandlers.first;
-    _init(initFloorMapId, initAssetId);
+    init(initFloorMapId, initAssetId);
   }
 
   Future<void> changeFloorMap(FloorMap floorMap) async {
+    if (floorMap == _currentFloorMap) {
+      return;
+    }
+
     _isLoading = true;
     _currentFloorMap = floorMap;
-    await _assetLocationTracker.close();
     notifyListeners();
 
     if (floorMap.zones == null) {
@@ -51,39 +62,26 @@ class AssetDashboardPageViewModel extends ViewModel {
     _assets = await _assetService.getAssetsByFloorMap(floorMap.id);
     _visibleAssets = _assets;
 
-    await _assetLocationTracker.connect();
-
-    _assetLocationTracker.addListener((location) {
-      if (location.floorMapId != _currentFloorMap?.id) {
-        return;
-      }
-
-      int i = _assets.indexWhere((e) => e.id == location.id);
-
-      if (i != -1) {
-        _assets[i].updateLocation(location);
-        _currentDisplayHandler.changeNotifier.updatedAssetLocation(i, _assets[i]);
-      }
-    });
-
     _currentDisplayHandler.deactivate();
     _currentDisplayHandler.activate(floorMap);
 
     _isLoading = false;
     notifyListeners();
+
     _currentDisplayHandler.changeNotifier.setAssets(visibleAssets);
   }
 
   void changeDisplayHandler(IAssetDisplayHandler handler) {
-    if (handler == _currentDisplayHandler) {
+    if (handler == _currentDisplayHandler || _currentFloorMap == null) {
       return;
     }
 
     _currentDisplayHandler.deactivate();
+
     _currentDisplayHandler = handler;
     _currentDisplayHandler.activate(_currentFloorMap!);
-
     notifyListeners();
+
     _currentDisplayHandler.changeNotifier.setAssets(visibleAssets);
   }
 
@@ -110,10 +108,62 @@ class AssetDashboardPageViewModel extends ViewModel {
   List<Asset> get visibleAssets => _visibleAssets;
 
   bool get isLoading => _isLoading;
+  Message? get message => _message;
 
-  Future<void> _init(int? initFloorMapId, int? initAssetId) async {
-    await _loadFloorMaps();
+  Future<void> init(int? initFloorMapId, int? initAssetId) async {
+    _message = null;
+    _isLoading = true;
+    notifyListeners();
 
+    try {
+      _floorMaps = await _floorMapService.getAllFloorMaps();
+      await _startAssetLocationTracker();
+    } catch (a) {
+      var e = AppException.from(a);
+
+      _assetLocationTracker.close();
+      _assetLocationStreamSub?.cancel();
+
+      _message = Message.error(e.message);
+      log(e.message);
+
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
+
+    _isLoading = false;
+    notifyListeners();
+
+    await _autoSelect(initFloorMapId, initAssetId);
+  }
+
+  Future<void> _startAssetLocationTracker() async {
+    await _assetLocationTracker.connect();
+    _assetLocationStreamSub = _assetLocationTracker.stream.listen(_onAssetLocationUpdate);
+  }
+
+  void _onAssetLocationUpdate(AssetLocation location) {
+    if (location.floorMapId != _currentFloorMap?.id) {
+      return;
+    }
+
+    int i = visibleAssets.indexWhere((e) => e.id == location.id);
+
+    if (i != -1) {
+      visibleAssets[i].updateLocation(location);
+      _currentDisplayHandler.changeNotifier.updatedAssetLocation(i, visibleAssets[i]);
+      return;
+    }
+
+    i = assets.indexWhere((e) => e.id == location.id);
+
+    if (i != -1) {
+      assets[i].updateLocation(location);
+    }
+  }
+
+  Future<void> _autoSelect(int? initFloorMapId, int? initAssetId) async {
     if (initFloorMapId != null) {
       var i = _floorMaps.indexWhere((e) => e.id == initFloorMapId);
 
@@ -123,24 +173,23 @@ class AssetDashboardPageViewModel extends ViewModel {
     }
 
     if (initAssetId != null) {
-      for (var asset in assets) {
-        asset.visible = asset.id == initAssetId;
+      var i = _assets.indexWhere((e) => e.id == initAssetId);
+
+      if (i != -1) {
+        for (var asset in _assets) {
+          asset.visible = asset.id == initAssetId;
+        }
+
+        _visibleAssets = assets.where((e) => e.visible).toList();
+        _currentDisplayHandler.changeNotifier.setAssets(visibleAssets);
       }
-
-      _visibleAssets = assets.where((e) => e.visible).toList();
-      _currentDisplayHandler.changeNotifier.setAssets(visibleAssets);
     }
-  }
-
-  Future<void> _loadFloorMaps() async {
-    _floorMaps = await _floorMapService.getAllFloorMaps();
-    _isLoading = false;
-    notifyListeners();
   }
 
   @override
   void dispose() {
     _assetLocationTracker.close();
+    _assetLocationStreamSub?.cancel();
 
     for (var e in _displayHandlers) {
       e.dispose();

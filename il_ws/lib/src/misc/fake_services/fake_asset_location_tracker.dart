@@ -6,13 +6,15 @@ import 'package:il_ws/il_ws.dart';
 
 class FakeAssetLocationTracker implements IAssetLocationTracker {
   Timer? _timer;
-  final List<AssetLocationCallback> _listeners = [];
+  StreamController<AssetLocation>? _streamController;
 
   @override
   Future<void> connect() async {
     if (_timer != null) {
-      await close();
+      close();
     }
+
+    _streamController = StreamController();
 
     _timer = Timer.periodic(
       Duration(milliseconds: 1000),
@@ -24,10 +26,7 @@ class FakeAssetLocationTracker implements IAssetLocationTracker {
         double y = random.nextInt(2000).toDouble();
 
         var location = AssetLocation(id: id, x: x, y: y, floorMapId: 1);
-
-        for (var listener in _listeners) {
-          listener.call(location);
-        }
+        _streamController!.sink.add(location);
       },
     );
 
@@ -35,14 +34,14 @@ class FakeAssetLocationTracker implements IAssetLocationTracker {
   }
 
   @override
-  void addListener(AssetLocationCallback onData) {
-    _listeners.add(onData);
-  }
+  void close() {
+    _streamController?.close();
+    _streamController = null;
 
-  @override
-  Future<void> close() async {
-    _listeners.clear();
     _timer?.cancel();
     _timer = null;
   }
+
+  @override
+  Stream<AssetLocation> get stream => _streamController!.stream;
 }

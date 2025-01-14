@@ -33,4 +33,9 @@ class FakeAuthenticationService implements IAuthenticationService {
     }
     throw WebServiceException("Error");
   }
+
+  @override
+  Future<MqttCredentials> getMqttCredentials() {
+    throw UnimplementedError();
+  }
 }
