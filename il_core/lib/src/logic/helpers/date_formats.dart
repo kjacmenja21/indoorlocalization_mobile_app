@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 
 class DateFormats {
   static final dateTime = DateFormat('dd.MM.yyyy.  HH:mm');
+  static final dateTimeSeconds = DateFormat('dd.MM.yyyy.  HH:mm:ss');
 
   static String formatDuration(Duration duration) {
     int totalMinutes = duration.inMinutes;
