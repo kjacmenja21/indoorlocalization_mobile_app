@@ -103,7 +103,7 @@ class _AssetDetailsState extends State<_AssetDetails> {
         const SizedBox(height: 10),
         //
         Text('Last sync', style: titleTextStyle),
-        Text(DateFormats.dateTime.format(asset.lastSync), style: bodyTextStyle),
+        Text(DateFormats.dateTimeSeconds.format(asset.lastSync), style: bodyTextStyle),
       ],
     );
   }

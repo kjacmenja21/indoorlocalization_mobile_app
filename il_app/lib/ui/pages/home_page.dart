@@ -5,7 +5,7 @@ import 'package:il_app/logic/vm/home_page_view_model.dart';
 import 'package:il_app/ui/widgets/app_logo.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
 import 'package:il_core/il_entities.dart';
-import 'package:il_ws/il_fake_services.dart';
+import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           child: ChangeNotifierProvider(
             create: (context) => HomePageViewModel(
-              floorMapService: FakeFloorMapService(),
+              floorMapService: FloorMapService(),
             ),
             child: buildBody(),
           ),

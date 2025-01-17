@@ -113,7 +113,7 @@ class _AssetTailmapReportWidgetState extends State<AssetTailmapReportWidget> {
                 icon: paused ? const FaIcon(FontAwesomeIcons.play) : const FaIcon(FontAwesomeIcons.pause),
               ),
               const SizedBox(width: 10),
-              Text(DateFormats.dateTime.format(data.currentDate), style: Theme.of(context).textTheme.bodyLarge),
+              Text(DateFormats.dateTimeSeconds.format(data.currentDate), style: Theme.of(context).textTheme.bodyLarge),
             ],
           ),
           Slider(

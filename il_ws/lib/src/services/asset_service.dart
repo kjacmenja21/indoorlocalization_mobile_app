@@ -14,7 +14,7 @@ class AssetService extends WebService implements IAssetService {
       path: '/api/v1/assets/',
       queryParameters: {
         'page': '0',
-        'limit': '100',
+        'limit': '10000',
       },
     );
 

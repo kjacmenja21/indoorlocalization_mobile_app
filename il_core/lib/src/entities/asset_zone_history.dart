@@ -1,4 +1,5 @@
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_exceptions.dart';
 
 class AssetZoneHistory {
   int id;
@@ -6,7 +7,7 @@ class AssetZoneHistory {
   int zoneId;
 
   DateTime enterDateTime;
-  DateTime exitDateTime;
+  DateTime? exitDateTime;
 
   FloorMapZone? zone;
 
@@ -20,6 +21,27 @@ class AssetZoneHistory {
   });
 
   Duration get retentionTime {
-    return exitDateTime.difference(enterDateTime);
+    if (exitDateTime == null) {
+      throw AppException('Can\'t calculate retention time because exit date time is unknown.');
+    }
+
+    return exitDateTime!.difference(enterDateTime);
+  }
+
+  factory AssetZoneHistory.fromJson(Map<String, dynamic> json) {
+    DateTime enterDateTime = DateTime.parse(json['enterDateTime']);
+    DateTime? exitDateTime;
+
+    if (json['exitDateTime'] != null) {
+      exitDateTime = DateTime.parse(json['exitDateTime']);
+    }
+
+    return AssetZoneHistory(
+      id: json['id'],
+      assetId: json['assetId'],
+      zoneId: json['zoneId'],
+      enterDateTime: enterDateTime,
+      exitDateTime: exitDateTime,
+    );
   }
 }

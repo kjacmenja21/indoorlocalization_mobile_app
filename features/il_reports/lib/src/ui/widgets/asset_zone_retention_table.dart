@@ -32,9 +32,16 @@ class AssetZoneRetentionTable extends StatelessWidget {
   }
 
   DataRow getDataRow(AssetZoneHistory zoneHistory) {
-    var enterDateTime = DateFormats.dateTime.format(zoneHistory.enterDateTime);
-    var exitDateTime = DateFormats.dateTime.format(zoneHistory.exitDateTime);
-    var retention = DateFormats.formatDuration(zoneHistory.retentionTime);
+    String enterDateTime = DateFormats.dateTime.format(zoneHistory.enterDateTime);
+
+    String exitDateTime;
+    if (zoneHistory.exitDateTime != null) {
+      exitDateTime = DateFormats.dateTime.format(zoneHistory.exitDateTime!);
+    } else {
+      exitDateTime = '';
+    }
+
+    String retention = DateFormats.formatDuration(zoneHistory.retentionTime);
 
     return DataRow(
       cells: [

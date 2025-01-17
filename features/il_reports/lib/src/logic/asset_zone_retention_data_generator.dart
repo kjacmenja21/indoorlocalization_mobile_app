@@ -11,6 +11,8 @@ class AssetZoneRetentionDataGenerator {
     required List<FloorMapZone> zones,
     required List<AssetZoneHistory> zoneHistoryData,
   }) {
+    zoneHistoryData = zoneHistoryData.where((e) => e.exitDateTime != null).toList();
+
     if (zoneHistoryData.isEmpty) {
       throw AppException('Cannot generate zone retention report because there is no available data.');
     }
@@ -34,7 +36,7 @@ class AssetZoneRetentionDataGenerator {
     return AssetZoneRetentionReportData(
       asset: asset,
       startDate: zoneHistoryData.first.enterDateTime,
-      endDate: zoneHistoryData.last.exitDateTime,
+      endDate: zoneHistoryData.last.exitDateTime!,
       zoneHistoryData: zoneHistoryData,
       zoneRetentionData: zoneRetentionData,
     );
@@ -72,7 +74,7 @@ class AssetZoneRetentionDataGenerator {
   }
 
   Duration getOutsideZoneRetention(AssetZoneHistory zone1, AssetZoneHistory zone2) {
-    var t1 = zone1.exitDateTime;
+    var t1 = zone1.exitDateTime!;
     var t2 = zone2.enterDateTime;
 
     var duration = t2.difference(t1);

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -26,9 +27,14 @@ class FloorMap {
   });
 
   factory FloorMap.fromJson(Map<String, dynamic> json) {
+    String imageText = json['image'];
+    Uint8List image = base64Decode(imageText);
+
     return FloorMap(
       id: json['id'],
       name: json['name'],
+      image: image,
+      imageType: json['image_type'],
       trackingArea: Rect.fromLTWH(
         json['tx'],
         json['ty'],
