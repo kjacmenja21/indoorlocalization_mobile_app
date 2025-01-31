@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/services/session_service.dart';
 import 'package:il_app/logic/vm/entry_page_view_model.dart';
 import 'package:il_app/ui/widgets/message_card.dart';
-import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +15,7 @@ class EntryPage extends StatelessWidget {
       body: ChangeNotifierProvider(
         create: (context) => EntryPageViewModel(
           sessionService: SessionService(),
-          autoLoginHandler: AutoLoginHandler(AuthenticationService()),
+          authService: AuthenticationService(),
           navigateToLoginPage: () => context.pushReplacement('/login'),
           navigateToHomePage: () => context.pushReplacement('/home'),
         ),
