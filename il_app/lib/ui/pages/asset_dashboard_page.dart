@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/vm/asset_dashboard_page_view_model.dart';
 import 'package:il_app/ui/widgets/asset_filter_dialog.dart';
-import 'package:il_app/ui/widgets/message_card.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
@@ -52,6 +52,7 @@ class AssetDashboardPage extends StatelessWidget {
         assetService: AssetService(),
         assetLocationTracker: AssetLocationTracker(),
         floorMapService: FloorMapService(),
+        showExceptionPage: (e) => context.pushReplacement('/exception', extra: e),
         initFloorMapId: initFloorMapId,
         initAssetId: initAssetId,
       ),
@@ -80,17 +81,6 @@ class AssetDashboardPage extends StatelessWidget {
             child: Center(
               child: CircularProgressIndicator(),
             ),
-          );
-        } else if (model.message != null) {
-          child = Column(
-            children: [
-              MessageCard(message: model.message!),
-              const SizedBox(height: 20),
-              TextButton(
-                onPressed: () => model.init(initFloorMapId, initAssetId),
-                child: const Text("Try again"),
-              ),
-            ],
           );
         } else if (model.currentFloorMap == null) {
           child = Expanded(
@@ -138,7 +128,7 @@ class AssetDashboardPage extends StatelessWidget {
     return DropdownMenu<FloorMap>(
       initialSelection: model.currentFloorMap,
       label: const Text('Facility'),
-      enabled: !model.isLoading && model.message == null,
+      enabled: !model.isLoading,
       enableSearch: false,
       requestFocusOnTap: false,
       enableFilter: false,
