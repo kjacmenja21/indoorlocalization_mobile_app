@@ -2,14 +2,20 @@ name: il_ws
 description: A starting point for Dart libraries or applications.
 publish_to: 'none'
 version: 1.0.0
+# repository: https://github.com/my_org/my_repo
 
 environment:
   sdk: ^3.5.4
 
+# Add regular dependencies here.
 dependencies:
+  # path: ^1.8.0
 
   http: ^1.2.2
   mqtt_client: ^10.5.0
+
+  path: ^1.9.0
+  path_provider: ^2.1.5
 
   il_core:
     path: ../il_core

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:il_core/il_entities.dart';
 import 'package:il_reports/src/logic/asset_zone_retention_data_generator.dart';
@@ -68,7 +66,7 @@ FloorMapZone createZone(int zoneId) {
   return FloorMapZone(
     id: zoneId,
     name: '',
-    color: const Color.fromARGB(255, 255, 255, 255),
+    colorValue: 0,
     points: [],
     floorMapId: 0,
   );

@@ -33,4 +33,12 @@ class FakeAssetService implements IAssetService {
       ];
     });
   }
+
+  @override
+  void assignFloorMaps(List<Asset> assets, List<FloorMap> floorMaps) {
+    for (var asset in assets) {
+      var floorMap = floorMaps.firstWhere((e) => e.id == asset.floorMapId);
+      asset.floorMap = floorMap;
+    }
+  }
 }

@@ -140,14 +140,14 @@ class FakeFloorMapService implements IFloorMapService {
         FloorMapZone(
           id: 1,
           name: 'Zone 1',
-          color: Color.fromARGB(255, 255, 167, 38),
+          colorValue: 0,
           points: _getRectPoints(182.01, 152.57, 958.22, 1632.71),
           floorMapId: floorMapId,
         ),
         FloorMapZone(
           id: 2,
           name: 'Zone 2',
-          color: Color.fromARGB(255, 255, 222, 38),
+          colorValue: 0,
           points: _getRectPoints(1384.06, 177.19, 1367, 1036.64),
           floorMapId: floorMapId,
         ),

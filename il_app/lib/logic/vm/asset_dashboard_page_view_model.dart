@@ -58,6 +58,8 @@ class AssetDashboardPageViewModel extends ViewModel {
     }
 
     _assets = await _assetService.getAssetsByFloorMap(floorMap.id);
+    _assetService.assignFloorMaps(_assets, _floorMaps);
+
     _visibleAssets = _assets;
 
     _currentDisplayHandler.deactivate();

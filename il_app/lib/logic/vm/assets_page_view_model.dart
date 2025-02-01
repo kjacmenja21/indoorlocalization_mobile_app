@@ -80,6 +80,8 @@ class AssetsPageViewModel extends ViewModel {
         _loadFloorMaps(),
       ]);
 
+      _assetService.assignFloorMaps(_allAssets, _floorMaps);
+
       _isLoading = false;
       notifyListeners();
     } catch (e) {
