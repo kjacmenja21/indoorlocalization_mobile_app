@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:il_core/il_entities.dart';
 import 'package:il_ws/src/services/web_service.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 abstract class IFloorMapService {
   Future<List<FloorMap>> getAllFloorMaps();
@@ -7,12 +12,9 @@ abstract class IFloorMapService {
 }
 
 class FloorMapService extends WebService implements IFloorMapService {
-  static List<FloorMap> _cachedFloorMaps = [];
-  static DateTime? _floorMapsCacheDate;
-
   @override
   Future<List<FloorMap>> getAllFloorMaps() async {
-    List<FloorMap>? floorMaps = _loadCachedFloorMaps();
+    List<FloorMap>? floorMaps = await _loadCachedFloorMaps();
 
     if (floorMaps != null) {
       return floorMaps;
@@ -32,7 +34,7 @@ class FloorMapService extends WebService implements IFloorMapService {
       return FloorMap.fromJson(e);
     }).toList();
 
-    _saveFloorMaps(floorMaps);
+    await _saveFloorMaps(floorMaps);
     return floorMaps;
   }
 
@@ -52,23 +54,48 @@ class FloorMapService extends WebService implements IFloorMapService {
     }).toList();
   }
 
-  void _saveFloorMaps(List<FloorMap> floorMaps) {
-    _cachedFloorMaps = [...floorMaps];
-    _floorMapsCacheDate = DateTime.now();
+  Future<void> _saveFloorMaps(List<FloorMap> floorMaps) async {
+    var data = {
+      'datetime': DateTime.now().toIso8601String(),
+      'floor_maps': floorMaps.map((e) => e.toJson()).toList(),
+    };
+
+    var json = jsonEncode(data);
+    var path = await _getCacheFilePath();
+    var file = File(path);
+
+    await file.writeAsString(json);
   }
 
-  List<FloorMap>? _loadCachedFloorMaps() {
-    if (_cachedFloorMaps.isEmpty || _floorMapsCacheDate == null) {
+  Future<List<FloorMap>?> _loadCachedFloorMaps() async {
+    var path = await _getCacheFilePath();
+    var file = File(path);
+
+    var exists = await file.exists();
+    if (!exists) return null;
+
+    try {
+      var json = await file.readAsString();
+      var data = jsonDecode(json);
+
+      var dateTime = DateTime.parse(data['datetime']);
+
+      var now = DateTime.now();
+      var cacheAge = now.difference(dateTime);
+
+      if (cacheAge.inHours >= 2) {
+        return null;
+      }
+
+      var floorMaps = data['floor_maps'] as List<dynamic>;
+      return floorMaps.map((e) => FloorMap.fromJson(e)).toList();
+    } catch (_) {
       return null;
     }
+  }
 
-    var now = DateTime.now();
-    var cacheAge = now.difference(_floorMapsCacheDate!);
-
-    if (cacheAge.inMinutes >= 10) {
-      return null;
-    }
-
-    return [..._cachedFloorMaps];
+  Future<String> _getCacheFilePath() async {
+    var cacheDirectory = await getApplicationCacheDirectory();
+    return join(cacheDirectory.path, 'floor_maps.json');
   }
 }
