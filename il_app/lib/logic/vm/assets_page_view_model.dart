@@ -8,6 +8,7 @@ class AssetsPageViewModel extends ViewModel {
 
   late final IAssetService _assetService;
   late final IFloorMapService _floorMapService;
+  final void Function(Object e) showExceptionPage;
 
   List<Asset> _allAssets = [];
   List<Asset> _currentAssets = [];
@@ -20,6 +21,7 @@ class AssetsPageViewModel extends ViewModel {
   AssetsPageViewModel({
     required IAssetService assetService,
     required IFloorMapService floorMapService,
+    required this.showExceptionPage,
   }) {
     _assetService = assetService;
     _floorMapService = floorMapService;
@@ -72,13 +74,17 @@ class AssetsPageViewModel extends ViewModel {
   }
 
   Future<void> _loadData() async {
-    await Future.wait([
-      _loadAllAssets(),
-      _loadFloorMaps(),
-    ]);
+    try {
+      await Future.wait([
+        _loadAllAssets(),
+        _loadFloorMaps(),
+      ]);
 
-    _isLoading = false;
-    notifyListeners();
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      showExceptionPage(e);
+    }
   }
 
   Future<void> _loadAllAssets() async {

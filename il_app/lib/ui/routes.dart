@@ -4,6 +4,7 @@ import 'package:il_app/ui/pages/asset_report_view_page.dart';
 import 'package:il_app/ui/pages/asset_reports_page.dart';
 import 'package:il_app/ui/pages/assets_page.dart';
 import 'package:il_app/ui/pages/entry_page.dart';
+import 'package:il_app/ui/pages/exception_page.dart';
 import 'package:il_app/ui/pages/home_page.dart';
 import 'package:il_app/ui/pages/login_page.dart';
 import 'package:il_app/ui/pages/user_page.dart';
@@ -42,6 +43,10 @@ final goRouter = GoRouter(
     GoRoute(
       path: '/user',
       builder: (context, state) => const UserPage(),
+    ),
+    GoRoute(
+      path: '/exception',
+      builder: (context, state) => ExceptionPage(exception: state.extra!),
     ),
   ],
 );
