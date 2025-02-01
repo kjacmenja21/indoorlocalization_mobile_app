@@ -30,6 +30,13 @@ class FloorMap {
     String imageText = json['image'];
     Uint8List image = base64Decode(imageText);
 
+    List<FloorMapZone>? zones;
+
+    if (json.containsKey('zones')) {
+      var zonesJson = json['zones'] as List<dynamic>;
+      zones = zonesJson.map((e) => FloorMapZone.fromJson(e)).toList();
+    }
+
     return FloorMap(
       id: json['id'],
       name: json['name'],
@@ -45,6 +52,28 @@ class FloorMap {
         json['width'],
         json['height'],
       ),
+      zones: zones,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    var json = {
+      'id': id,
+      'name': name,
+      'image': base64Encode(image!),
+      'image_type': imageType,
+      'tx': trackingArea.left,
+      'ty': trackingArea.top,
+      'tw': trackingArea.width,
+      'th': trackingArea.height,
+      'width': size.width,
+      'height': size.height,
+    };
+
+    if (zones != null) {
+      json['zones'] = zones!.map((e) => e.toJson()).toList();
+    }
+
+    return json;
   }
 }
