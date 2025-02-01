@@ -24,6 +24,7 @@ class HomePage extends StatelessWidget {
           child: ChangeNotifierProvider(
             create: (context) => HomePageViewModel(
               floorMapService: FloorMapService(),
+              showExceptionPage: (e) => context.pushReplacement('/exception', extra: e),
             ),
             child: buildBody(),
           ),
