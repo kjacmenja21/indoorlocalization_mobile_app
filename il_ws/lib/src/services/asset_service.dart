@@ -1,10 +1,11 @@
 import 'package:il_core/il_entities.dart';
-import 'package:il_ws/il_ws.dart';
 import 'package:il_ws/src/services/web_service.dart';
 
 abstract class IAssetService {
   Future<List<Asset>> getAllAssets();
   Future<List<Asset>> getAssetsByFloorMap(int floorMapId);
+
+  void assignFloorMaps(List<Asset> assets, List<FloorMap> floorMaps);
 }
 
 class AssetService extends WebService implements IAssetService {
@@ -18,15 +19,10 @@ class AssetService extends WebService implements IAssetService {
       },
     );
 
-    var floorMapService = FloorMapService();
-    var floorMaps = await floorMapService.getAllFloorMaps();
-
     var assets = response['page'] as List<dynamic>;
 
     return assets.map((e) {
-      var asset = Asset.fromJson(e);
-      asset.floorMap = floorMaps.firstWhere((e) => e.id == asset.floorMapId);
-      return asset;
+      return Asset.fromJson(e);
     }).toList();
   }
 
@@ -34,5 +30,13 @@ class AssetService extends WebService implements IAssetService {
   Future<List<Asset>> getAssetsByFloorMap(int floorMapId) async {
     var assets = await getAllAssets();
     return assets.where((e) => e.floorMapId == floorMapId).toList();
+  }
+
+  @override
+  void assignFloorMaps(List<Asset> assets, List<FloorMap> floorMaps) {
+    for (var asset in assets) {
+      var floorMap = floorMaps.firstWhere((e) => e.id == asset.floorMapId);
+      asset.floorMap = floorMap;
+    }
   }
 }
