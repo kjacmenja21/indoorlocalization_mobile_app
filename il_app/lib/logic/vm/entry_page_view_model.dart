@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:il_app/logic/services/session_service.dart';
 import 'package:il_app/logic/vm/view_model.dart';
 import 'package:il_app/models/message.dart';
-import 'package:il_basic_auth/il_basic_auth.dart';
 import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_ws/il_ws.dart';
 
 class EntryPageViewModel extends ViewModel {
   Message? message;
 
   final ISessionService sessionService;
-  final ILoginHandler autoLoginHandler;
+  final IAuthenticationService authService;
   final VoidCallback navigateToLoginPage;
   final VoidCallback navigateToHomePage;
 
   EntryPageViewModel({
     required this.sessionService,
-    required this.autoLoginHandler,
+    required this.authService,
     required this.navigateToLoginPage,
     required this.navigateToHomePage,
   }) {
@@ -40,23 +40,15 @@ class EntryPageViewModel extends ViewModel {
       return;
     }
 
-    var token = AutoLoginToken(refreshToken);
+    try {
+      var registeredUser = await authService.renewSession(refreshToken);
 
-    autoLoginHandler.handleLogin(
-      baseToken: token,
-      loginListener: LoginOutcomeListener(
-        onSuccessfulLogin: (registeredUser) {
-          AuthenticationContext.currentUser = registeredUser;
-
-          sessionService.saveSession(registeredUser);
-
-          navigateToHomePage();
-        },
-        onFailedLogin: (reason) {
-          sessionService.deleteSession();
-          navigateToLoginPage();
-        },
-      ),
-    );
+      AuthenticationContext.currentUser = registeredUser;
+      sessionService.saveSession(registeredUser);
+      navigateToHomePage();
+    } catch (_) {
+      sessionService.deleteSession();
+      navigateToLoginPage();
+    }
   }
 }

@@ -25,9 +25,6 @@ dependencies:
   il_ws:
     path: ../il_ws
 
-  il_basic_auth:
-    path: ../il_basic_auth
-
   il_display_assets_map:
     path: ../features/il_display_assets_map
   
