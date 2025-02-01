@@ -30,12 +30,14 @@ class AssetReportsPageViewModel extends ViewModel {
   bool _isLoading = true;
 
   final void Function(IAssetReportGenerator generator, dynamic data) openReportViewPage;
+  final void Function(Object e) showExceptionPage;
 
   AssetReportsPageViewModel({
     required IAssetService assetService,
     required IFloorMapService floorMapService,
     required List<IAssetReportGenerator> reportGenerators,
     required this.openReportViewPage,
+    required this.showExceptionPage,
     int? initAssetId,
   }) {
     _assetService = assetService;
@@ -132,10 +134,15 @@ class AssetReportsPageViewModel extends ViewModel {
   }
 
   Future<void> _loadData(int? initAssetId) async {
-    await Future.wait([
-      _loadAssets(),
-      _loadFloorMaps(),
-    ]);
+    try {
+      await Future.wait([
+        _loadAssets(),
+        _loadFloorMaps(),
+      ]);
+    } catch (e) {
+      showExceptionPage(e);
+      return;
+    }
 
     _isLoading = false;
     notifyListeners();

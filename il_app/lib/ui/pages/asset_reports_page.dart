@@ -76,6 +76,7 @@ class AssetReportsPage extends StatelessWidget {
 
           context.push('/asset_report_view', extra: extra);
         },
+        showExceptionPage: (e) => context.pushReplacement('/exception', extra: e),
         initAssetId: initAssetId,
       ),
       child: Scaffold(
