@@ -3,7 +3,10 @@ import 'dart:ui';
 class FloorMapZone {
   int id;
   String name;
+
   Color color;
+  int colorValue;
+
   List<Offset> points;
 
   int floorMapId;
@@ -11,10 +14,10 @@ class FloorMapZone {
   FloorMapZone({
     required this.id,
     required this.name,
-    required this.color,
+    required this.colorValue,
     required this.points,
     required this.floorMapId,
-  });
+  }) : color = Color(colorValue).withAlpha(255);
 
   Offset get labelPoint => points.first;
 
@@ -29,14 +32,31 @@ class FloorMapZone {
     });
     var points = pointsJson.map((e) => Offset(e['x'], e['y'])).toList();
 
-    var color = json['color'] as int;
-
     return FloorMapZone(
       id: json['id'],
       name: json['name'],
-      color: Color(color).withAlpha(255),
+      colorValue: json['color'],
       points: points,
       floorMapId: json['floorMapId'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    var points = List.generate(this.points.length, (index) {
+      var point = this.points[index];
+      return {
+        'ordinalNumber': index,
+        'x': point.dx,
+        'y': point.dy,
+      };
+    });
+
+    return {
+      'id': id,
+      'name': name,
+      'color': colorValue,
+      'points': points,
+      'floorMapId': floorMapId,
+    };
   }
 }
