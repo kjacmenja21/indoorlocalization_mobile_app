@@ -17,6 +17,7 @@ class AssetsPage extends StatelessWidget {
       create: (context) => AssetsPageViewModel(
         assetService: AssetService(),
         floorMapService: FloorMapService(),
+        showExceptionPage: (e) => context.pushReplacement('/exception', extra: e),
       ),
       child: Scaffold(
         appBar: AppBar(
