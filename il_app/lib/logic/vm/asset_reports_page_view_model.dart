@@ -139,6 +139,8 @@ class AssetReportsPageViewModel extends ViewModel {
         _loadAssets(),
         _loadFloorMaps(),
       ]);
+
+      _assetService.assignFloorMaps(_assets, _floorMaps);
     } catch (e) {
       showExceptionPage(e);
       return;
