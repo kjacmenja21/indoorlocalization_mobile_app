@@ -312,15 +312,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.5.1"
-  multicast_dns:
-    dependency: transitive
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: fe4d49be1dc31b629f90a4cdc1ff83d384763b7b
-      url: "https://github.com/jmojzes21/multicast_dns.git"
-    source: git
-    version: "0.3.2+8"
   nested:
     dependency: transitive
     description:
