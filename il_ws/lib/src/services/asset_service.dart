@@ -19,11 +19,11 @@ class AssetService extends WebService implements IAssetService {
       },
     );
 
-    var assets = response['page'] as List<dynamic>;
+    var assetsJson = response['page'] as List<dynamic>;
+    var assets = assetsJson.map((e) => Asset.fromJson(e)).toList();
 
-    return assets.map((e) {
-      return Asset.fromJson(e);
-    }).toList();
+    assets.sort((a, b) => a.name.compareTo(b.name));
+    return assets;
   }
 
   @override
