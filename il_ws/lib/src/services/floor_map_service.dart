@@ -9,6 +9,8 @@ import 'package:path_provider/path_provider.dart';
 abstract class IFloorMapService {
   Future<List<FloorMap>> getAllFloorMaps();
   Future<List<FloorMapZone>> getFloorMapZones(int floorMapId);
+
+  Future<void> clearCachedFloorMaps();
 }
 
 class FloorMapService extends WebService implements IFloorMapService {
@@ -97,5 +99,16 @@ class FloorMapService extends WebService implements IFloorMapService {
   Future<String> _getCacheFilePath() async {
     var cacheDirectory = await getApplicationCacheDirectory();
     return join(cacheDirectory.path, 'floor_maps.json');
+  }
+
+  @override
+  Future<void> clearCachedFloorMaps() async {
+    var path = await _getCacheFilePath();
+    var file = File(path);
+
+    var exists = await file.exists();
+    if (exists) {
+      await file.delete();
+    }
   }
 }
