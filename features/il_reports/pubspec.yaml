@@ -1,0 +1,29 @@
+name: il_reports
+description:
+version: 0.0.1
+publish_to: 'none'
+
+environment:
+  sdk: ^3.5.4
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  il_core:
+    path: ../../il_core
+
+  il_ws:
+    path: ../../il_ws
+
+  fl_chart: ^0.70.0
+  flutter_svg: ^2.0.16
+  font_awesome_flutter: ^10.8.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:

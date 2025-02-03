@@ -4,6 +4,8 @@ import 'package:il_ws/src/services/web_service.dart';
 abstract class IAuthenticationService {
   Future<RegisteredUser> login(String username, String password);
   Future<RegisteredUser> renewSession(JwtToken refreshToken);
+
+  Future<MqttCredentials> getMqttCredentials();
 }
 
 class AuthenticationService extends WebService implements IAuthenticationService {
@@ -31,21 +33,12 @@ class AuthenticationService extends WebService implements IAuthenticationService
 
   @override
   Future<RegisteredUser> renewSession(JwtToken refreshToken) async {
-    var cookie = 'refresh-token=${refreshToken.value}';
+    return renewUserSession(refreshToken);
+  }
 
-    var response = await httpPost(
-      path: '/api/v1/auth/autologin',
-      headers: {'Cookie': cookie},
-    );
-
-    var user = User.fromJson(response['data']);
-    var accessToken = JwtToken.decode(response['access_token']);
-    var newRefreshToken = JwtToken.decode(response['refresh_token']);
-
-    return RegisteredUser(
-      user: user,
-      accessToken: accessToken,
-      refreshToken: newRefreshToken,
-    );
+  @override
+  Future<MqttCredentials> getMqttCredentials() async {
+    var response = await httpGet(path: '/api/v1/mqtt/');
+    return MqttCredentials.fromJson(response);
   }
 }

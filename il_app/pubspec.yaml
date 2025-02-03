@@ -15,27 +15,39 @@ dependencies:
   font_awesome_flutter: ^10.8.0
   shared_preferences: ^2.3.3
 
+  intl: ^0.19.0
+  flutter_localizations:
+    sdk: flutter
+  
   il_core:
     path: ../il_core
 
   il_ws:
     path: ../il_ws
 
-  il_basic_auth:
-    path: ../il_basic_auth
-
   il_display_assets_map:
     path: ../features/il_display_assets_map
   
   il_display_assets_table:
     path: ../features/il_display_assets_table 
+  
+  il_reports:
+    path: ../features/il_reports
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
 
+  flutter_launcher_icons: ^0.14.3
+
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
+
+# dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  image_path: "assets/images/app_icon.png"
+  min_sdk_android: 21

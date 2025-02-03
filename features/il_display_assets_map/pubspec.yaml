@@ -12,11 +12,13 @@ dependencies:
     sdk: flutter
   
   flutter_svg: ^2.0.16
-  vector_math: ^2.1.4
   font_awesome_flutter: ^10.8.0
 
   il_core:
     path: ../../il_core
+
+  il_reports:
+    path: ../il_reports
 
 dev_dependencies:
   flutter_test:

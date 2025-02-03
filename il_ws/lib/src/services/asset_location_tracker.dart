@@ -1,82 +1,111 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
+import 'dart:math' as math;
 
-import 'package:il_core/il_core.dart';
 import 'package:il_core/il_entities.dart';
+import 'package:il_core/il_exceptions.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:il_ws/src/services/authentication_service.dart';
 
 typedef AssetLocationCallback = void Function(AssetLocation location);
 
 abstract class IAssetLocationTracker {
   Future<void> connect();
-  Future<void> close();
+  void close();
 
-  void addListener(AssetLocationCallback onData);
+  Stream<AssetLocation> get stream;
 }
 
 class AssetLocationTracker implements IAssetLocationTracker {
   MqttServerClient? _client;
-  StreamSubscription<List<MqttReceivedMessage<MqttMessage>>>? _streamSub;
+  StreamSubscription<List<MqttReceivedMessage<MqttMessage>>>? _mqttStreamSub;
 
-  final List<AssetLocationCallback> _listeners = [];
+  bool _connected = false;
+  StreamController<AssetLocation>? _streamController;
+
+  static const String _assetLocationTopic = '/test/topic';
 
   @override
   Future<void> connect() async {
-    if (_client != null) {
+    if (_connected) {
       return;
     }
 
-    var server = BackendContext.mqttServerAddress;
-    var port = BackendContext.mqttServerPort;
+    var authService = AuthenticationService();
+    var mqttCredentials = await authService.getMqttCredentials();
 
-    var username = BackendContext.mqttUsername;
-    var password = BackendContext.mqttPassword;
+    var server = mqttCredentials.serverAddress;
+    var port = mqttCredentials.serverPort;
 
-    _client = MqttServerClient.withPort(server, 'flutter_app', port);
+    var username = mqttCredentials.username;
+    var password = mqttCredentials.password;
+    var clientId = _generateClientId();
+
+    _client = MqttServerClient.withPort(server, clientId, port);
+
     await _client!.connect(username, password);
 
-    _client!.subscribe('/test/topic', MqttQos.atLeastOnce);
-    _streamSub = _client!.updates!.listen((List<MqttReceivedMessage<MqttMessage>> data) {
-      for (var e in data) {
-        var payload = e.payload;
+    if (_client!.connectionStatus?.state != MqttConnectionState.connected) {
+      close();
+      throw AppException('Mqtt connection failed!');
+    }
 
-        if (payload is MqttPublishMessage) {
-          _handleMessage(e.topic, payload.payload.message.buffer.asUint8List());
-        }
-      }
-    });
+    _client!.subscribe(_assetLocationTopic, MqttQos.atLeastOnce);
+    _mqttStreamSub = _client!.updates!.listen(_onMqttMessage);
+
+    _streamController = StreamController();
   }
 
   @override
-  void addListener(AssetLocationCallback onData) {
-    _listeners.add(onData);
-  }
+  void close() {
+    _connected = false;
 
-  @override
-  Future<void> close() async {
-    _listeners.clear();
-    _streamSub?.cancel();
+    _streamController?.close();
+    _streamController = null;
+
+    _mqttStreamSub?.cancel();
+    _mqttStreamSub = null;
+
     _client?.disconnect();
-
-    _streamSub = null;
     _client = null;
+  }
+
+  @override
+  Stream<AssetLocation> get stream => _streamController!.stream;
+
+  String _generateClientId() {
+    var random = math.Random();
+    var bytes = List.generate(32, (index) => random.nextInt(255));
+
+    return 'mobile-app-${base64Encode(bytes)}';
+  }
+
+  void _onMqttMessage(List<MqttReceivedMessage<MqttMessage>> messages) {
+    for (var message in messages) {
+      var payload = message.payload;
+
+      if (payload is MqttPublishMessage) {
+        _handleMessage(message.topic, payload.payload.message.buffer.asUint8List());
+      }
+    }
   }
 
   void _handleMessage(String topic, Uint8List data) {
     try {
-      if (topic != '/test/topic') return;
+      if (topic != _assetLocationTopic) return;
 
       var text = String.fromCharCodes(data).trim();
       var json = jsonDecode(text);
 
       var location = _parseLocation(json);
-
-      for (var l in _listeners) {
-        l.call(location);
-      }
-    } catch (_) {}
+      _streamController!.sink.add(location);
+    } catch (a) {
+      var e = AppException.from(a);
+      log(e.message);
+    }
   }
 
   AssetLocation _parseLocation(dynamic json) {

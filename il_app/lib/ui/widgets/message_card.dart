@@ -4,11 +4,13 @@ import 'package:il_app/models/message.dart';
 
 class MessageCard extends StatelessWidget {
   final Message message;
+  final EdgeInsets padding;
   final void Function()? onClose;
 
   const MessageCard({
     super.key,
     required this.message,
+    this.padding = const EdgeInsets.only(top: 20),
     this.onClose,
   });
 
@@ -35,7 +37,7 @@ class MessageCard extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
+      padding: padding,
       child: Card(
         child: ListTile(
           leading: icon,
