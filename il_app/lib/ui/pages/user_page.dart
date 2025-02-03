@@ -3,10 +3,24 @@ import 'package:go_router/go_router.dart';
 import 'package:il_app/logic/services/session_service.dart';
 import 'package:il_app/logic/vm/user_page_view_model.dart';
 import 'package:il_app/ui/widgets/navigation_drawer.dart';
+import 'package:il_ws/il_ws.dart';
 import 'package:provider/provider.dart';
 
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
+
+  void clearCache(UserPageViewModel model, BuildContext context) async {
+    await model.clearCache();
+
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        content: Text('Cache cleared'),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +34,9 @@ class UserPage extends StatelessWidget {
         child: ChangeNotifierProvider(
           create: (context) => UserPageViewModel(
             sessionService: SessionService(),
+            floorMapService: FloorMapService(),
             navigateToLoginPage: () => context.pushReplacement('/login'),
+            showExceptionPage: (e) => context.pushReplacement('/exception', extra: e),
           ),
           child: Consumer<UserPageViewModel>(
             builder: (context, model, child) {
@@ -50,6 +66,11 @@ class UserPage extends StatelessWidget {
                   FilledButton(
                     onPressed: () => model.logout(),
                     child: const Text('Log out'),
+                  ),
+                  const SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () => clearCache(model, context),
+                    child: const Text('Clear cache'),
                   ),
                 ],
               );

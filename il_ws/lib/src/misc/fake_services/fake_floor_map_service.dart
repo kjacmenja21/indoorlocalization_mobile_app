@@ -163,4 +163,7 @@ class FakeFloorMapService implements IFloorMapService {
       Offset(x, y + h),
     ];
   }
+
+  @override
+  Future<void> clearCachedFloorMaps() async {}
 }
