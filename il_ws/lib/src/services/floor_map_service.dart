@@ -29,10 +29,9 @@ class FloorMapService extends WebService implements IFloorMapService {
     );
 
     var floorMapsJson = response['page'] as List<dynamic>;
+    floorMaps = floorMapsJson.map((e) => FloorMap.fromJson(e)).toList();
 
-    floorMaps = floorMapsJson.map((e) {
-      return FloorMap.fromJson(e);
-    }).toList();
+    floorMaps.sort((a, b) => a.name.compareTo(b.name));
 
     await _saveFloorMaps(floorMaps);
     return floorMaps;
@@ -47,11 +46,11 @@ class FloorMapService extends WebService implements IFloorMapService {
       },
     );
 
-    var zones = response as List<dynamic>;
+    var zonesJson = response as List<dynamic>;
+    var zones = zonesJson.map((e) => FloorMapZone.fromJson(e)).toList();
 
-    return zones.map((e) {
-      return FloorMapZone.fromJson(e);
-    }).toList();
+    zones.sort((a, b) => a.name.compareTo(b.name));
+    return zones;
   }
 
   Future<void> _saveFloorMaps(List<FloorMap> floorMaps) async {
